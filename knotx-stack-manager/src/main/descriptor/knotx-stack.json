@@ -1,0 +1,27 @@
+//
+// vert.x stack descriptor
+//
+// To add a dependency:
+// - if the dependency is already listed, just set `included` to `true`
+// - if not, add the dependency using the Maven coordinates, and set `included` to `true`
+//
+// You can also set `exclusions` and whether or not the dependency need to resolve its transitive dependencies.
+//
+// Then launch the resolution process with: vertx resolve --dir=lib --stack=./vertx-vertx.json
+//
+// To remove a dependency:
+// - either remove the dependency declaration or just toggled the `included` value. Then launch the resolution process.
+//
+{
+  "variables": {
+    "knotx.version": "${knotx.version}"
+  },
+  "dependencies": [
+    {
+      "groupId": "io.knotx",
+      "artifactId": "knotx-stack-manager",
+      "version": "\${knotx.version}",
+      "included": true
+    }
+  ]
+}
