@@ -74,7 +74,6 @@ settings.json
 
 target
 atlassian-ide-plugin.xml
-bin/
 *.bak
 
 # Project specific   #
