@@ -42,6 +42,7 @@
   </developers>
 
   <modules>
+    <module>knotx-base-bundle</module>
     <module>knotx-stack-manager</module>
   </modules>
 

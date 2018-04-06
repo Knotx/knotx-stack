@@ -12,6 +12,8 @@
  *       http://www.opensource.org/licenses/apache2.0.php
  *
  *  You may elect to redistribute this code under either of these licenses.
+ *
+ *  Modifications Copyright (C) 2016 Cognifide Limited
  */
 
 package io.knotx.stack.model;
@@ -38,6 +40,7 @@ import org.eclipse.aether.artifact.Artifact;
  * Object responsible for resolving a stack. This object is stateful, and must be used only for a single resolution.
  *
  * @author <a href="http://escoffier.me">Clement Escoffier</a>
+ * @author <a href="http://github.com/marcinczeczko">Marcin Czeczko</a>
  */
 public class StackResolution {
 
@@ -141,7 +144,7 @@ public class StackResolution {
 
     // Schedule the deletion of all non-marked file.
     marks.forEach((fileName, mark) -> {
-      if (!mark && !fileName.startsWith("vertx-stack-manager-")) { // Do not delete me
+      if (!mark && !fileName.startsWith("knotx-stack-manager-")) { // Do not delete me
         chain.add(Actions.remove(new File(directory, fileName)));
       }
     });
