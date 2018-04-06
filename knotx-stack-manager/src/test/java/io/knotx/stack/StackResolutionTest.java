@@ -59,16 +59,16 @@ public class StackResolutionTest {
     Stack stack = new Stack().addDependency(new Dependency("io.vertx", "vertx-core", "3.1.0"));
     StackResolution resolution = new StackResolution(stack, root, STRICT);
     Map<String, File> map = resolution.resolve();
-    assertThat(map).containsKey("io.vertx:knotx-core:jar:3.1.0");
+    assertThat(map).containsKey("io.vertx:vertx-core:jar:3.1.0");
   }
 
   @Test
   public void testTheResolutionOfAVerySmallStackWithFiltering() {
-    Stack stack = new Stack().addDependency(new Dependency("io.vertx", "vertx-core", "${knotx.version}"))
+    Stack stack = new Stack().addDependency(new Dependency("io.vertx", "vertx-core", "${vertx.version}"))
         .addVariable("vertx.version", "3.1.0");
     StackResolution resolution = new StackResolution(stack, root, STRICT);
     Map<String, File> map = resolution.resolve();
-    assertThat(map).containsKey("io.vertx:knotx-core:jar:3.1.0");
+    assertThat(map).containsKey("io.vertx:vertx-core:jar:3.1.0");
   }
 
   @Test
@@ -76,7 +76,7 @@ public class StackResolutionTest {
     Stack stack = new Stack().addDependency(new Dependency("io.vertx", "vertx-core", "3.1.0").setTransitive(false));
     StackResolution resolution = new StackResolution(stack, root, STRICT);
     Map<String, File> map = resolution.resolve();
-    assertThat(map).containsKeys("io.vertx:knotx-core:jar:3.1.0").hasSize(1);
+    assertThat(map).containsKeys("io.vertx:vertx-core:jar:3.1.0").hasSize(1);
   }
 
   @Test
@@ -88,7 +88,7 @@ public class StackResolutionTest {
 
     StackResolution resolution = new StackResolution(stack, root, STRICT);
     Map<String, File> map = resolution.resolve();
-    assertThat(map).containsKey("io.vertx:knotx-core:jar:3.1.0");
+    assertThat(map).containsKey("io.vertx:vertx-core:jar:3.1.0");
     assertThat(map).containsKey("com.fasterxml.jackson.core:jackson-databind:jar:2.6.1");
   }
 
@@ -121,7 +121,7 @@ public class StackResolutionTest {
     StackResolution resolution = new StackResolution(stack, root, STRICT);
     resolution.resolve();
     Map<String, File> map = resolution.resolve();
-    assertThat(map).containsKey("io.vertx:knotx-core:jar:3.1.0");
+    assertThat(map).containsKey("io.vertx:vertx-core:jar:3.1.0");
     assertThat(map).containsKey("com.fasterxml.jackson.core:jackson-databind:jar:2.4.1.3");
   }
 
@@ -129,20 +129,20 @@ public class StackResolutionTest {
   public void testModificationOfStack() {
     Stack stack = new Stack()
         .addDependency(new Dependency("io.vertx", "vertx-core", "3.1.0"))
-        .addDependency(new Dependency("io.vertx", "knotx-stomp", "3.1.0").setIncluded(false));
+        .addDependency(new Dependency("io.vertx", "vertx-stomp", "3.1.0").setIncluded(false));
 
     StackResolution resolution = new StackResolution(stack, root, STRICT);
     Map<String, File> resolved = resolution.resolve();
-    assertThat(resolved).doesNotContainKeys("io.vertx:knotx-stomp:jar:3.1.0");
+    assertThat(resolved).doesNotContainKeys("io.vertx:vertx-stomp:jar:3.1.0");
     int numberOfArtifacts = root.listFiles().length;
 
     // include stomp
     stack = new Stack()
         .addDependency(new Dependency("io.vertx", "vertx-core", "3.1.0"))
-        .addDependency(new Dependency("io.vertx", "knotx-stomp", "3.1.0").setIncluded(true));
+        .addDependency(new Dependency("io.vertx", "vertx-stomp", "3.1.0").setIncluded(true));
     resolution = new StackResolution(stack, root, STRICT);
     resolved = resolution.resolve();
-    assertThat(resolved).containsKey("io.vertx:knotx-stomp:jar:3.1.0");
+    assertThat(resolved).containsKey("io.vertx:vertx-stomp:jar:3.1.0");
 
     // remove stomp
     stack = new Stack()
@@ -160,7 +160,7 @@ public class StackResolutionTest {
   public void testTheResolutionWhenAnArtifactIsMissing() {
     Stack stack = new Stack()
         .addDependency(new Dependency("io.vertx", "vertx-core", "3.1.0"))
-        .addDependency(new Dependency("io.vertx", "knotx-missing", "3.1.0"));
+        .addDependency(new Dependency("io.vertx", "vertx-missing", "3.1.0"));
     StackResolution resolution = new StackResolution(stack, root, STRICT);
     resolution.resolve();
   }
@@ -200,7 +200,7 @@ public class StackResolutionTest {
         .setLocalRepository(local.getAbsolutePath());
     StackResolution resolution = new StackResolution(stack, root, options);
     Map<String, File> map = resolution.resolve();
-    assertThat(map).containsKey("io.vertx:knotx-core:jar:3.1.0");
+    assertThat(map).containsKey("io.vertx:vertx-core:jar:3.1.0");
     assertThat(map).containsKey("org.acme:acme:txt:1.0");
   }
 
@@ -222,7 +222,7 @@ public class StackResolutionTest {
         .setLocalRepository(local.getAbsolutePath());
     StackResolution resolution = new StackResolution(stack, root, options);
     Map<String, File> map = resolution.resolve();
-    assertThat(map).containsKey("io.vertx:knotx-core:jar:3.1.0");
+    assertThat(map).containsKey("io.vertx:vertx-core:jar:3.1.0");
     assertThat(map).containsKey("org.acme:acme:txt:1.0");
   }
 
@@ -230,16 +230,16 @@ public class StackResolutionTest {
   public void testModificationOfStackIntroducingConflict() {
     Stack stack = new Stack()
         .addDependency(new Dependency("io.vertx", "vertx-core", "3.1.0"))
-        .addDependency(new Dependency("io.vertx", "knotx-stomp", "3.1.0").setIncluded(false))
+        .addDependency(new Dependency("io.vertx", "vertx-stomp", "3.1.0").setIncluded(false))
         .addDependency(new Dependency("io.vertx", "vertx-core", "3.0.0").setIncluded(false));
 
     StackResolution resolution = new StackResolution(stack, root, STRICT);
     Map<String, File> resolved = resolution.resolve();
-    assertThat(resolved).doesNotContainKeys("io.vertx:knotx-core:jar:3.0.0");
+    assertThat(resolved).doesNotContainKeys("io.vertx:vertx-core:jar:3.0.0");
 
     stack = new Stack()
         .addDependency(new Dependency("io.vertx", "vertx-core", "3.1.0"))
-        .addDependency(new Dependency("io.vertx", "knotx-stomp", "3.1.0").setIncluded(true))
+        .addDependency(new Dependency("io.vertx", "vertx-stomp", "3.1.0").setIncluded(true))
         .addDependency(new Dependency("io.vertx", "vertx-core", "3.0.0").setIncluded(true));
     resolution = new StackResolution(stack, root, STRICT);
     try {
@@ -249,9 +249,9 @@ public class StackResolutionTest {
       // OK
     }
 
-    assertThat(resolved).containsKey("io.vertx:knotx-core:jar:3.1.0");
-    assertThat(resolved).doesNotContainKeys("io.vertx:knotx-core:jar:3.0.0");
-    assertThat(resolved).doesNotContainKeys("io.vertx:knotx-stomp:jar:3.1.0");
+    assertThat(resolved).containsKey("io.vertx:vertx-core:jar:3.1.0");
+    assertThat(resolved).doesNotContainKeys("io.vertx:vertx-core:jar:3.0.0");
+    assertThat(resolved).doesNotContainKeys("io.vertx:vertx-stomp:jar:3.1.0");
 
   }
 

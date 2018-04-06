@@ -4,12 +4,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <!--<parent>-->
-    <!--<groupId>io.knotx</groupId>-->
-    <!--<artifactId>vertx-parent</artifactId>-->
-    <!--<version>14</version>-->
-  <!--</parent>-->
-
   <groupId>io.knotx</groupId>
   <artifactId>knotx-stack</artifactId>
   <version>1.3.0-SNAPSHOT</version>
@@ -46,14 +40,26 @@
     <module>knotx-stack-manager</module>
   </modules>
 
-  <!--
   <scm>
     <connection>scm:git:git://github.com/Knotx/knotx-stack.git</connection>
     <developerConnection>scm:git:ssh://github.com:Knotx/knotx-stack.git</developerConnection>
     <url>http://github.com/Knotx/knotx-stack/tree/master</url>
     <tag>HEAD</tag>
   </scm>
-  -->
+
+  <repositories>
+    <repository>
+      <id>sonatype-nexus-snapshots</id>
+      <name>Sonatype Nexus Snapshots</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 
   <distributionManagement>
     <snapshotRepository>
@@ -71,7 +77,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>1.8</java.version>
 
-    <!--<stack.version>3.6.0-SNAPSHOT</stack.version>-->
     <timestamp>${maven.build.timestamp}</timestamp>
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
   </properties>
