@@ -32,7 +32,7 @@
   <fileSets>
     <fileSet>
       <directory>${project.basedir}/target/lib</directory>
-      <outputDirectory>/lib/</outputDirectory>
+      <outputDirectory>lib/</outputDirectory>
     </fileSet>
 
     <fileSet>
@@ -52,7 +52,7 @@
   <dependencySets>
     <dependencySet>
       <useProjectArtifact>false</useProjectArtifact>
-      <outputDirectory>/conf/</outputDirectory>
+      <outputDirectory>conf/</outputDirectory>
       <includes>
         <include>io.vertx:vertx-hazelcast</include>
       </includes>
@@ -67,7 +67,7 @@
 
     <dependencySet>
       <useProjectArtifact>true</useProjectArtifact>
-      <outputDirectory>/lib/</outputDirectory>
+      <outputDirectory>lib/</outputDirectory>
       <includes>
         <include>${project.groupId}:${project.artifactId}:jar:${project.version}</include>
       </includes>

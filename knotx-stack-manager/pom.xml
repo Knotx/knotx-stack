@@ -34,7 +34,6 @@
     <knotx.version>${project.version}</knotx.version>
     <vertx.stack.version>3.5.0</vertx.stack.version>
 
-
     <finalName>knot.x-${project.version}</finalName>
     <asciidoc.dir>${project.basedir}/src/main/asciidoc</asciidoc.dir>
   </properties>
@@ -43,18 +42,6 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-stack-manager</artifactId>
-      <version>${vertx.stack.version}</version>
-    </dependency>
-
-    <!-- These dependencies must match the SLF4J version used by Vert.x -->
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>1.7.16</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -70,81 +57,111 @@
       <artifactId>vertx-hazelcast</artifactId>
       <scope>provided</scope>
     </dependency>
-    <!--<dependency>-->
-    <!--<groupId>org.apache.maven</groupId>-->
-    <!--<artifactId>maven-aether-provider</artifactId>-->
-    <!--<version>3.3.9</version>-->
-    <!--<exclusions>-->
-    <!--<exclusion>-->
-    <!--<groupId>org.eclipse.sisu</groupId>-->
-    <!--<artifactId>org.eclipse.sisu.plexus</artifactId>-->
-    <!--</exclusion>-->
-    <!--<exclusion>-->
-    <!--<groupId>org.codehaus.plexus</groupId>-->
-    <!--<artifactId>plexus-component-annotations</artifactId>-->
-    <!--</exclusion>-->
-    <!--</exclusions>-->
-    <!--</dependency>-->
-    <!--<dependency>-->
-    <!--<groupId>org.eclipse.aether</groupId>-->
-    <!--<artifactId>aether-api</artifactId>-->
-    <!--<version>${aether.version}</version>-->
-    <!--</dependency>-->
-    <!--<dependency>-->
-    <!--<groupId>org.eclipse.aether</groupId>-->
-    <!--<artifactId>aether-connector-basic</artifactId>-->
-    <!--<version>${aether.version}</version>-->
-    <!--</dependency>-->
-    <!--<dependency>-->
-    <!--<groupId>org.eclipse.aether</groupId>-->
-    <!--<artifactId>aether-transport-file</artifactId>-->
-    <!--<version>${aether.version}</version>-->
-    <!--</dependency>-->
-    <!--<dependency>-->
-    <!--<groupId>org.eclipse.aether</groupId>-->
-    <!--<artifactId>aether-transport-http</artifactId>-->
-    <!--<version>${aether.version}</version>-->
-    <!--<exclusions>-->
-    <!--<exclusion>-->
-    <!--<groupId>org.slf4j</groupId>-->
-    <!--<artifactId>slf4j-api</artifactId>-->
-    <!--</exclusion>-->
-    <!--<exclusion>-->
-    <!--<groupId>org.slf4j</groupId>-->
-    <!--<artifactId>jcl-over-slf4j</artifactId>-->
-    <!--</exclusion>-->
-    <!--</exclusions>-->
-    <!--</dependency>-->
-    <!--<dependency>-->
-    <!--<groupId>org.eclipse.aether</groupId>-->
-    <!--<artifactId>aether-spi</artifactId>-->
-    <!--<version>${aether.version}</version>-->
-    <!--</dependency>-->
-    <!--<dependency>-->
-    <!--<groupId>org.eclipse.aether</groupId>-->
-    <!--<artifactId>aether-impl</artifactId>-->
-    <!--<version>${aether.version}</version>-->
-    <!--</dependency>-->
-    <!--<dependency>-->
-    <!--<groupId>org.eclipse.aether</groupId>-->
-    <!--<artifactId>aether-util</artifactId>-->
-    <!--<version>${aether.version}</version>-->
-    <!--</dependency>-->
-    <!--<dependency>-->
-    <!--&lt;!&ndash; required by aether &ndash;&gt;-->
-    <!--<groupId>com.google.guava</groupId>-->
-    <!--<artifactId>guava</artifactId>-->
-    <!--<version>19.0</version>-->
-    <!--</dependency>-->
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-aether-provider</artifactId>
+      <version>3.3.9</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.eclipse.sisu</groupId>
+          <artifactId>org.eclipse.sisu.plexus</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.codehaus.plexus</groupId>
+          <artifactId>plexus-component-annotations</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.aether</groupId>
+      <artifactId>aether-api</artifactId>
+      <version>${aether.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.aether</groupId>
+      <artifactId>aether-connector-basic</artifactId>
+      <version>${aether.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.aether</groupId>
+      <artifactId>aether-transport-file</artifactId>
+      <version>${aether.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.aether</groupId>
+      <artifactId>aether-transport-http</artifactId>
+      <version>${aether.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>jcl-over-slf4j</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.aether</groupId>
+      <artifactId>aether-spi</artifactId>
+      <version>${aether.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.aether</groupId>
+      <artifactId>aether-impl</artifactId>
+      <version>${aether.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.aether</groupId>
+      <artifactId>aether-util</artifactId>
+      <version>${aether.version}</version>
+    </dependency>
+    <dependency>
+      <!-- required by aether -->
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>19.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.jayway.awaitility</groupId>
+      <artifactId>awaitility</artifactId>
+      <version>1.7.0</version>
+      <scope>test</scope>
+    </dependency>
 
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-docgen</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>3.3.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.19.1</version>
+        <configuration>
+          <systemPropertyVariables>
+            <vertx.logger-delegate-factory-class-name>
+              io.vertx.core.logging.SLF4JLogDelegateFactory
+            </vertx.logger-delegate-factory-class-name>
+          </systemPropertyVariables>
+        </configuration>
+      </plugin>
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
         <version>2.7</version>
@@ -188,7 +205,7 @@
               </systemProperties>
               <mainClass>io.vertx.core.Launcher</mainClass>
               <arguments>
-                <argument>update</argument>
+                <argument>resolve</argument>
                 <argument>${project.basedir}/target/knotx-stack/knotx-stack.json</argument>
                 <argument>--dir=${project.basedir}/target/lib</argument>
                 <argument>--no-cache</argument>
@@ -197,63 +214,49 @@
           </execution>
         </executions>
       </plugin>
-      <!-- TODO: repackage vertx-stack-manager removing slf4j and make knotx-stack-manager -->
-      <!--<plugin>-->
-        <!--<groupId>org.apache.maven.plugins</groupId>-->
-        <!--<artifactId>maven-shade-plugin</artifactId>-->
-        <!--<version>2.4.3</version>-->
-        <!--<executions>-->
-          <!--<execution>-->
-            <!--<phase>package</phase>-->
-            <!--<goals>-->
-              <!--<goal>shade</goal>-->
-            <!--</goals>-->
-            <!---->
-            <!--&lt;!&ndash;<configuration>&ndash;&gt;-->
-              <!--&lt;!&ndash;<createDependencyReducedPom>false</createDependencyReducedPom>&ndash;&gt;-->
-              <!--&lt;!&ndash;<artifactSet>&ndash;&gt;-->
-                <!--&lt;!&ndash;<excludes>&ndash;&gt;-->
-                  <!--&lt;!&ndash;<exclude>io.vertx:vertx-core</exclude>&ndash;&gt;-->
-                  <!--&lt;!&ndash;<exclude>io.vertx:vertx-docgen</exclude>&ndash;&gt;-->
-                  <!--&lt;!&ndash;<exclude>io.netty:*</exclude>&ndash;&gt;-->
-                  <!--&lt;!&ndash;<exclude>com.fasterxml.jackson.core:*</exclude>&ndash;&gt;-->
-                <!--&lt;!&ndash;</excludes>&ndash;&gt;-->
-              <!--&lt;!&ndash;</artifactSet>&ndash;&gt;-->
-              <!--&lt;!&ndash;<filters>&ndash;&gt;-->
-                <!--&lt;!&ndash;<filter>&ndash;&gt;-->
-                  <!--&lt;!&ndash;<artifact>io.vertx:vertx-stack-manager</artifact>&ndash;&gt;-->
-                  <!--&lt;!&ndash;<includes>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<include>shaded/org/apache/commons/logging</include>&ndash;&gt;-->
-                  <!--&lt;!&ndash;</includes>&ndash;&gt;-->
-                  <!--&lt;!&ndash;<excludes>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<exclude>shaded/org/slf4j/**</exclude>&ndash;&gt;-->
-                  <!--&lt;!&ndash;</excludes>&ndash;&gt;-->
-                <!--&lt;!&ndash;</filter>&ndash;&gt;-->
-              <!--&lt;!&ndash;</filters>&ndash;&gt;-->
-              <!--&lt;!&ndash;<relocations>&ndash;&gt;-->
-                <!--&lt;!&ndash;<relocation>&ndash;&gt;-->
-                  <!--&lt;!&ndash;<pattern>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<org class="apache"></org>&ndash;&gt;-->
-                  <!--&lt;!&ndash;</pattern>&ndash;&gt;-->
-                  <!--&lt;!&ndash;<shadedPattern>shaded.org.apache</shadedPattern>&ndash;&gt;-->
-                <!--&lt;!&ndash;</relocation>&ndash;&gt;-->
-                <!--&lt;!&ndash;<relocation>&ndash;&gt;-->
-                  <!--&lt;!&ndash;<pattern>org.eclipse.aether</pattern>&ndash;&gt;-->
-                  <!--&lt;!&ndash;<shadedPattern>shaded.org.eclipse.aether</shadedPattern>&ndash;&gt;-->
-                <!--&lt;!&ndash;</relocation>&ndash;&gt;-->
-                <!--&lt;!&ndash;<relocation>&ndash;&gt;-->
-                  <!--&lt;!&ndash;<pattern>com.google.common</pattern>&ndash;&gt;-->
-                  <!--&lt;!&ndash;<shadedPattern>shaded.com.google.common</shadedPattern>&ndash;&gt;-->
-                <!--&lt;!&ndash;</relocation>&ndash;&gt;-->
-                <!--&lt;!&ndash;<relocation>&ndash;&gt;-->
-                  <!--&lt;!&ndash;<pattern>org.codehaus.plexus</pattern>&ndash;&gt;-->
-                  <!--&lt;!&ndash;<shadedPattern>shaded.org.codehaus.plexus</shadedPattern>&ndash;&gt;-->
-                <!--&lt;!&ndash;</relocation>&ndash;&gt;-->
-              <!--&lt;!&ndash;</relocations>&ndash;&gt;-->
-            <!--&lt;!&ndash;</configuration>&ndash;&gt;-->
-          <!--</execution>-->
-        <!--</executions>-->
-      <!--</plugin>-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>2.4.3</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
+              <artifactSet>
+                <excludes>
+                  <exclude>io.vertx:vertx-core</exclude>
+                  <exclude>io.vertx:vertx-docgen</exclude>
+                  <exclude>io.netty:*</exclude>
+                  <exclude>com.fasterxml.jackson.core:*</exclude>
+                  <exclude>ch.qos.logback:*</exclude>
+                </excludes>
+              </artifactSet>
+              <relocations>
+                <relocation>
+                  <pattern>org.apache</pattern>
+                  <shadedPattern>shaded.org.apache</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>org.eclipse.aether</pattern>
+                  <shadedPattern>shaded.org.eclipse.aether</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>com.google.common</pattern>
+                  <shadedPattern>shaded.com.google.common</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>org.codehaus.plexus</pattern>
+                  <shadedPattern>shaded.org.codehaus.plexus</shadedPattern>
+                </relocation>
+              </relocations>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <version>2.6</version>

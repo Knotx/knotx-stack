@@ -12,10 +12,16 @@
  *       http://www.opensource.org/licenses/apache2.0.php
  *
  *  You may elect to redistribute this code under either of these licenses.
+ *
+ *  Modifications Copyright (C) 2016 Cognifide Limited
  */
 
 package io.knotx.stack.command;
 
+import io.knotx.stack.model.Stack;
+import io.knotx.stack.model.StackResolution;
+import io.knotx.stack.model.StackResolutionOptions;
+import io.knotx.stack.utils.Home;
 import io.vertx.core.cli.CLIException;
 import io.vertx.core.cli.annotations.Argument;
 import io.vertx.core.cli.annotations.DefaultValue;
@@ -25,26 +31,25 @@ import io.vertx.core.cli.annotations.Name;
 import io.vertx.core.cli.annotations.Option;
 import io.vertx.core.cli.annotations.Summary;
 import io.vertx.core.spi.launcher.DefaultCommand;
-import io.vertx.stack.model.Stack;
-import io.vertx.stack.model.StackResolution;
-import io.vertx.stack.model.StackResolutionOptions;
-import io.vertx.stack.utils.Home;
 import java.io.File;
 import java.util.List;
 
 /**
  * The resolve command.
  * <p/>
- * The resolve command maintains the files contained in the `lib` directory of a knot.x stack based on a stack
+ * The resolve command maintains the files contained in the `lib` directory of a vert.x stack based on a stack
  * descriptor.
+ *
+ * @author <a href="http://escoffier.me">Clement Escoffier</a>
+ * @author <a href="http://github.com/marcinczeczko">Marcin Czeczko</a>
  */
-@Name("update")
+@Name("resolve")
 @Summary("Resolve the knot.x stack according to the content the stack description.")
 @Description(
     "Synchronize the content of a knot.x distribution based on the description given in a 'json' file. From "
         +
         "the 'KNOTX_HOME' directory, launch it with: 'bin/knotx resolve'.")
-public class KnotxResolveCommand extends DefaultCommand {
+public class ResolveCommand extends DefaultCommand {
 
   private String directory;
   private String descriptor;
@@ -134,15 +139,15 @@ public class KnotxResolveCommand extends DefaultCommand {
   public void run() throws CLIException {
     File descriptorFile = new File(descriptor);
     if (!descriptorFile.isFile()) {
-      if (getKnotxHome() != null) {
-        descriptorFile = new File(Home.getVertxHome(), descriptor);
+      if (Home.getKnotxHome() != null) {
+        descriptorFile = new File(Home.getKnotxHome(), descriptor);
       }
     }
 
     if (!descriptorFile.isFile()) {
       String message =
           "Cannot find the stack descriptor. Have been tried: \n\t - ./" + descriptorFile;
-      if (getKnotxHome() != null) {
+      if (Home.getKnotxHome() != null) {
         message += "\n\t - " + descriptorFile.getAbsolutePath();
       }
       throw new CLIException(message);
@@ -150,8 +155,8 @@ public class KnotxResolveCommand extends DefaultCommand {
 
     File lib;
     if (directory == null) {
-      if (getKnotxHome() != null) {
-        lib = new File(getKnotxHome(), "lib");
+      if (Home.getKnotxHome() != null) {
+        lib = new File(Home.getKnotxHome(), "lib");
       } else {
         lib = new File("lib");
       }
@@ -181,19 +186,5 @@ public class KnotxResolveCommand extends DefaultCommand {
 
     StackResolution resolution = new StackResolution(stack, lib, options);
     resolution.resolve();
-  }
-
-
-  private static File getKnotxHome() {
-    String home = System.getProperty("knotx.home");
-    if (home != null) {
-      return new File(home);
-    }
-    // Environment variable
-    home = System.getenv("KNOTX_HOME");
-    if (home != null) {
-      return new File(home);
-    }
-    return null;
   }
 }
