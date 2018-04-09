@@ -34,7 +34,7 @@
     <knotx.version>${project.version}</knotx.version>
     <vertx.stack.version>3.5.0</vertx.stack.version>
 
-    <finalName>knot.x-${project.version}</finalName>
+    <finalName>knotx-${project.version}</finalName>
     <asciidoc.dir>${project.basedir}/src/main/asciidoc</asciidoc.dir>
   </properties>
 
