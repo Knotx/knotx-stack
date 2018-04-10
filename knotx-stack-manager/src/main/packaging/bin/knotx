@@ -17,6 +17,23 @@ JMX_OPTS=""
 # To enable JMX uncomment the following
 # JMX_OPTS="-Dcom.sun.management.jmxremote -Dhazelcast.jmx=true -Dvertx.options.jmxEnabled=true"
 
+# To enable remote debug port, uncomment the following
+# JVM_DEBUG="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=18092"
+
+# You can specify the path to the vertx cache directory. If not specified a ${KNOTX_HOME}/.vertx is used
+# VERTX_CACHE_DIR=
+
+# You can specify path to your custom logger configuration file. If not specified a ${KNOTX_HOME}/conf/logback.xml is used
+# KNOTX_LOGBACK_CONFIG =
+
+# You can specify path to your custom Hazelcast cluser.xml file. If not specified a ${KNOTX_HOME}/conf/default-cluster.xml is used
+# CLUSTER_CONFIG =
+
+# You can specify hazelcast cluster options here. See http://docs.hazelcast.org/docs/3.6/manual/html-single/index.html#system-properties for the available options.
+HAZELCAST_OPTS="-Dhazelcast.max.no.heartbeat.seconds=5"
+
+#################### DO NOT CHANGE BELOW ######################################
+
 APP_NAME="knotx"
 APP_BASE_NAME=`basename "$0"`
 
@@ -107,14 +124,17 @@ fi
 function splitJvmOpts ( ) {
     JVM_OPTS=("$@")
 }
-eval splitJvmOpts $JVM_OPTS $JAVA_OPTS $JMX_OPTS $VERTX_OPTS
+eval splitJvmOpts $JVM_OPTS $JAVA_OPTS $JMX_OPTS $VERTX_OPTS $HAZELCAST_OPTS $JVM_DEBUG
 
 exec "$JAVACMD" \
     "${JVM_OPTS[@]}" \
+    -Dlogback.configurationFile=${KNOTX_LOGBACK_CONFIG:-${KNOTX_HOME}/conf/logback.xml}\
     -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.SLF4JLogDelegateFactory\
-    -Dknotx.home="$KNOTX_HOME"\
-    -Dvertx.cli.usage.prefix=knotx\
-    -Dvertx.clusterManagerFactory=io.vertx.spi.cluster.impl.hazelcast.HazelcastClusterManagerFactory\
     -Dhazelcast.logging.type=slf4j\
+    -Dvertx.clusterManagerFactory=io.vertx.spi.cluster.impl.hazelcast.HazelcastClusterManagerFactory\
+    -Dvertx.hazelcast.config=${CLUSTER_CONFIG:-${KNOTX_HOME}/conf/default-cluster.xml}\
+    -Dknotx.home="$KNOTX_HOME"\
+    -Dvertx.cacheDirBase=${VERTX_CACHE_DIR:-${KNOTX_HOME}/.vertx}\
+    -Dvertx.cli.usage.prefix=knotx\
     -classpath "$CLASSPATH" \
     io.vertx.core.Launcher "$@"
