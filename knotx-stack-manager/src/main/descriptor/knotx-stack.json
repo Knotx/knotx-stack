@@ -10,7 +10,7 @@
 // Then launch the resolution process with: vertx resolve --dir=lib --stack=./knotx-knotx.json
 //
 // To remove a dependency:
-// - either remove the dependency declaration or just set the `included` value tp `false`. Then launch the resolution process.
+// - either remove the dependency declaration or just set the `included` value to `false`. Then launch the resolution process.
 //
 {
   "variables": {
