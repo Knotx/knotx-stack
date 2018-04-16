@@ -2,7 +2,7 @@
 // vert.x stack descriptor
 //
 // To add a dependency:
-// - if the dependency is already listed, just set `included` to `true`
+// - if the dependency is already listed, just set `included` to `false`
 // - if not, add the dependency using the Maven coordinates, and set `included` to `true`
 //
 // You can also set `exclusions` and whether or not the dependency need to resolve its transitive dependencies.
