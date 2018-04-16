@@ -36,8 +36,8 @@
   </developers>
 
   <modules>
-    <module>knotx-base-bundle</module>
     <module>knotx-stack-manager</module>
+    <module>knotx-docker</module>
   </modules>
 
   <scm>
