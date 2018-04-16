@@ -32,7 +32,7 @@
   <properties>
     <aether.version>1.1.0</aether.version>
     <knotx.version>${project.version}</knotx.version>
-    <vertx.stack.version>3.5.0</vertx.stack.version>
+    <vertx.version>3.5.0</vertx.version>
 
     <finalName>knotx-${project.version}</finalName>
     <asciidoc.dir>${project.basedir}/src/main/asciidoc</asciidoc.dir>
