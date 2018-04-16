@@ -14,9 +14,12 @@
 //
 {
   "variables": {
+    "vertx.version": "${vertx.version}",
+    "tcnative.version": "2.0.7.Final",
     "knotx.version": "${knotx.version}"
   },
   "dependencies": [
+    //Knot.x dependencies
     {
       "groupId": "io.knotx",
       "artifactId": "knotx-core",
@@ -43,8 +46,75 @@
     },
     {
       "groupId": "io.knotx",
+      "artifactId": "knotx-adapter-common",
+      "version": "\${knotx.version}",
+      "included": true
+    },
+    {
+      "groupId": "io.knotx",
       "artifactId": "knotx-adapter-service-http",
       "version": "\${knotx.version}",
+      "included": true
+    },
+    // Vert.x dependencies
+    {
+      "groupId": "io.vertx",
+      "artifactId": "vertx-core",
+      "version": "\${vertx.version}",
+      "included": true
+    },
+    {
+      "groupId": "io.netty",
+      "artifactId": "netty-tcnative-boringssl-static",
+      "version": "\${tcnative.version}",
+      "included": true
+    },
+    {
+      "groupId": "io.vertx",
+      "artifactId": "vertx-hazelcast",
+      "version": "\${vertx.version}",
+      "included": true
+    },
+    {
+      "groupId": "io.vertx",
+      "artifactId": "vertx-service-proxy",
+      "version": "\${vertx.version}",
+      "included": true
+    },
+    {
+      "groupId": "io.vertx",
+      "artifactId": "vertx-dropwizard-metrics",
+      "version": "\${vertx.version}",
+      "included": true
+    },
+    {
+      "groupId": "io.vertx",
+      "artifactId": "vertx-rx-java2",
+      "version": "\${vertx.version}",
+      "included": true
+    },
+    {
+      "groupId": "io.vertx",
+      "artifactId": "vertx-service-factory",
+      "version": "\${vertx.version}",
+      "included": true
+    },
+    {
+      "groupId": "io.vertx",
+      "artifactId": "vertx-web",
+      "version": "\${vertx.version}",
+      "included": true
+    },
+    {
+      "groupId": "io.vertx",
+      "artifactId": "vertx-web-client",
+      "version": "\${vertx.version}",
+      "included": true
+    },
+    {
+      "groupId": "io.vertx",
+      "artifactId": "vertx-config",
+      "version": "\${vertx.version}",
       "included": true
     }
   ]
