@@ -12,6 +12,8 @@
  *       http://www.opensource.org/licenses/apache2.0.php
  *
  *  You may elect to redistribute this code under either of these licenses.
+ *
+ *  Modifications Copyright (C) 2016 Cognifide Limited
  */
 
 package io.knotx.stack.resolver;
@@ -59,12 +61,13 @@ import org.eclipse.aether.util.repository.AuthenticationBuilder;
  * An implementation of {@link Resolver} based on Aether.
  *
  * @author <a href="http://escoffier.me">Clement Escoffier</a>
+ * @author <a href="http://github.com/marcinczeczko">Marcin Czeczko</a>
  */
 public class ResolverImpl implements Resolver {
 
-  private final static Logger LOGGER = LoggerFactory.getLogger("vertx-stack-resolver");
+  private final static Logger LOGGER = LoggerFactory.getLogger("knotx-stack-resolver");
 
-  public static final String REMOTE_SNAPSHOT_POLICY_SYS_PROP = "vertx.maven.remoteSnapshotPolicy";
+  public static final String REMOTE_SNAPSHOT_POLICY_SYS_PROP = "knotx.maven.snapshotPolicy";
 
   private final RepositorySystem system;
   private LocalRepository localRepo;
