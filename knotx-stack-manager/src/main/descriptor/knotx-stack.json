@@ -116,12 +116,6 @@
       "artifactId": "vertx-config",
       "version": "\${vertx.version}",
       "included": true
-    },
-    {
-      "groupId": "io.vertx",
-      "artifactId": "vertx-health-check",
-      "version": "\${vertx.version}",
-      "included": true
     }
   ]
 }
