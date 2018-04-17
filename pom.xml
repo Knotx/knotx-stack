@@ -37,6 +37,7 @@
 
   <modules>
     <module>knotx-stack-manager</module>
+    <module>knotx-docker</module>
   </modules>
 
   <scm>

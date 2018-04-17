@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>io.knotx</groupId>
+    <artifactId>knotx-stack</artifactId>
+    <version>1.3.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>knotx-docker</artifactId>
+
+  <name>Knotx.x - Docker images</name>
+  <packaging>pom</packaging>
+
+  <properties>
+    <asciidoc.dir>${project.basedir}/src/main/asciidoc</asciidoc.dir>
+    <docker.domain>knotx</docker.domain>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>io.knotx</groupId>
+      <artifactId>knotx-stack-manager</artifactId>
+      <version>${project.version}</version>
+      <type>zip</type>
+    </dependency>
+  </dependencies>
+
+  <profiles>
+
+    <profile>
+      <!-- Use -DskipDocker as the docker module requires docker to be installed, there are built an their own profile -->
+      <id>docker</id>
+      <activation>
+        <property>
+          <name>!skipDocker</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>io.fabric8</groupId>
+            <artifactId>docker-maven-plugin</artifactId>
+            <version>0.15.9</version>
+            <executions>
+              <execution>
+                <id>build-images</id>
+                <goals>
+                  <goal>build</goal>
+                </goals>
+                <phase>package</phase>
+              </execution>
+            </executions>
+
+            <configuration>
+              <images>
+                <!-- Regular knotx stack -->
+                <image>
+                  <alias>${docker.domain}/knotx</alias>
+                  <name>${docker.domain}/knotx</name>
+                  <build>
+                    <tags>
+                      <tag>latest</tag>
+                      <tag>${project.version}</tag>
+                    </tags>
+                    <dockerFile>base/Dockerfile</dockerFile>
+                  </build>
+                </image>
+
+                <image>
+                  <alias>${docker.domain}/knotx-alpine</alias>
+                  <name>${docker.domain}/knotx-alpine</name>
+                  <build>
+                    <tags>
+                      <tag>latest</tag>
+                      <tag>${project.version}</tag>
+                    </tags>
+                    <dockerFile>base-alpine/Dockerfile</dockerFile>
+                  </build>
+                </image>
+              </images>
+            </configuration>
+          </plugin>
+
+          <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>2.10</version>
+            <executions>
+              <execution>
+                <id>unzip-knotx-stack</id>
+                <phase>compile</phase>
+                <goals>
+                  <goal>unpack-dependencies</goal>
+                </goals>
+                <configuration>
+                  <includeArtifactIds>knotx-stack-manager</includeArtifactIds>
+                  <outputDirectory>${project.build.directory}/docker/${docker.domain}/knotx/build</outputDirectory>
+                  <markersDirectory>${project.build.directory}/marker-dependency</markersDirectory>
+                </configuration>
+              </execution>
+              <execution>
+                <id>unzip-knotx-stack-alpine</id>
+                <phase>compile</phase>
+                <goals>
+                  <goal>unpack-dependencies</goal>
+                </goals>
+                <configuration>
+                  <includeArtifactIds>knotx-stack-manager</includeArtifactIds>
+                  <outputDirectory>${project.build.directory}/docker/${docker.domain}/knotx-alpine/build
+                  </outputDirectory>
+                  <markersDirectory>${project.build.directory}/marker-dependency-alpine</markersDirectory>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+</project>
