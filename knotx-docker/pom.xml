@@ -10,9 +10,9 @@
     <version>1.3.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>knotx-stack-docker</artifactId>
+  <artifactId>knotx-docker</artifactId>
 
-  <name>Knotx.x Stack - Docker images</name>
+  <name>Knotx.x - Docker images</name>
   <packaging>pom</packaging>
 
   <properties>
@@ -24,20 +24,8 @@
     <dependency>
       <groupId>io.knotx</groupId>
       <artifactId>knotx-stack-manager</artifactId>
-      <version>1.3.0-SNAPSHOT</version>
+      <version>${project.version}</version>
       <type>zip</type>
-    </dependency>
-    <dependency>
-      <groupId>com.jayway.restassured</groupId>
-      <artifactId>rest-assured</artifactId>
-      <version>2.9.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -65,20 +53,6 @@
                 </goals>
                 <phase>package</phase>
               </execution>
-              <execution>
-                <id>start-containers</id>
-                <goals>
-                  <goal>start</goal>
-                </goals>
-                <phase>pre-integration-test</phase>
-              </execution>
-              <execution>
-                <id>stop-containers</id>
-                <goals>
-                  <goal>stop</goal>
-                </goals>
-                <phase>post-integration-test</phase>
-              </execution>
             </executions>
 
             <configuration>
@@ -94,26 +68,6 @@
                     </tags>
                     <dockerFile>base/Dockerfile</dockerFile>
                   </build>
-                  <run>
-                    <namingStrategy>none</namingStrategy>
-                    <ports>
-                      <port>${knotx.host}:${knotx.port}:8092</port>
-                    </ports>
-                    <cmd>knotx run-knotx</cmd>
-                    <wait>
-                      <log>Verticle startup - regular</log>
-                      <http>
-                        <url>http://${knotx.host}:${knotx.port}/</url>
-                        <method>GET</method>
-                        <status>200</status>
-                      </http>
-                      <time>30000</time>
-                    </wait>
-                    <log>
-                      <enabled>true</enabled>
-                      <color>red</color>
-                    </log>
-                  </run>
                 </image>
 
                 <image>
@@ -126,105 +80,6 @@
                     </tags>
                     <dockerFile>base-alpine/Dockerfile</dockerFile>
                   </build>
-                  <run>
-                    <namingStrategy>none</namingStrategy>
-                    <volumes>
-                      <bind>
-                        <volume>${project.basedir}/src/test/it/:/verticles</volume>
-                      </bind>
-                    </volumes>
-                    <ports>
-                      <port>${knotx-alpine.host}:${knotx-alpine.port}:8092</port>
-                    </ports>
-                    <cmd>knotx run /verticles/MyVerticle.groovy</cmd>
-                    <wait>
-                      <log>Verticle startup - alpine</log>
-                      <http>
-                        <url>http://${knotx-alpine.host}:${knotx-alpine.port}/</url>
-                        <method>GET</method>
-                        <status>200</status>
-                      </http>
-                      <time>30000</time>
-                    </wait>
-                    <log>
-                      <enabled>true</enabled>
-                      <color>red</color>
-                    </log>
-                  </run>
-                </image>
-
-                <image>
-                  <alias>${docker.domain}/knotx-exec</alias>
-                  <name>${docker.domain}/knotx-exec</name>
-                  <build>
-                    <tags>
-                      <tag>latest</tag>
-                      <tag>${project.version}</tag>
-                    </tags>
-                    <dockerFile>exec/Dockerfile</dockerFile>
-                  </build>
-                  <run>
-                    <namingStrategy>none</namingStrategy>
-                    <volumes>
-                      <bind>
-                        <volume>${project.basedir}/src/test/it/:/verticles</volume>
-                      </bind>
-                    </volumes>
-                    <ports>
-                      <port>${knotx-exec.host}:${knotx-exec.port}:8080</port>
-                    </ports>
-                    <cmd>run /verticles/MyVerticle.groovy</cmd>
-                    <wait>
-                      <log>Verticle startup - exec-regular</log>
-                      <http>
-                        <url>http://${knotx-exec.host}:${knotx-exec.port}/</url>
-                        <method>GET</method>
-                        <status>200</status>
-                      </http>
-                      <time>30000</time>
-                    </wait>
-                    <log>
-                      <enabled>true</enabled>
-                      <color>red</color>
-                    </log>
-                  </run>
-                </image>
-
-                <image>
-                  <alias>${docker.domain}/knotx-exec-alpine</alias>
-                  <name>${docker.domain}/knotx-exec-alpine</name>
-                  <build>
-                    <tags>
-                      <tag>latest</tag>
-                      <tag>${project.version}</tag>
-                    </tags>
-                    <dockerFile>exec-alpine/Dockerfile</dockerFile>
-                  </build>
-                  <run>
-                    <namingStrategy>none</namingStrategy>
-                    <volumes>
-                      <bind>
-                        <volume>${project.basedir}/src/test/it/:/verticles</volume>
-                      </bind>
-                    </volumes>
-                    <ports>
-                      <port>${knotx-exec-alpine.host}:${knotx-exec-alpine.port}:8080</port>
-                    </ports>
-                    <cmd>run /verticles/MyVerticle.groovy</cmd>
-                    <wait>
-                      <log>Verticle startup - exec-alpine</log>
-                      <http>
-                        <url>http://${knotx-exec-alpine.host}:${knotx-exec-alpine.port}/</url>
-                        <method>GET</method>
-                        <status>200</status>
-                      </http>
-                      <time>30000</time>
-                    </wait>
-                    <log>
-                      <enabled>true</enabled>
-                      <color>red</color>
-                    </log>
-                  </run>
                 </image>
               </images>
             </configuration>
@@ -247,7 +102,7 @@
                 </configuration>
               </execution>
               <execution>
-                <id>unzip-kntox-stack-alpine</id>
+                <id>unzip-knotx-stack-alpine</id>
                 <phase>compile</phase>
                 <goals>
                   <goal>unpack-dependencies</goal>
@@ -260,36 +115,6 @@
                 </configuration>
               </execution>
             </executions>
-          </plugin>
-
-          <plugin>
-            <artifactId>maven-failsafe-plugin</artifactId>
-            <version>2.17</version>
-            <executions>
-              <execution>
-                <id>failsafe-IT</id>
-                <goals>
-                  <goal>integration-test</goal>
-                </goals>
-                <phase>integration-test</phase>
-              </execution>
-              <execution>
-                <id>failsafe-verify</id>
-                <goals>
-                  <goal>verify</goal>
-                </goals>
-                <phase>verify</phase>
-              </execution>
-            </executions>
-            <configuration>
-              <systemPropertyVariables>
-                <knotx.url>http://${docker.host.address}:${knotx.port}</knotx.url>
-                <knotx-exec.url>http://${docker.host.address}:${knotx-exec.port}</knotx-exec.url>
-                <knotx-alpine.url>http://${docker.host.address}:${knotx-alpine.port}</knotx-alpine.url>
-                <knotx-exec-alpine.url>http://${docker.host.address}:${knotx-exec-alpine.port}</knotx-exec-alpine.url>
-                <knotx.version>${project.version}</knotx.version>
-              </systemPropertyVariables>
-            </configuration>
           </plugin>
         </plugins>
       </build>
