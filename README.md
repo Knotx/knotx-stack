@@ -35,9 +35,6 @@ The images can be pushed to Docker Hub. Before, be sure you are in the _knotx_ o
   <id>docker-hub</id>
   <username>username</username>
   <password>password</password>
-  <configuration>
-    <email>email</email>
-  </configuration>
 </server>
 ```
 
