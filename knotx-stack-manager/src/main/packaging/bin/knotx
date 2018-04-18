@@ -33,7 +33,7 @@ JMX_OPTS=""
 HAZELCAST_OPTS="-Dhazelcast.max.no.heartbeat.seconds=5"
 
 # You can enable Vert.x metrics by uncommenting this line.
-# METRICS_OPTS="-Dvertx.metrics.options.enabled=true -Dvertx.metrics.options.registryName=knotx-dw"
+# METRICS_OPTS="-Dvertx.metrics.options.enabled=true -Dvertx.metrics.options.registryName=knotx-dropwizard-registry"
 
 #################### DO NOT CHANGE BELOW ######################################
 
