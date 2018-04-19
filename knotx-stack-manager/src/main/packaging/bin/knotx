@@ -32,6 +32,9 @@ JMX_OPTS=""
 # You can specify hazelcast cluster options here. See http://docs.hazelcast.org/docs/3.6/manual/html-single/index.html#system-properties for the available options.
 HAZELCAST_OPTS="-Dhazelcast.max.no.heartbeat.seconds=5"
 
+# You can enable Vert.x metrics by uncommenting this line.
+# METRICS_OPTS="-Dvertx.metrics.options.enabled=true -Dvertx.metrics.options.registryName=knotx-dropwizard-registry"
+
 #################### DO NOT CHANGE BELOW ######################################
 
 APP_NAME="knotx"
@@ -124,7 +127,7 @@ fi
 function splitJvmOpts ( ) {
     JVM_OPTS=("$@")
 }
-eval splitJvmOpts $JVM_OPTS $JAVA_OPTS $JMX_OPTS $VERTX_OPTS $HAZELCAST_OPTS $JVM_DEBUG
+eval splitJvmOpts $JVM_OPTS $JAVA_OPTS $JMX_OPTS $VERTX_OPTS $HAZELCAST_OPTS $JVM_DEBUG $METRICS_OPTS
 
 exec "$JAVACMD" \
     "${JVM_OPTS[@]}" \
