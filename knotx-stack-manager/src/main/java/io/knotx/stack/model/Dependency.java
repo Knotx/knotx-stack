@@ -23,7 +23,6 @@ import org.apache.maven.model.Exclusion;
 /**
  * Represents a dependency. The stack describes a set of dependencies resolved as Maven dependencies. Each dependency
  * can be included or excluded and can instruct whether the resolution need to bring the transitive dependencies too.
- * <p/>
  * Be aware the dependencies cannot be set as "optional', as optionality do not make sense when we deploy the artifact.
  *
  * @author <a href="http://escoffier.me">Clement Escoffier</a>
@@ -63,7 +62,6 @@ public class Dependency extends org.apache.maven.model.Dependency {
 
   /**
    * Creates a new {@link Dependency}.
-   * <p/>
    * The type is set to "jar" by default.
    */
   public Dependency() {
@@ -80,6 +78,7 @@ public class Dependency extends org.apache.maven.model.Dependency {
   /**
    * Sets whether or not the dependency is included. Included by default.
    *
+   * @param included true/false
    * @return the current {@link Dependency} instance.
    */
   public Dependency setIncluded(boolean included) {
@@ -98,6 +97,7 @@ public class Dependency extends org.apache.maven.model.Dependency {
    * Sets whether or not the dependency resolution also resolves the transitive dependencies. Transitive dependencies
    * are resolved by default.
    *
+   * @param transitive true/false
    * @return the current {@link Dependency} instance.
    */
   public Dependency setTransitive(boolean transitive) {
