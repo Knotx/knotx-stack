@@ -35,8 +35,6 @@ import java.io.File;
 import java.util.List;
 
 /**
- * The resolve command.
- * <p/>
  * The resolve command maintains the files contained in the `lib` directory of a vert.x stack based on a stack
  * descriptor.
  *
