@@ -7,7 +7,8 @@
         "format": "conf",
         "config": {
           "path": "${KNOTX_HOME}/conf/application.conf"
-        }
+        },
+        "optional": false
       }
     ]
   }
