@@ -1,4 +1,4 @@
-@if "%DEBUG%" == "" @echo off 
+@if "%DEBUG%" == "" @echo off
 @rem ##########################################################################
 @rem
 @rem  vertx startup script for Windows
@@ -9,10 +9,28 @@
 if "%OS%"=="Windows_NT" setlocal
 
 @rem Add default JVM options here. You can also use JAVA_OPTS and VERTX_OPTS to pass JVM options to this script.
-set DEFAULT_JVM_OPTS=-XX:+UseBiasedLocking -XX:BiasedLockingStartupDelay=0
+set JVM_OPTS=-XX:+UseBiasedLocking -XX:BiasedLockingStartupDelay=0
+
+@rem To enable JMX uncomment the following
+@rem JMX_OPTS=-Dcom.sun.management.jmxremote -Dhazelcast.jmx=true -Dvertx.options.jmxEnabled=true -Dvertx.metrics.options.jmxDomain=knotx
 
 @rem enable remote debug port, uncomment the following
-@rem set JVM_DEBUG=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
+@rem set JVM_DEBUG=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=18092
+
+@rem You can specify the path to the vertx cache directory. If not specified a %KNOTX_HOME%/.vertx is used
+@rem set VERTX_CACHE_DIR=%KNOTX_HOME%/.vertx
+
+@rem You can specify path to your custom logger configuration file. If not specified a %KNOTX_HOME%/conf/logback.xml is used
+@rem set KNOTX_LOGBACK_CONFIG=
+
+@rem You can specify path to your custom Hazelcast cluser.xml file. If not specified a %KNOTX_HOME%/conf/default-cluster.xml is used
+@rem set CLUSTER_CONFIG=
+
+@rem You can specify hazelcast cluster options here. See http://docs.hazelcast.org/docs/3.6/manual/html-single/index.html#system-properties for the available options.
+set HAZELCAST_OPTS=-Dhazelcast.max.no.heartbeat.seconds=5
+
+@rem You can enable Vert.x metrics by uncommenting this line.
+@rem METRICS_OPTS=-Dvertx.metrics.options.enabled=true -Dvertx.metrics.options.registryName=knotx-dropwizard-registry
 
 set DIRNAME=%~dp0
 if "%DIRNAME%" == "" set DIRNAME=.
@@ -79,14 +97,22 @@ set CMD_LINE_ARGS=%$
 @rem Setup the command line
 if "%KNOTX_HOME%" == "" set KNOTX_HOME=.
 if "%KNOTX_LOGBACK_CONFIG%" == "" set KNOTX_LOGBACK_CONFIG=%KNOTX_HOME%/conf/logback.xml
+if "%CLUSTER_CONFIG%" == "" set CLUSTER_CONFIG=%KNOTX_HOME%/conf/default-cluster.xml
+if "%VERTX_CACHE_DIR%" == "" set VERTX_CACHE_DIR=%KNOTX_HOME%/.vertx
 
 set CLASSPATH=%CLASSPATH%;%KNOTX_HOME%\conf;%KNOTX_HOME%\lib\*
 
 @rem Execute vertx
-"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %JVM_DEBUG% ^
-  -Dknotx.home=%KNOTX_HOME% ^
+"%JAVA_EXE%" %JVM_OPTS% %JAVA_OPTS% %JVM_DEBUG% ^
   -Dlogback.configurationFile=%KNOTX_LOGBACK_CONFIG% ^
   -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.SLF4JLogDelegateFactory ^
+  -Dhazelcast.logging.type=slf4j ^
+  -Dvertx.clusterManagerFactory=io.vertx.spi.cluster.impl.hazelcast.HazelcastClusterManagerFactory ^
+  -Dvertx.hazelcast.config=%CLUSTER_CONFIG% ^
+  -Dknotx.home=%KNOTX_HOME% ^
+  -Dvertx.cacheDirBase=%VERTX_CACHE_DIR% ^
+  -Dvertx.cli.usage.prefix=knotx ^
+  -classpath %CLASSPATH% ^
   io.vertx.core.Launcher %CMD_LINE_ARGS%
 
 :end
