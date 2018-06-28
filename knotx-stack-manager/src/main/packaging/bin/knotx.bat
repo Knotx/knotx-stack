@@ -17,13 +17,13 @@ set JVM_OPTS=-XX:+UseBiasedLocking -XX:BiasedLockingStartupDelay=0
 @rem enable remote debug port, uncomment the following
 @rem set JVM_DEBUG=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=18092
 
-@rem You can specify the path to the vertx cache directory. If not specified a %KNOTX_HOME%/.vertx is used
+@rem You can specify the path to the vertx cache directory. If not specified a %KNOTX_HOME%\.vertx is used
 @rem set VERTX_CACHE_DIR=%KNOTX_HOME%/.vertx
 
-@rem You can specify path to your custom logger configuration file. If not specified a %KNOTX_HOME%/conf/logback.xml is used
+@rem You can specify path to your custom logger configuration file. If not specified a %KNOTX_HOME%\conf\logback.xml is used
 @rem set KNOTX_LOGBACK_CONFIG=
 
-@rem You can specify path to your custom Hazelcast cluser.xml file. If not specified a %KNOTX_HOME%/conf/default-cluster.xml is used
+@rem You can specify path to your custom Hazelcast cluser.xml file. If not specified a %KNOTX_HOME%\conf\default-cluster.xml is used
 @rem set CLUSTER_CONFIG=
 
 @rem You can specify hazelcast cluster options here. See http://docs.hazelcast.org/docs/3.6/manual/html-single/index.html#system-properties for the available options.
@@ -67,12 +67,6 @@ echo location of your Java installation.
 goto fail
 
 :init
-@rem Add module option to commandline, if VERTX_MODS was set
-if not "%VERTX_MODS%" == "" set VERTX_MODULE_OPTS="-Dvertx.mods=%VERTX_MODS%"
-
-@rem Configure JUL using custom properties file
-if "%VERTX_JUL_CONFIG%" == "" set VERTX_JUL_CONFIG="%APP_HOME%\conf\logging.properties"
-
 @rem Get command-line arguments, handling Windowz variants
 
 if not "%OS%" == "Windows_NT" goto win9xME_args
@@ -96,9 +90,9 @@ set CMD_LINE_ARGS=%$
 :execute
 @rem Setup the command line
 if "%KNOTX_HOME%" == "" set KNOTX_HOME=.
-if "%KNOTX_LOGBACK_CONFIG%" == "" set KNOTX_LOGBACK_CONFIG=%KNOTX_HOME%/conf/logback.xml
-if "%CLUSTER_CONFIG%" == "" set CLUSTER_CONFIG=%KNOTX_HOME%/conf/default-cluster.xml
-if "%VERTX_CACHE_DIR%" == "" set VERTX_CACHE_DIR=%KNOTX_HOME%/.vertx
+if "%KNOTX_LOGBACK_CONFIG%" == "" set KNOTX_LOGBACK_CONFIG=%KNOTX_HOME%\conf\logback.xml
+if "%CLUSTER_CONFIG%" == "" set CLUSTER_CONFIG=%KNOTX_HOME%\conf\default-cluster.xml
+if "%VERTX_CACHE_DIR%" == "" set VERTX_CACHE_DIR=%KNOTX_HOME%\.vertx
 
 set CLASSPATH=%CLASSPATH%;%KNOTX_HOME%\conf;%KNOTX_HOME%\lib\*
 
