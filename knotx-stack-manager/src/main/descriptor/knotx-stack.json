@@ -28,19 +28,19 @@
     },
     {
       "groupId": "io.knotx",
-      "artifactId": "knotx-data-bridge-api",
+      "artifactId": "knotx-databridge-api",
       "version": "\${knotx.version}",
       "included": true
     },
     {
       "groupId": "io.knotx",
-      "artifactId": "knotx-data-bridge-core",
+      "artifactId": "knotx-databridge-core",
       "version": "\${knotx.version}",
       "included": true
     },
     {
       "groupId": "io.knotx",
-      "artifactId": "knotx-data-bridge-http",
+      "artifactId": "knotx-databridge-adapter-http",
       "version": "\${knotx.version}",
       "included": true
     },
@@ -53,12 +53,6 @@
     {
       "groupId": "io.knotx",
       "artifactId": "knotx-knot-handlebars",
-      "version": "\${knotx.version}",
-      "included": true
-    },
-    {
-      "groupId": "io.knotx",
-      "artifactId": "knotx-adapter-common",
       "version": "\${knotx.version}",
       "included": true
     },
