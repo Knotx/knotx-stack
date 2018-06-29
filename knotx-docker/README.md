@@ -1,4 +1,4 @@
-# Knotx.x Docker Images
+# Knot.x Docker Images
 
 This project builds the docker images for the Knot.x
 
@@ -10,7 +10,7 @@ To build the docker images, just launch:
 
 `mvn clean install`
 
-## Knotx.x docker base Image
+## Knot.x docker base Image
 
 The built image contains the `knotx` command in the system path.
  
@@ -43,8 +43,6 @@ The knotx/knotx-exec image provides the default "full" Vert.x stack. You may wan
 }
 ```
 You can list any dependency you need, not just the Vert.x artifacts (refer to the Stack Manager documentation for details).
-
-
 
 ```Dockerfile
 FROM knotx/knotx
@@ -84,14 +82,12 @@ CMD ["knotx", "run-knotx", "-conf $KNOTX_MAIN_CONFIG"]
 
 You should know be able to build your custom executable image:
 
-`docker build -t mycompany/my-knotx-exec .`
+`docker build -t mycompany/my-knotx .`
 
-And run your verticle:
+And run your instance:
 
 ```
-docker run -i -t -p 8080:8080 \
-    -v $PWD:/verticles mycompany/my-knotx-exec \
-    run run-knotx
+docker run -i -t -p 8092:8092 mycompany/my-knotx
 ```
 
 ### Launching the base image
@@ -106,38 +102,3 @@ The knotx.x files are located in ` /usr/local/knotx/`.
 You can access the `knotx` command directly using:
 
 `docker run -i -t knotx/knotx knotx`
-
-## Knot.x executable image from Docker
-
-A Docker image providing the `knotx` command
-
-### TBD - launching
-
-Notice the export CLASSPATH=…​; part in the CMD instruction. It builds the value of the CLASSPATH variable from the content of the $VERTICLE_HOME directory. This tricks is useful to compute large and dynamic classpath.
-
------
-
-Just launch:
-
-`docker run -i -t knotx/knotx-exec`
-
-Append the `knotx` command parameter you need.
-
-for instance:
-
-```
-> docker run -i -t knotx/knotx-exec -version
-3.0.0-SNAPSHOT
-```
-
-If you want to run a verticle:
-
-```
-docker run -i -t -p 8080:8080 \
-    -v $PWD:/verticles knotx/knotx-exec \
-    run io.vertx.sample.RandomGeneratorVerticle \
-    -cp /verticles/MY_VERTICLE.jar
-```
-
-This command mount the current directory into `/verticles` and then launch the `knotx run` command. Notice the `-cp`
-parameter reusing the `/verticles` directory.
