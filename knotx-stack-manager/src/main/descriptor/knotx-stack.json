@@ -19,16 +19,10 @@
     "knotx.version": "${knotx.version}"
   },
   "dependencies": [
-    //Knot.x dependencies
+    // Knot.x dependencies
     {
       "groupId": "io.knotx",
       "artifactId": "knotx-core",
-      "version": "\${knotx.version}",
-      "included": true
-    },
-    {
-      "groupId": "io.knotx",
-      "artifactId": "knotx-knot-service",
       "version": "\${knotx.version}",
       "included": true
     },
@@ -50,9 +44,22 @@
       "version": "\${knotx.version}",
       "included": true
     },
+    // Knot.x Data Bridge
     {
       "groupId": "io.knotx",
-      "artifactId": "knotx-adapter-service-http",
+      "artifactId": "knotx-databridge-api",
+      "version": "\${knotx.version}",
+      "included": true
+    },
+    {
+      "groupId": "io.knotx",
+      "artifactId": "knotx-databridge-core",
+      "version": "\${knotx.version}",
+      "included": true
+    },
+    {
+      "groupId": "io.knotx",
+      "artifactId": "knotx-databridge-adapter-http",
       "version": "\${knotx.version}",
       "included": true
     },
