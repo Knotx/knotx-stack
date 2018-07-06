@@ -44,6 +44,11 @@ The knotx/knotx-exec image provides the default "full" Vert.x stack. You may wan
 ```
 You can list any dependency you need, not just the Vert.x artifacts (refer to the Stack Manager documentation for details).
 
+First line of your Dockerfile should say what docker image you're going to start with. Use `knotx/knotx:<version>` where `<version>` is the version of Knot.x the immage is going to run.
+In this example we're using `1.3.0`, for other version simply look at `https://hub.docker.com/r/knotx/knotx/tags/` or `https://hub.docker.com/r/knotx/knotx-alpine/tags/` if you want to use alpine image.
+
+**NOTE: Avoid using `latest` tag, as it point always to latest build image, that in most cases if SNAPSHOT images**
+
 ```Dockerfile
 FROM knotx/knotx:1.3.0
 
