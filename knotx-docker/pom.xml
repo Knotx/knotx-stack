@@ -44,7 +44,7 @@
           <plugin>
             <groupId>io.fabric8</groupId>
             <artifactId>docker-maven-plugin</artifactId>
-            <version>0.15.9</version>
+            <version>0.26.0</version>
             <executions>
               <execution>
                 <id>build-images</id>
@@ -59,25 +59,23 @@
               <images>
                 <!-- Regular knotx stack -->
                 <image>
-                  <alias>${docker.domain}/knotx</alias>
                   <name>${docker.domain}/knotx</name>
                   <build>
                     <tags>
-                      <tag>latest</tag>
                       <tag>${project.version}</tag>
                     </tags>
+                    <nocache>true</nocache>
                     <dockerFile>base/Dockerfile</dockerFile>
                   </build>
                 </image>
 
                 <image>
-                  <alias>${docker.domain}/knotx-alpine</alias>
                   <name>${docker.domain}/knotx-alpine</name>
                   <build>
                     <tags>
-                      <tag>latest</tag>
                       <tag>${project.version}</tag>
                     </tags>
+                    <nocache>true</nocache>
                     <dockerFile>base-alpine/Dockerfile</dockerFile>
                   </build>
                 </image>
