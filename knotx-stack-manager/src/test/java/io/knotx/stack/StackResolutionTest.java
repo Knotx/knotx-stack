@@ -16,23 +16,28 @@
 
 package io.knotx.stack;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.fail;
+
 import com.jayway.awaitility.Awaitility;
-import io.knotx.stack.model.*;
+import io.knotx.stack.model.Dependency;
+import io.knotx.stack.model.DependencyConflictException;
+import io.knotx.stack.model.Stack;
+import io.knotx.stack.model.StackResolution;
+import io.knotx.stack.model.StackResolutionOptions;
 import io.knotx.stack.utils.FileUtils;
 import io.knotx.stack.utils.LocalArtifact;
 import io.knotx.stack.utils.LocalDependency;
 import io.knotx.stack.utils.LocalRepoBuilder;
-import org.apache.maven.model.Exclusion;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
 import java.io.File;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
+import org.apache.maven.model.Exclusion;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author <a href="http://escoffier.me">Clement Escoffier</a>
@@ -41,15 +46,16 @@ public class StackResolutionTest {
 
   private File root = new File("target/stack");
 
-  private final static StackResolutionOptions STRICT = new StackResolutionOptions().setFailOnConflicts(true);
+  private final static StackResolutionOptions STRICT = new StackResolutionOptions()
+      .setFailOnConflicts(true);
 
-  @Before
+  @BeforeEach
   public void setUp() {
     FileUtils.delete(root);
     Awaitility.await().atMost(10, TimeUnit.SECONDS).until(() -> !root.exists());
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     System.clearProperty("vertx.version");
   }
@@ -64,7 +70,8 @@ public class StackResolutionTest {
 
   @Test
   public void testTheResolutionOfAVerySmallStackWithFiltering() {
-    Stack stack = new Stack().addDependency(new Dependency("io.vertx", "vertx-core", "${vertx.version}"))
+    Stack stack = new Stack()
+        .addDependency(new Dependency("io.vertx", "vertx-core", "${vertx.version}"))
         .addVariable("vertx.version", "3.1.0");
     StackResolution resolution = new StackResolution(stack, root, STRICT);
     Map<String, File> map = resolution.resolve();
@@ -73,7 +80,8 @@ public class StackResolutionTest {
 
   @Test
   public void testTheResolutionOfVertxCoreWithoutTransitive() {
-    Stack stack = new Stack().addDependency(new Dependency("io.vertx", "vertx-core", "3.1.0").setTransitive(false));
+    Stack stack = new Stack()
+        .addDependency(new Dependency("io.vertx", "vertx-core", "3.1.0").setTransitive(false));
     StackResolution resolution = new StackResolution(stack, root, STRICT);
     Map<String, File> map = resolution.resolve();
     assertThat(map).containsKeys("io.vertx:vertx-core:jar:3.1.0").hasSize(1);
@@ -92,7 +100,7 @@ public class StackResolutionTest {
     assertThat(map).containsKey("com.fasterxml.jackson.core:jackson-databind:jar:2.6.1");
   }
 
-  @Test(expected = DependencyConflictException.class)
+  @Test
   public void testConflictOnDependencyVersionMismatch() {
     Dependency dependency = new Dependency("io.vertx", "vertx-core", "3.1.0");
     Stack stack = new Stack()
@@ -100,7 +108,8 @@ public class StackResolutionTest {
         .addDependency(new Dependency("com.fasterxml.jackson.core", "jackson-databind", "2.4.1.3"));
 
     StackResolution resolution = new StackResolution(stack, root, STRICT);
-    resolution.resolve();
+    assertThatExceptionOfType(DependencyConflictException.class)
+        .isThrownBy(() -> resolution.resolve());
   }
 
   @Test
@@ -156,20 +165,23 @@ public class StackResolutionTest {
     assertThat(numberOfArtifacts).isEqualTo(numberOfArtifacts2);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void testTheResolutionWhenAnArtifactIsMissing() {
     Stack stack = new Stack()
         .addDependency(new Dependency("io.vertx", "vertx-core", "3.1.0"))
         .addDependency(new Dependency("io.vertx", "vertx-missing", "3.1.0"));
     StackResolution resolution = new StackResolution(stack, root, STRICT);
-    resolution.resolve();
+
+    assertThatIllegalArgumentException()
+        .isThrownBy(() -> resolution.resolve());
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void testTheResolutionWhenATransitiveDependencyIsMissing() {
     File local = new File("target/test-repos/incomplete");
-    new LocalRepoBuilder(local).addArtifact(new LocalArtifact("org.acme", "acme", "1.0").generateMainArtifact()
-        .addDependency(new LocalDependency("org.acme", "acme-missing", "1.0"))).build();
+    new LocalRepoBuilder(local)
+        .addArtifact(new LocalArtifact("org.acme", "acme", "1.0").generateMainArtifact()
+            .addDependency(new LocalDependency("org.acme", "acme-missing", "1.0"))).build();
     Stack stack = new Stack()
         .addDependency(new Dependency("io.vertx", "vertx-core", "3.1.0"))
         .addDependency(new Dependency("org.acme", "acme", "1.0", "txt"));
@@ -177,14 +189,17 @@ public class StackResolutionTest {
         .setLocalRepository(local.getAbsolutePath())
         .setCacheDisabled(true);
     StackResolution resolution = new StackResolution(stack, root, options);
-    resolution.resolve();
+
+    assertThatIllegalArgumentException()
+        .isThrownBy(() -> resolution.resolve());
   }
 
   @Test
   public void testTheResolutionWhenATransitiveDependencyIsMissingButExcluded() {
     File local = new File("target/test-repos/incomplete");
-    new LocalRepoBuilder(local).addArtifact(new LocalArtifact("org.acme", "acme", "1.0").generateMainArtifact()
-        .addDependency(new LocalDependency("org.acme", "acme-missing", "1.0"))).build();
+    new LocalRepoBuilder(local)
+        .addArtifact(new LocalArtifact("org.acme", "acme", "1.0").generateMainArtifact()
+            .addDependency(new LocalDependency("org.acme", "acme-missing", "1.0"))).build();
 
     Exclusion exclusion = new Exclusion();
     exclusion.setArtifactId("acme-missing");
@@ -207,8 +222,10 @@ public class StackResolutionTest {
   @Test
   public void testTheResolutionWhenATransitiveDependencyIsMissingButOptional() {
     File local = new File("target/test-repos/incomplete");
-    new LocalRepoBuilder(local).addArtifact(new LocalArtifact("org.acme", "acme", "1.0").generateMainArtifact()
-        .addDependency(new LocalDependency("org.acme", "acme-missing", "1.0").optional(true))).build();
+    new LocalRepoBuilder(local)
+        .addArtifact(new LocalArtifact("org.acme", "acme", "1.0").generateMainArtifact()
+            .addDependency(new LocalDependency("org.acme", "acme-missing", "1.0").optional(true)))
+        .build();
 
     Exclusion exclusion = new Exclusion();
     exclusion.setArtifactId("acme-missing");

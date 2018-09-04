@@ -16,16 +16,16 @@
 
 package io.knotx.stack.utils;
 
-import org.junit.Test;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 import java.util.Collections;
-
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import org.junit.jupiter.api.Test;
 
 
 /**
  * @author <a href="http://escoffier.me">Clement Escoffier</a>
  */
+@SuppressWarnings("unchecked")
 public class FilteringTest {
 
   @Test

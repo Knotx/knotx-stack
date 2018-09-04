@@ -18,21 +18,20 @@
 
 package io.knotx.stack;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.jayway.awaitility.Awaitility;
+import io.knotx.stack.command.ResolveCommand;
+import io.knotx.stack.utils.FileUtils;
 import io.vertx.core.Launcher;
 import io.vertx.core.impl.launcher.VertxCommandLauncher;
 import io.vertx.core.spi.launcher.ExecutionContext;
-import io.knotx.stack.command.ResolveCommand;
-import io.knotx.stack.utils.FileUtils;
-import org.junit.Before;
-import org.junit.Test;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author <a href="http://escoffier.me">Clement Escoffier</a>
@@ -42,7 +41,7 @@ public class DescriptorTest {
 
   private File root = new File("target/stack");
 
-  @Before
+  @BeforeEach
   public void setUp() {
     FileUtils.delete(root);
     Awaitility.await().atMost(10, TimeUnit.SECONDS).until(() -> !root.exists());
