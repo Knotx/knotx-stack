@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011-2015 The original author or authors
+ *  Copyright (c) 2011-2018 The original author or authors
  *  ------------------------------------------------------
  *  All rights reserved. This program and the accompanying materials
  *  are made available under the terms of the Eclipse Public License v1.0
@@ -17,19 +17,18 @@
 package io.knotx.stack.resolver;
 
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import io.knotx.stack.utils.FileUtils;
 import io.knotx.stack.utils.LocalArtifact;
 import io.knotx.stack.utils.LocalDependency;
 import io.knotx.stack.utils.LocalRepoBuilder;
-import org.eclipse.aether.artifact.Artifact;
-import org.junit.Before;
-import org.junit.Test;
-
 import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.eclipse.aether.artifact.Artifact;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author <a href="http://escoffier.me">Clement Escoffier</a>
@@ -42,7 +41,7 @@ public class ResolverTest {
 
   private Resolver resolver = Resolver.create(new ResolverOptions().setLocalRepository(LOCAL.getAbsolutePath()));
 
-  @Before
+  @BeforeEach
   public void setUp() {
     FileUtils.delete(LOCAL);
   }

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011-2015 The original author or authors
+ *  Copyright (c) 2011-2018 The original author or authors
  *  ------------------------------------------------------
  *  All rights reserved. This program and the accompanying materials
  *  are made available under the terms of the Eclipse Public License v1.0
@@ -27,24 +27,24 @@ import io.vertx.core.impl.launcher.commands.VersionCommand;
 import java.io.File;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class VertxStacksTest {
 
   private File root = new File("target/stack");
 
-  @Before
+  @BeforeEach
   public void setUp() {
     FileUtils.delete(root);
     Awaitility.await().atMost(10, TimeUnit.SECONDS).until(() -> !root.exists());
-    String vertxVersion = new VersionCommand().getVersion();
+    String vertxVersion = VersionCommand.getVersion();
     assertThat(vertxVersion).isNotEmpty();
     System.setProperty("vertx.version", vertxVersion);
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     System.clearProperty("knotx.version");
   }
