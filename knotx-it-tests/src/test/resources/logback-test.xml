@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2011-2018 The original author or authors
+  ======================================================
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  and Apache License v2.0 which accompanies this distribution.
+
+       The Eclipse Public License is available at
+       http://www.eclipse.org/legal/epl-v10.html
+
+       The Apache License v2.0 is available at
+       http://www.opensource.org/licenses/apache2.0.php
+
+  You may elect to redistribute this code under either of these licenses.
+-->
+<configuration debug="true">
+  <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener"/>
+
+  <property name="CONSOLE_KNOTX_LOG_PATTERN" value="%d{${KNOTX_LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} [%thread] %-5level %logger{36} - %msg%n"/>
+  <include resource="io/knotx/logging/logback/console-appender.xml" />
+
+  <root level="INFO" additivity="false">
+    <appender-ref ref="CONSOLE"/>
+  </root>
+
+  <logger name="io.netty" level="ERROR" additivity="false"/>
+  <logger name="io.vertx" level="ERROR" additivity="false"/>
+
+  <logger name="io.knotx" level="TRACE" additivity="false">
+    <appender-ref ref="CONSOLE"/>
+  </logger>
+</configuration>
