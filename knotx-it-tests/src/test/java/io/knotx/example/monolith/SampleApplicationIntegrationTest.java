@@ -192,7 +192,7 @@ public class SampleApplicationIntegrationTest {
     AdapterResponse resp = new AdapterResponse().setResponse(clientResponse);
 
     new ServiceBinder(vertx.getDelegate())
-        .setAddress("mock.action.adapter")
+        .setAddress("knotx.action.adapter")
         .register(AdapterProxy.class, (request, result) -> {
           String path = request.getParams().getString("path");
           if (StringUtils.isNotBlank(path)) {
