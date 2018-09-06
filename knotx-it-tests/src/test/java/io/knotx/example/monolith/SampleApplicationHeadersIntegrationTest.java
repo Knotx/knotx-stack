@@ -48,11 +48,23 @@ public class SampleApplicationHeadersIntegrationTest {
 
   private MultiMap expectedHeaders = MultiMap.caseInsensitiveMultiMap();
 
+  @KnotxWiremock(port = 4000)
+  protected WireMockServer mockService;
+
   @KnotxWiremock(port = 4001)
   protected WireMockServer mockRepository;
 
   @BeforeEach
   public void before() {
+    stubForServer(mockService,
+        get(urlMatching("/service/mock/.*"))
+            .willReturn(
+                aResponse()
+                    .withHeader("Cache-control", "no-cache, no-store, must-revalidate")
+                    .withHeader("Content-Type", "application/json; charset=UTF-8")
+                    .withHeader("X-Server", "Knot.x")
+            ));
+
     stubForServer(mockRepository,
         get(urlMatching("/content/.*"))
             .willReturn(
@@ -65,7 +77,7 @@ public class SampleApplicationHeadersIntegrationTest {
     expectedHeaders.clear();
     expectedHeaders.add("Access-Control-Allow-Origin", "*");
     expectedHeaders.add("Content-Type", "text/html; charset=UTF-8");
-    expectedHeaders.add("content-length", "3020");
+    expectedHeaders.add("content-length", "2995");
     expectedHeaders.add("X-Server", "Knot.x");
   }
 
