@@ -57,7 +57,7 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app-custom-symbol.json")
+  @KnotxApplyConfiguration({"knotx-test-app.conf", "knotx-test-handlebars-custom-symbol.conf"})
   public void whenRequestingLocalSimplePageWithGetCustomSymbol_expectLocalSimpleHtml(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, "/content/local/customSymbol.html",
@@ -65,7 +65,7 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app-custom-and-default-symbol.json")
+  @KnotxApplyConfiguration({"knotx-test-app.conf", "knotx-test-handlebars-custom-symbol.conf"})
   public void whenRequestingLocalSimplePageWithGetCustomAndDefaultSymbol_expectLocalSimpleHtmlWithDefault(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, "/content/local/customAndDefaultSymbol.html",
@@ -73,7 +73,7 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app-no-body.json")
+  @KnotxApplyConfiguration({"knotx-test-app.conf"})
   public void whenRequestingLocalPageWhereInServiceIsMissingResponseBody_expectNoBodyHtml(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, LOCAL_NO_BODY_REQUEST_URI, "noBody.html");
