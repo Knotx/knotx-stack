@@ -50,7 +50,7 @@ public class SampleApplicationIntegrationTest {
   private static final String KNOTX_SERVER_ADDRESS = "localhost";
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app.json")
+  @KnotxApplyConfiguration("knotx-test-app.conf")
   public void whenRequestingLocalSimplePageWithGet_expectLocalSimpleHtml(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, LOCAL_REQUEST_URI, "localSimpleResult.html");
@@ -80,21 +80,21 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app.json")
+  @KnotxApplyConfiguration("knotx-test-app.conf")
   public void whenRequestingPageWithMissingServiceWithoutConfiguration_expectServerError(
       VertxTestContext context, Vertx vertx) {
     testGetServerError(context, vertx, MISSING_SERVICE_CONFIG_REQUEST_URI);
   }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app.json")
+  @KnotxApplyConfiguration("knotx-test-app.conf")
   public void whenRequestingRemoteSimplePageWithGet_expectRemoteSimpleHtml(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, REMOTE_REQUEST_URI, "remoteSimpleResult.html");
   }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app.json")
+  @KnotxApplyConfiguration("knotx-test-app.conf")
   public void whenRequestingRemoteSimplePageWithGetAndRequestParameterNameContainsSpace_expectRemoteSimpleHtml(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, REMOTE_REQUEST_URI_WITH_PARAMETER_CONTAINING_SPACE,
@@ -102,14 +102,14 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app.json")
+  @KnotxApplyConfiguration("knotx-test-app.conf")
   public void whenRequestingLocalMultipleFormsPageWithGet_expectMutlipleFormsWithGetResultHtml(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, LOCAL_MULTIPLE_FORMS_URI, "multipleFormWithGetResult.html");
   }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app.json")
+  @KnotxApplyConfiguration("knotx-test-app.conf")
   public void whenRequestingWithPostMethodFirstForm_expectFirstFormPresentingFormActionResult(
       VertxTestContext context, Vertx vertx) {
     mockActionAdapter(vertx, getFirstTestFormData(), null);
@@ -118,7 +118,7 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app.json")
+  @KnotxApplyConfiguration("knotx-test-app.conf")
   public void whenRequestingWithPostFirstFormTwiceWithDifferentData_expectDifferentResultOfFirstFormForEachRequest(
       VertxTestContext context, Vertx vertx) {
     mockActionAdapter(vertx, getFirstTestFormData(), getSecondTestFormData());
