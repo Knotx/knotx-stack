@@ -46,9 +46,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(KnotxExtension.class)
+@TestInstance(Lifecycle.PER_CLASS)
 public class SampleApplicationIntegrationTest {
 
   private static final String REMOTE_REQUEST_URI = "/content/remote/simple.html";
@@ -60,14 +63,23 @@ public class SampleApplicationIntegrationTest {
   private static final int KNOTX_SERVER_PORT = 9092;
   private static final String KNOTX_SERVER_ADDRESS = "localhost";
 
+  @KnotxWiremock(port = 4000)
+  protected WireMockServer mockService;
+
   @KnotxWiremock(port = 4001)
   protected WireMockServer mockRepository;
 
-  @KnotxWiremock(port = 4002)
-  protected WireMockServer mockService;
-
   @BeforeAll
   void initMocks() {
+    stubForServer(mockService,
+        get(urlMatching("/service/mock/.*"))
+            .willReturn(
+                aResponse()
+                    .withHeader("Cache-control", "no-cache, no-store, must-revalidate")
+                    .withHeader("Content-Type", "application/json; charset=UTF-8")
+                    .withHeader("X-Server", "Knot.x")
+            ));
+
     stubForServer(mockRepository,
         get(urlMatching("/content/.*"))
             .willReturn(
@@ -75,18 +87,7 @@ public class SampleApplicationIntegrationTest {
                     .withHeader("Cache-control", "no-cache, no-store, must-revalidate")
                     .withHeader("Content-Type", "text/html; charset=UTF-8")
                     .withHeader("X-Server", "Knot.x")
-            ));
-
-    //fixme add bouncer from original verticle
-    stubForServer(mockService,
-        get(urlMatching("/content/.*"))
-            .willReturn(
-                aResponse()
-                    .withHeader("Cache-control", "no-cache, no-store, must-revalidate")
-                    .withHeader("Content-Type", "text/html; charset=UTF-8")
-                    .withHeader("X-Server", "Knot.x")
-            ));
-  }
+            ));  }
 
   @Test
   @KnotxApplyConfiguration("knotx-test-app.conf")

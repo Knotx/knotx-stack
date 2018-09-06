@@ -86,11 +86,6 @@
       <groupId>io.vertx</groupId>
       <artifactId>vertx-service-proxy</artifactId>
     </dependency>
-    <!--<dependency>-->
-      <!--<groupId>io.knotx</groupId>-->
-      <!--<artifactId>knotx-mocks</artifactId>-->
-      <!--<version>${project.version}</version>-->
-    <!--</dependency>-->
 
     <!-- Tests -->
     <dependency>
