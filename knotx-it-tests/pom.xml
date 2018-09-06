@@ -36,6 +36,18 @@
     </dependency>
     <dependency>
       <groupId>io.knotx</groupId>
+      <artifactId>knotx-databridge-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.knotx</groupId>
+      <artifactId>knotx-databridge-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.knotx</groupId>
+      <artifactId>knotx-databridge-adapter-http</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.knotx</groupId>
       <artifactId>knotx-knot-service</artifactId>
     </dependency>
     <dependency>
