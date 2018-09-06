@@ -19,21 +19,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import io.knotx.dataobjects.AdapterResponse;
 import io.knotx.dataobjects.ClientResponse;
-import io.knotx.junit.util.FileReader;
 import io.knotx.junit5.KnotxApplyConfiguration;
 import io.knotx.junit5.KnotxExtension;
-import io.knotx.junit5.KnotxTestUtils;
+import io.knotx.junit5.util.FileReader;
 import io.knotx.proxy.AdapterProxy;
 import io.netty.handler.codec.http.HttpResponseStatus;
-import io.reactivex.Observable;
 import io.vertx.core.Future;
-import io.vertx.core.http.HttpClientOptions;
-import io.vertx.core.http.HttpMethod;
 import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.VertxTestContext;
+import io.vertx.reactivex.core.MultiMap;
 import io.vertx.reactivex.core.Vertx;
-import io.vertx.reactivex.core.http.HttpClient;
-import io.vertx.reactivex.core.http.HttpClientResponse;
+import io.vertx.reactivex.ext.web.client.WebClient;
 import io.vertx.serviceproxy.ServiceBinder;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
@@ -54,21 +50,22 @@ public class SampleApplicationIntegrationTest {
   private static final String KNOTX_SERVER_ADDRESS = "localhost";
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app.json")
+  @KnotxApplyConfiguration("knotx-test-app.conf")
   public void whenRequestingLocalSimplePageWithGet_expectLocalSimpleHtml(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, LOCAL_REQUEST_URI, "localSimpleResult.html");
   }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app-custom-symbol.json")
+  @KnotxApplyConfiguration({"knotx-test-app.conf", "knotx-test-handlebars-custom-symbol.conf"})
   public void whenRequestingLocalSimplePageWithGetCustomSymbol_expectLocalSimpleHtml(
       VertxTestContext context, Vertx vertx) {
-    testGetRequest(context, vertx, "/content/local/customSymbol.html", "localSimpleResultAngular.html");
+    testGetRequest(context, vertx, "/content/local/customSymbol.html",
+        "localSimpleResultAngular.html");
   }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app-custom-and-default-symbol.json")
+  @KnotxApplyConfiguration({"knotx-test-app.conf", "knotx-test-handlebars-custom-symbol.conf"})
   public void whenRequestingLocalSimplePageWithGetCustomAndDefaultSymbol_expectLocalSimpleHtmlWithDefault(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, "/content/local/customAndDefaultSymbol.html",
@@ -76,28 +73,28 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app-no-body.json")
+  @KnotxApplyConfiguration({"knotx-test-app.conf"})
   public void whenRequestingLocalPageWhereInServiceIsMissingResponseBody_expectNoBodyHtml(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, LOCAL_NO_BODY_REQUEST_URI, "noBody.html");
   }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app.json")
+  @KnotxApplyConfiguration("knotx-test-app.conf")
   public void whenRequestingPageWithMissingServiceWithoutConfiguration_expectServerError(
       VertxTestContext context, Vertx vertx) {
     testGetServerError(context, vertx, MISSING_SERVICE_CONFIG_REQUEST_URI);
   }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app.json")
+  @KnotxApplyConfiguration("knotx-test-app.conf")
   public void whenRequestingRemoteSimplePageWithGet_expectRemoteSimpleHtml(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, REMOTE_REQUEST_URI, "remoteSimpleResult.html");
   }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app.json")
+  @KnotxApplyConfiguration("knotx-test-app.conf")
   public void whenRequestingRemoteSimplePageWithGetAndRequestParameterNameContainsSpace_expectRemoteSimpleHtml(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, REMOTE_REQUEST_URI_WITH_PARAMETER_CONTAINING_SPACE,
@@ -105,88 +102,74 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app.json")
+  @KnotxApplyConfiguration("knotx-test-app.conf")
   public void whenRequestingLocalMultipleFormsPageWithGet_expectMutlipleFormsWithGetResultHtml(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, LOCAL_MULTIPLE_FORMS_URI, "multipleFormWithGetResult.html");
   }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app.json")
+  @KnotxApplyConfiguration("knotx-test-app.conf")
   public void whenRequestingWithPostMethodFirstForm_expectFirstFormPresentingFormActionResult(
       VertxTestContext context, Vertx vertx) {
     mockActionAdapter(vertx, getFirstTestFormData(), null);
     testPostRequest(context, vertx, LOCAL_MULTIPLE_FORMS_URI, getFirstTestFormData().getMap(),
-        "multipleFormWithPostResult.html", false);
+        "multipleFormWithPostResult.html");
   }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app.json")
+  @KnotxApplyConfiguration("knotx-test-app.conf")
   public void whenRequestingWithPostFirstFormTwiceWithDifferentData_expectDifferentResultOfFirstFormForEachRequest(
       VertxTestContext context, Vertx vertx) {
     mockActionAdapter(vertx, getFirstTestFormData(), getSecondTestFormData());
     testPostRequest(context, vertx, LOCAL_MULTIPLE_FORMS_URI, getFirstTestFormData().getMap(),
-        "multipleFormWithPostResult.html", false);
+        "multipleFormWithPostResult.html");
     testPostRequest(context, vertx, LOCAL_MULTIPLE_FORMS_URI, getSecondTestFormData().getMap(),
-        "multipleFormWithPostResult2.html", false);
+        "multipleFormWithPostResult2.html");
   }
 
-  private void testPostRequest(VertxTestContext context, Vertx vertx, String url, Map<String, Object> formData,
-      String expectedResponseFile, boolean ajaxCall) {
-    HttpClient client = vertx.createHttpClient();
+  private void testPostRequest(VertxTestContext context, Vertx vertx, String url,
+      Map<String, Object> formData,
+      String expectedResponseFile) {
 
-    Observable<HttpClientResponse> request = KnotxTestUtils
-        .asyncRequest(client, HttpMethod.POST, KNOTX_SERVER_PORT,
-        KNOTX_SERVER_ADDRESS, url, req -> {
-          String bodyForm = formData.entrySet().stream()
-              .map(entry -> entry.getKey() + "=" + entry.getValue())
-              .reduce((p1, p2) -> p1 + "&" + p2).get();
-          req.headers().set("content-length", String.valueOf(bodyForm.length()));
-          req.headers().set("content-type", "application/x-www-form-urlencoded");
-          if (ajaxCall) {
-            req.headers().set("X-Requested-With", "XMLHttpRequest");
-          }
-          req.write(bodyForm);
-        });
-
-    request.subscribe(resp -> resp.bodyHandler(body -> {
-      assertEquals(resp.statusCode(), HttpResponseStatus.OK.code());
-      try {
-        assertEquals(Jsoup.parse(body.toString()).body().html(),
-            Jsoup.parse(FileReader.readText(expectedResponseFile)).body().html());
-      } catch (Exception e) {
-        context.failNow(e);
-      }
-
-      context.completeNow();
-    }));
-  }
-
-  private void testGetRequest(VertxTestContext context, Vertx vertx, String url, String expectedResponseFile) {
-    HttpClient client = vertx.createHttpClient(new HttpClientOptions());
-
-    client.getNow(KNOTX_SERVER_PORT, KNOTX_SERVER_ADDRESS, url,
-        resp -> resp.bodyHandler(body -> {
+    WebClient client = WebClient.create(vertx);
+    client.post(KNOTX_SERVER_PORT, KNOTX_SERVER_ADDRESS, url)
+        .rxSendForm(getMultiMap(formData))
+        .doOnSuccess(resp -> {
           assertEquals(resp.statusCode(), HttpResponseStatus.OK.code());
-          try {
-            assertEquals(Jsoup.parse(body.toString()).body().html().trim(),
-                Jsoup.parse(FileReader.readText(expectedResponseFile)).body().html().trim());
-          } catch (Exception e) {
-            context.failNow(e);
-          }
+          assertEquals(Jsoup.parse(resp.body().toString()).body().html(),
+              Jsoup.parse(FileReader.readTextSafe(expectedResponseFile)).body().html());
+        })
+        .subscribe(onSuccess -> context.completeNow(), context::failNow);
+  }
+
+  private MultiMap getMultiMap(Map<String, Object> formData) {
+    MultiMap formMap = MultiMap.caseInsensitiveMultiMap();
+    formData.forEach((key, value) -> formMap.add(key, (String) value));
+    return formMap;
+  }
+
+  private void testGetRequest(VertxTestContext context, Vertx vertx, String url,
+      String expectedResponseFile) {
+    WebClient client = WebClient.create(vertx);
+    client.get(KNOTX_SERVER_PORT, KNOTX_SERVER_ADDRESS, url).rxSend()
+        .doOnSuccess(resp -> {
+          assertEquals(resp.statusCode(), HttpResponseStatus.OK.code());
+          assertEquals(Jsoup.parse(resp.body().toString()).body().html().trim(),
+              Jsoup.parse(FileReader.readTextSafe(expectedResponseFile)).body().html().trim());
           client.close();
-          context.completeNow();
-        }));
+        })
+        .subscribe(onSuccess -> context.completeNow(), context::failNow);
   }
 
   private void testGetServerError(VertxTestContext context, Vertx vertx, String url) {
-    HttpClient client = vertx.createHttpClient();
-    client.getNow(KNOTX_SERVER_PORT, KNOTX_SERVER_ADDRESS, url,
-        resp -> resp.bodyHandler(body -> {
+    WebClient client = WebClient.create(vertx);
+    client.get(KNOTX_SERVER_PORT, KNOTX_SERVER_ADDRESS, url).rxSend()
+        .doOnSuccess(resp -> {
           assertEquals(resp.statusCode(), HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
           client.close();
-          context.completeNow();
-        }));
+        })
+        .subscribe(onSuccess -> context.completeNow(), context::failNow);
   }
 
   private JsonObject getFirstTestFormData() {
@@ -209,7 +192,7 @@ public class SampleApplicationIntegrationTest {
     AdapterResponse resp = new AdapterResponse().setResponse(clientResponse);
 
     new ServiceBinder(vertx.getDelegate())
-        .setAddress("mock.action.adapter")
+        .setAddress("knotx.action.adapter")
         .register(AdapterProxy.class, (request, result) -> {
           String path = request.getParams().getString("path");
           if (StringUtils.isNotBlank(path)) {
