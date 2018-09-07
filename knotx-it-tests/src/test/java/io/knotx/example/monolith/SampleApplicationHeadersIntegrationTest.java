@@ -48,10 +48,10 @@ public class SampleApplicationHeadersIntegrationTest {
 
   private MultiMap expectedHeaders = MultiMap.caseInsensitiveMultiMap();
 
-  @KnotxWiremock(port = 4000)
+  @KnotxWiremock
   protected WireMockServer mockService;
 
-  @KnotxWiremock(port = 4001)
+  @KnotxWiremock
   protected WireMockServer mockRepository;
 
   @BeforeEach

@@ -63,10 +63,10 @@ public class SampleApplicationIntegrationTest {
   private static final int KNOTX_SERVER_PORT = 9092;
   private static final String KNOTX_SERVER_ADDRESS = "localhost";
 
-  @KnotxWiremock(port = 4000)
+  @KnotxWiremock
   protected WireMockServer mockService;
 
-  @KnotxWiremock(port = 4001)
+  @KnotxWiremock
   protected WireMockServer mockRepository;
 
   @BeforeAll
