@@ -21,7 +21,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="shortcut icon" href="http://cognifide.com/favicon.ico?v=2"/>
   <title>Knot.x</title>
-  <link href="https://bootswatch.com/4/simplex/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://bootswatch.com/4/superhero/bootstrap.min.css" rel="stylesheet"/>
 </head>
 <body>
 <div class="container-fluid">
@@ -32,7 +32,7 @@
           Hello Knot.x - reactive micro-service assembler world!
         </h2>
         <p>
-          This template is served from the <strong>local</strong> repository.
+          This template is served from the <strong>remote</strong> repository.
         </p>
         <p>
           <a class="btn btn-primary btn-large"
@@ -49,20 +49,22 @@
             type="text/knotx-snippet">
 
       <div class="col-md-4">
-        <h2>Snippet1 - {[_result.message]}</h2>
-        <div>Snippet1 - {[_result.body.a]}</div>
-        <div>{[#bold]}Custom Handlebars helper{[/bold]}</div>
+        <h2>Snippet1 - {{_result.message}}</h2>
+        <div>Snippet1 - {{_result.body.a}}</div>
+        <div>{{#bold}}Custom Handlebars helper{{/bold}}</div>
       </div>
       <div class="col-md-4">
-        <h2>Snippet1 - {[second._result.message]}</h2>
-        <div>Snippet1 - {[second._result.body.a]}</div>
-        {[#string_equals second._response.statusCode "200"]}
-        <div>Success! Status code : {[second._response.statusCode]}</div>
-        {[/string_equals]}
+        <h2>Snippet1 - {{second._result.message}}</h2>
+        <div>Snippet1 - {{second._result.body.a}}</div>
+        {{#string_equals second._response.statusCode "200"}}
+        <div>Success! Status code : {{second._response.statusCode}}</div>
+        {{/string_equals}}
+        <h2>Snippet1 - {{second._result.message}}</h2>
+        <div>Snippet1 - {{second._result.body.a}}</div>
       </div>
       <div class="col-md-4">
-        <h2>Snippet1 - {[third._result.message]}</h2>
-        <div>Snippet1 - {[third._result.body.a]}</div>
+        <h2>Snippet1 - {{third._result.message}}</h2>
+        <div>Snippet1 - {{third._result.body.a}}</div>
       </div>
     </script>
   </div>
@@ -78,15 +80,15 @@
     <div class="col-md-4">
       <script data-knotx-knots="databridge,handlebars" data-knotx-databridge-name="third-service"
               type="text/knotx-snippet">
-        <h2>Snippet3 - {[_result.message]}</h2>
-        <p>Snippet3 - {[_result.body.a]}</p>
+        <h2>Snippet3 - {{_result.message}}</h2>
+        <p>Snippet3 - {{_result.body.a}}</p>
       </script>
     </div>
     <div class="col-md-4">
       <script data-knotx-knots="databridge,handlebars" data-knotx-databridge-name="third-service"
               type="text/knotx-snippet">
-        <h2>Snippet4 - {[_result.message]}</h2>
-        <p>Snippet4 - {[encode_uri _result.url]}</p>
+        <h2>Snippet4 - {{_result.message}}</h2>
+        <p>Snippet4 - {{encode_uri _result.url}}</p>
       </script>
     </div>
   </div>
