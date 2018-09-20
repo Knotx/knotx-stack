@@ -39,6 +39,7 @@
 
   <modules>
     <module>knotx-stack-manager</module>
+    <module>knotx-it-tests</module>
     <module>knotx-docker</module>
   </modules>
 
@@ -79,10 +80,11 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>1.8</java.version>
 
-    <maven.nexus.staging.plugin.version>1.6.7</maven.nexus.staging.plugin.version>
-    <maven.source.plugin.version>2.2.1</maven.source.plugin.version>
-    <maven.javadoc.plugin.version>2.9.1</maven.javadoc.plugin.version>
+    <maven.nexus.staging.plugin.version>1.6.8</maven.nexus.staging.plugin.version>
+    <maven.source.plugin.version>3.0.1</maven.source.plugin.version>
+    <maven.javadoc.plugin.version>3.0.1</maven.javadoc.plugin.version>
     <maven.gpg.plugin.version>1.5</maven.gpg.plugin.version>
+    <maven.assembly.plugin.version>3.1.0</maven.assembly.plugin.version>
 
     <timestamp>${maven.build.timestamp}</timestamp>
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
@@ -100,12 +102,40 @@
     </dependencies>
   </dependencyManagement>
 
+  <dependencies>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+      <version>1.7.25</version>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+    </dependency>
+  </dependencies>
+
   <build>
     <pluginManagement>
       <plugins>
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.22.0</version>
+          <configuration>
+            <systemPropertyVariables>
+              <vertx.logger-delegate-factory-class-name>
+                io.vertx.core.logging.SLF4JLogDelegateFactory
+              </vertx.logger-delegate-factory-class-name>
+            </systemPropertyVariables>
+          </configuration>
+        </plugin>
+        <plugin>
           <artifactId>maven-assembly-plugin</artifactId>
-          <version>2.4.1</version>
+          <version>${maven.assembly.plugin.version}</version>
         </plugin>
         <plugin>
           <groupId>org.sonatype.plugins</groupId>
