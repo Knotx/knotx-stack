@@ -51,18 +51,18 @@ servers:
 paths:
   /content/local/*:
     get:
-      operationId: local-get
+      operationId: te-local-get
       responses:
         default:
           description: local repository response with templating
     post:
-      operationId: local-post
+      operationId: te-local-post
       responses:
         default:
           description: local repository response with templating
   /content/*:
     get:
-      operationId: remote-get
+      operationId: te-remote-get
       responses:
         default:
           description: remote repository response with templating
