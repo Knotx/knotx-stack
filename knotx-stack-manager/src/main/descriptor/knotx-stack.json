@@ -127,6 +127,12 @@
     },
     {
       "groupId": "io.vertx",
+      "artifactId": "vertx-web-api-contract",
+      "version": "${vertx.version}",
+      "included": true
+    },
+    {
+      "groupId": "io.vertx",
       "artifactId": "vertx-web-client",
       "version": "\${vertx.version}",
       "included": true
