@@ -75,10 +75,8 @@ public class SampleApplicationHeadersIntegrationTest {
             ));
 
     expectedHeaders.clear();
-    expectedHeaders.add("Access-Control-Allow-Origin", "*");
     expectedHeaders.add("Content-Type", "text/html; charset=UTF-8");
-    expectedHeaders.add("content-length", "2971");
-    expectedHeaders.add("X-Server", "Knot.x");
+    expectedHeaders.add("X-Server", "Knot.x-Custom-Header");
   }
 
   @Test
@@ -96,12 +94,13 @@ public class SampleApplicationHeadersIntegrationTest {
     subscribeToResult_shouldSucceed(context, httpRequest,
         resp -> {
           MultiMap headers = resp.headers();
-          headers.names().forEach(name -> {
-            assertEquals(HttpResponseStatus.OK.code(), resp.statusCode(), "Wrong status code received.");
-            assertTrue(expectedHeaders.contains(name), "Header " + name + " is not expected.");
+          expectedHeaders.names().forEach(name -> {
+            assertTrue(headers.contains(name), "Header " + name + " is expected to be present.");
             assertEquals(expectedHeaders.get(name), headers.get(name),
                 "Wrong value of " + name + " header.");
           });
+          assertEquals(HttpResponseStatus.OK.code(), resp.statusCode(), "Wrong status code received.");
+          assertTrue(headers.contains("content-length"), "content-length header is expected to be present.");
         }
     );
   }
