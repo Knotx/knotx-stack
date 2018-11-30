@@ -4,6 +4,7 @@ All notable changes to `knotx-stack` will be documented in this file.
 ## Unreleased
 List of changes that are finished but not yet released in any final version.
 - [PR-32](https://github.com/Knotx/knotx-stack/pull/32) - Extract assembler and splitter EB addresses to globals.
+- [PR-33](https://github.com/Knotx/knotx-stack/pull/33) - Knot.x Template Engine introduced instead of HBS Knot
 
 ## 1.4.0
 - [PR-5](https://github.com/Knotx/knotx-stack/pull/5) - Knot.x Data Bridge introduced instead of Service Knot
