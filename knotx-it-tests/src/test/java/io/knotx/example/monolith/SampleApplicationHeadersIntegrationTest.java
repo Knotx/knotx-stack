@@ -77,7 +77,7 @@ public class SampleApplicationHeadersIntegrationTest {
     expectedHeaders.clear();
     expectedHeaders.add("Access-Control-Allow-Origin", "*");
     expectedHeaders.add("Content-Type", "text/html; charset=UTF-8");
-    expectedHeaders.add("content-length", "2995");
+    expectedHeaders.add("content-length", "2971");
     expectedHeaders.add("X-Server", "Knot.x");
   }
 
