@@ -168,6 +168,14 @@ public class SampleApplicationIntegrationTest {
         "multipleFormWithPostResult2.html");
   }
 
+  @Test
+  @KnotxApplyConfiguration({"knotx-test-app.conf", "knotx-test-custom-tag.conf"})
+  public void whenRequestingLocalSimplePageWithCustomTag_expectLocalSimpleHtml(
+      VertxTestContext context, Vertx vertx) {
+    testGetRequest(context, vertx, "/content/local/customSnippetTag.html",
+        "localSimpleResultAngular.html");
+  }
+
   private void testPostRequest(VertxTestContext context, Vertx vertx, String url,
       Map<String, Object> formData,
       String expectedResponseFile) {
