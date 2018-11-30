@@ -44,23 +44,12 @@
   <div class="row">
     <script data-knotx-knots="databridge,te"
             data-knotx-databridge-name="first-service"
-            data-knotx-databridge-name-second="second-service"
-            data-knotx-databridge-name-third="third-service"
             type="text/knotx-snippet">
 
       <div class="col-md-4">
         <h2>Snippet1 - {[_result.message]}</h2>
         <div>Snippet1 - {[_result.body.a]}</div>
         <div>{[#bold]}Custom Handlebars helper{[/bold]}</div>
-      </div>
-      <div class="col-md-4">
-        <h2>Snippet1 - {[second._result.message]}</h2>
-        <div>Snippet1 - {[second._result.body.a]}</div>
-        <div>Success! Status code : {[second._response.statusCode]}</div>
-      </div>
-      <div class="col-md-4">
-        <h2>Snippet1 - {[third._result.message]}</h2>
-        <div>Snippet1 - {[third._result.body.a]}</div>
       </div>
     </script>
   </div>
