@@ -43,13 +43,13 @@
   </div>
   <div class="row">
     <knotx:fallback fallback-id="CUSTOM">
-      <p class="error">error</p>
+      <p class="error">local fallback</p>
     </knotx:fallback>
     <knotx:snippet knots="databridge,te"
             databridge-name="first-service"
             databridge-name-second="second-service"
             databridge-name-third="non-existing-service"
-            data-knotx-fallback="CUSTOM"
+            fallback="CUSTOM"
             type="text/knotx-snippet">
       <div class="col-md-4">
         <h2>Snippet1 - {{_result.message}}</h2>

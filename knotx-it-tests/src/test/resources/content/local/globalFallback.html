@@ -21,7 +21,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="shortcut icon" href="http://cognifide.com/favicon.ico?v=2"/>
   <title>Knot.x</title>
-  <link href="https://bootswatch.com/simplex/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://bootswatch.com/4/simplex/bootstrap.min.css" rel="stylesheet"/>
 </head>
 <body>
 <div class="container-fluid">
@@ -42,21 +42,49 @@
     </div>
   </div>
   <div class="row">
-    <p class="error">local fallback</p>
+    <knotx:snippet knots="databridge,te"
+            databridge-name="first-service"
+            databridge-name-second="second-service"
+            databridge-name-third="non-existing-service"
+            type="text/knotx-snippet">
+      <div class="col-md-4">
+        <h2>Snippet1 - {{_result.message}}</h2>
+        <div>Snippet1 - {{_result.body.a}}</div>
+        <div>{{#bold}}Custom Handlebars helper{{/bold}}</div>
+      </div>
+      <div class="col-md-4">
+        <h2>Snippet1 - {{second._result.message}}</h2>
+        <div>Snippet1 - {{second._result.body.a}}</div>
+        <div>Success! Status code : {{second._response.statusCode}}</div>
+      </div>
+      <div class="col-md-4">
+        <h2>Snippet1 - {{third._result.message}}</h2>
+        <div>Snippet1 - {{third._result.body.a}}</div>
+      </div>
+    </knotx:snippet>
   </div>
   <div class="row">
     <div class="col-md-4">
-      <h2>Snippet2 - this is webservice no. 2</h2>
-      <p>Snippet2 - message - a</p>
-      <p>Success!</p>
+      <knotx:snippet knots="databridge,te" databridge-name="second-service"
+              type="text/knotx-snippet">
+        <h2>Snippet2 - {{_result.message}}</h2>
+        <p>Snippet2 - {{_result.body.a}}</p>
+        <p>Success!</p>
+      </knotx:snippet>
     </div>
     <div class="col-md-4">
-      <h2>Snippet3 - this is webservice no. 3</h2>
-      <p>Snippet3 - message - a</p>
+      <knotx:snippet knots="databridge,te" databridge-name="third-service"
+              type="text/knotx-snippet">
+        <h2>Snippet3 - {{_result.message}}</h2>
+        <p>Snippet3 - {{_result.body.a}}</p>
+      </knotx:snippet>
     </div>
     <div class="col-md-4">
-      <h2>Snippet4 - this is webservice no. 3</h2>
-      <p>Snippet4 - http://example.com</p>
+      <knotx:snippet knots="databridge,te" databridge-name="third-service"
+              type="text/knotx-snippet">
+        <h2>Snippet4 - {{_result.message}}</h2>
+        <p>Snippet4 - {{_result.url}}</p>
+      </knotx:snippet>
     </div>
   </div>
 </div>
