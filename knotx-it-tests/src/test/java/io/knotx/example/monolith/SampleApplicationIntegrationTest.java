@@ -186,7 +186,7 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app-global-fallback.conf")
+  @KnotxApplyConfiguration({"knotx-test-app.conf", "knotx-test-fallback.conf"})
   public void whenRequestingFailingServiceWithGlobalFallback_expectFallback(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, GLOBAL_FALLBACK_REQUEST_URI, "globalFallbackResult.html");
