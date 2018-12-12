@@ -23,13 +23,13 @@ import static io.knotx.junit5.wiremock.KnotxWiremockExtension.stubForServer;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
-import io.knotx.dataobjects.AdapterResponse;
 import io.knotx.dataobjects.ClientResponse;
+import io.knotx.forms.api.FormsAdapterProxy;
+import io.knotx.forms.api.FormsAdapterResponse;
 import io.knotx.junit5.KnotxApplyConfiguration;
 import io.knotx.junit5.KnotxExtension;
 import io.knotx.junit5.util.FileReader;
 import io.knotx.junit5.wiremock.KnotxWiremock;
-import io.knotx.proxy.AdapterProxy;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.reactivex.Single;
 import io.vertx.core.Future;
@@ -89,7 +89,8 @@ public class SampleApplicationIntegrationTest {
                     .withHeader("Cache-control", "no-cache, no-store, must-revalidate")
                     .withHeader("Content-Type", "text/html; charset=UTF-8")
                     .withHeader("X-Server", "Knot.x")
-            ));  }
+            ));
+  }
 
   @Test
   @KnotxApplyConfiguration("conf/it-tests-application.conf")
@@ -99,7 +100,8 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration({"conf/it-tests-application.conf", "conf/overrides/knotx-test-handlebars-custom-symbol.conf"})
+  @KnotxApplyConfiguration({"conf/it-tests-application.conf",
+      "conf/overrides/knotx-test-handlebars-custom-symbol.conf"})
   public void whenRequestingLocalSimplePageWithGetCustomSymbol_expectLocalSimpleHtml(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, "/content/local/customSymbol.html",
@@ -107,7 +109,8 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration({"conf/it-tests-application.conf", "conf/overrides/knotx-test-handlebars-custom-symbol.conf"})
+  @KnotxApplyConfiguration({"conf/it-tests-application.conf",
+      "conf/overrides/knotx-test-handlebars-custom-symbol.conf"})
   public void whenRequestingLocalSimplePageWithGetCustomAndDefaultSymbol_expectLocalSimpleHtmlWithDefault(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, "/content/local/customAndDefaultSymbol.html",
@@ -154,7 +157,7 @@ public class SampleApplicationIntegrationTest {
   @KnotxApplyConfiguration("conf/it-tests-application.conf")
   public void whenRequestingWithPostMethodFirstForm_expectFirstFormPresentingFormActionResult(
       VertxTestContext context, Vertx vertx) {
-    mockActionAdapter(vertx, getFirstTestFormData(), null);
+    mockFormsAdapter(vertx, getFirstTestFormData(), null);
     testPostRequest(context, vertx, LOCAL_MULTIPLE_FORMS_URI, getFirstTestFormData().getMap(),
         "multipleFormWithPostResult.html");
   }
@@ -163,7 +166,7 @@ public class SampleApplicationIntegrationTest {
   @KnotxApplyConfiguration("conf/it-tests-application.conf")
   public void whenRequestingWithPostFirstFormTwiceWithDifferentData_expectDifferentResultOfFirstFormForEachRequest(
       VertxTestContext context, Vertx vertx) {
-    mockActionAdapter(vertx, getFirstTestFormData(), getSecondTestFormData());
+    mockFormsAdapter(vertx, getFirstTestFormData(), getSecondTestFormData());
     testPostRequest(context, vertx, LOCAL_MULTIPLE_FORMS_URI, getFirstTestFormData().getMap(),
         "multipleFormWithPostResult.html");
     testPostRequest(context, vertx, LOCAL_MULTIPLE_FORMS_URI, getSecondTestFormData().getMap(),
@@ -171,7 +174,8 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration({"conf/it-tests-application.conf", "conf/overrides/knotx-test-custom-tag.conf"})
+  @KnotxApplyConfiguration({"conf/it-tests-application.conf",
+      "conf/overrides/knotx-test-custom-tag.conf"})
   public void whenRequestingLocalSimplePageWithCustomTag_expectLocalSimpleHtml(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, "/content/local/customSnippetTag.html",
@@ -179,14 +183,14 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app.conf")
+  @KnotxApplyConfiguration("conf/it-tests-application.conf")
   public void whenRequestingFailingServiceWithFallback_expectFallback(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, LOCAL_FALLBACK_REQUEST_URI, "localFallbackResult.html");
   }
 
   @Test
-  @KnotxApplyConfiguration({"knotx-test-app.conf", "knotx-test-fallback.conf"})
+  @KnotxApplyConfiguration({"conf/it-tests-application.conf", "conf/overrides/knotx-test-fallback.conf"})
   public void whenRequestingFailingServiceWithGlobalFallback_expectFallback(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, GLOBAL_FALLBACK_REQUEST_URI, "globalFallbackResult.html");
@@ -254,14 +258,14 @@ public class SampleApplicationIntegrationTest {
         .put("_frmId", "newsletter");
   }
 
-  private void mockActionAdapter(Vertx vertx, JsonObject competitionData,
+  private void mockFormsAdapter(Vertx vertx, JsonObject competitionData,
       JsonObject newsletterData) {
     ClientResponse clientResponse = new ClientResponse().setStatusCode(404);
-    AdapterResponse resp = new AdapterResponse().setResponse(clientResponse);
+    FormsAdapterResponse resp = new FormsAdapterResponse().setResponse(clientResponse);
 
     new ServiceBinder(vertx.getDelegate())
-        .setAddress("knotx.action.adapter")
-        .register(AdapterProxy.class, (request, result) -> {
+        .setAddress("knotx.forms.mock.adapter")
+        .register(FormsAdapterProxy.class, (request, result) -> {
           String path = request.getParams().getString("path");
           if (StringUtils.isNotBlank(path)) {
             if (path.equals("/service/mock/post-competition.json")) {
