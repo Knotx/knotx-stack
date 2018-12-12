@@ -96,7 +96,7 @@ public class SampleApplicationIntegrationTest {
   @KnotxApplyConfiguration("conf/it-tests-application.conf")
   public void whenRequestingLocalSimplePageWithGet_expectLocalSimpleHtml(
       VertxTestContext context, Vertx vertx) {
-    testGetRequest(context, vertx, LOCAL_REQUEST_URI, "results/localSimpleResult.html");
+    testGetRequest(context, vertx, LOCAL_REQUEST_URI, "results/localSimple.html");
   }
 
   @Test
@@ -105,7 +105,7 @@ public class SampleApplicationIntegrationTest {
   public void whenRequestingLocalSimplePageWithGetCustomSymbol_expectLocalSimpleHtml(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, "/content/local/customSymbol.html",
-        "results/localSimpleResultAngular.html");
+        "results/localSimpleAngular.html");
   }
 
   @Test
@@ -114,7 +114,7 @@ public class SampleApplicationIntegrationTest {
   public void whenRequestingLocalSimplePageWithGetCustomAndDefaultSymbol_expectLocalSimpleHtmlWithDefault(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, "/content/local/customAndDefaultSymbol.html",
-        "results/localSimpleResultCustomAndDefault.html");
+        "results/localSimpleCustomAndDefault.html");
   }
 
   @Test
@@ -135,7 +135,7 @@ public class SampleApplicationIntegrationTest {
   @KnotxApplyConfiguration("conf/it-tests-application.conf")
   public void whenRequestingRemoteSimplePageWithGet_expectRemoteSimpleHtml(
       VertxTestContext context, Vertx vertx) {
-    testGetRequest(context, vertx, REMOTE_REQUEST_URI, "results/remoteSimpleResult.html");
+    testGetRequest(context, vertx, REMOTE_REQUEST_URI, "results/remoteSimple.html");
   }
 
   @Test
@@ -143,14 +143,14 @@ public class SampleApplicationIntegrationTest {
   public void whenRequestingRemoteSimplePageWithGetAndRequestParameterNameContainsSpace_expectRemoteSimpleHtml(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, REMOTE_REQUEST_URI_WITH_PARAMETER_CONTAINING_SPACE,
-        "results/remoteSimpleResult.html");
+        "results/remoteSimple.html");
   }
 
   @Test
   @KnotxApplyConfiguration("conf/it-tests-application.conf")
   public void whenRequestingLocalMultipleFormsPageWithGet_expectMutlipleFormsWithGetResultHtml(
       VertxTestContext context, Vertx vertx) {
-    testGetRequest(context, vertx, LOCAL_MULTIPLE_FORMS_URI, "results/multipleFormWithGetResult.html");
+    testGetRequest(context, vertx, LOCAL_MULTIPLE_FORMS_URI, "results/multipleFormWithGet.html");
   }
 
   @Test
@@ -159,7 +159,7 @@ public class SampleApplicationIntegrationTest {
       VertxTestContext context, Vertx vertx) {
     mockFormsAdapter(vertx, getFirstTestFormData(), null);
     testPostRequest(context, vertx, LOCAL_MULTIPLE_FORMS_URI, getFirstTestFormData().getMap(),
-        "results/multipleFormWithPostResult.html");
+        "results/multipleFormWithPost.html");
   }
 
   @Test
@@ -168,9 +168,9 @@ public class SampleApplicationIntegrationTest {
       VertxTestContext context, Vertx vertx) {
     mockFormsAdapter(vertx, getFirstTestFormData(), getSecondTestFormData());
     testPostRequest(context, vertx, LOCAL_MULTIPLE_FORMS_URI, getFirstTestFormData().getMap(),
-        "results/multipleFormWithPostResult.html");
+        "results/multipleFormWithPost.html");
     testPostRequest(context, vertx, LOCAL_MULTIPLE_FORMS_URI, getSecondTestFormData().getMap(),
-        "results/multipleFormWithPostResult2.html");
+        "results/multipleFormWithPost2.html");
   }
 
   @Test
@@ -179,21 +179,21 @@ public class SampleApplicationIntegrationTest {
   public void whenRequestingLocalSimplePageWithCustomTag_expectLocalSimpleHtml(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, "/content/local/customSnippetTag.html",
-        "results/localSimpleResultAngular.html");
+        "results/localSimpleAngular.html");
   }
 
   @Test
   @KnotxApplyConfiguration("conf/it-tests-application.conf")
   public void whenRequestingFailingServiceWithFallback_expectFallback(
       VertxTestContext context, Vertx vertx) {
-    testGetRequest(context, vertx, LOCAL_FALLBACK_REQUEST_URI, "results/localFallbackResult.html");
+    testGetRequest(context, vertx, LOCAL_FALLBACK_REQUEST_URI, "results/localFallback.html");
   }
 
   @Test
   @KnotxApplyConfiguration({"conf/it-tests-application.conf", "conf/overrides/knotx-test-fallback.conf"})
   public void whenRequestingFailingServiceWithGlobalFallback_expectFallback(
       VertxTestContext context, Vertx vertx) {
-    testGetRequest(context, vertx, GLOBAL_FALLBACK_REQUEST_URI, "results/globalFallbackResult.html");
+    testGetRequest(context, vertx, GLOBAL_FALLBACK_REQUEST_URI, "results/globalFallback.html");
   }
 
   private void testPostRequest(VertxTestContext context, Vertx vertx, String url,
