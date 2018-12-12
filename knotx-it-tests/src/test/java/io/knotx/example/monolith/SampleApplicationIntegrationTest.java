@@ -90,14 +90,14 @@ public class SampleApplicationIntegrationTest {
             ));  }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app.conf")
+  @KnotxApplyConfiguration("conf/it-tests-application.conf")
   public void whenRequestingLocalSimplePageWithGet_expectLocalSimpleHtml(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, LOCAL_REQUEST_URI, "localSimpleResult.html");
   }
 
   @Test
-  @KnotxApplyConfiguration({"knotx-test-app.conf", "knotx-test-handlebars-custom-symbol.conf"})
+  @KnotxApplyConfiguration({"conf/it-tests-application.conf", "conf/overrides/knotx-test-handlebars-custom-symbol.conf"})
   public void whenRequestingLocalSimplePageWithGetCustomSymbol_expectLocalSimpleHtml(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, "/content/local/customSymbol.html",
@@ -105,7 +105,7 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration({"knotx-test-app.conf", "knotx-test-handlebars-custom-symbol.conf"})
+  @KnotxApplyConfiguration({"conf/it-tests-application.conf", "conf/overrides/knotx-test-handlebars-custom-symbol.conf"})
   public void whenRequestingLocalSimplePageWithGetCustomAndDefaultSymbol_expectLocalSimpleHtmlWithDefault(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, "/content/local/customAndDefaultSymbol.html",
@@ -113,28 +113,28 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app.conf")
+  @KnotxApplyConfiguration("conf/it-tests-application.conf")
   public void whenRequestingLocalPageWhereInServiceIsMissingResponseBody_expectNoBodyHtml(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, LOCAL_NO_BODY_REQUEST_URI, "noBody.html");
   }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app.conf")
+  @KnotxApplyConfiguration("conf/it-tests-application.conf")
   public void whenRequestingPageWithMissingServiceWithoutConfiguration_expectServerError(
       VertxTestContext context, Vertx vertx) {
     testGetServerError(context, vertx, MISSING_SERVICE_CONFIG_REQUEST_URI);
   }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app.conf")
+  @KnotxApplyConfiguration("conf/it-tests-application.conf")
   public void whenRequestingRemoteSimplePageWithGet_expectRemoteSimpleHtml(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, REMOTE_REQUEST_URI, "remoteSimpleResult.html");
   }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app.conf")
+  @KnotxApplyConfiguration("conf/it-tests-application.conf")
   public void whenRequestingRemoteSimplePageWithGetAndRequestParameterNameContainsSpace_expectRemoteSimpleHtml(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, REMOTE_REQUEST_URI_WITH_PARAMETER_CONTAINING_SPACE,
@@ -142,14 +142,14 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app.conf")
+  @KnotxApplyConfiguration("conf/it-tests-application.conf")
   public void whenRequestingLocalMultipleFormsPageWithGet_expectMutlipleFormsWithGetResultHtml(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, LOCAL_MULTIPLE_FORMS_URI, "multipleFormWithGetResult.html");
   }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app.conf")
+  @KnotxApplyConfiguration("conf/it-tests-application.conf")
   public void whenRequestingWithPostMethodFirstForm_expectFirstFormPresentingFormActionResult(
       VertxTestContext context, Vertx vertx) {
     mockActionAdapter(vertx, getFirstTestFormData(), null);
@@ -158,7 +158,7 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app.conf")
+  @KnotxApplyConfiguration("conf/it-tests-application.conf")
   public void whenRequestingWithPostFirstFormTwiceWithDifferentData_expectDifferentResultOfFirstFormForEachRequest(
       VertxTestContext context, Vertx vertx) {
     mockActionAdapter(vertx, getFirstTestFormData(), getSecondTestFormData());
@@ -169,7 +169,7 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration({"knotx-test-app.conf", "knotx-test-custom-tag.conf"})
+  @KnotxApplyConfiguration({"conf/it-tests-application.conf", "conf/overrides/knotx-test-custom-tag.conf"})
   public void whenRequestingLocalSimplePageWithCustomTag_expectLocalSimpleHtml(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, "/content/local/customSnippetTag.html",

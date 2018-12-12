@@ -80,7 +80,7 @@ public class SampleApplicationHeadersIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration("knotx-test-app.conf")
+  @KnotxApplyConfiguration("conf/it-tests-application.conf")
   public void whenRequestingRemoteRepository_expectOnlyAllowedResponseHeaders(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, REMOTE_REQUEST_URI);
