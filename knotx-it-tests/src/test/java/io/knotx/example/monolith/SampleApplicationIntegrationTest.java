@@ -57,6 +57,8 @@ public class SampleApplicationIntegrationTest {
   private static final String REMOTE_REQUEST_URI = "/content/remote/simple.html";
   private static final String REMOTE_REQUEST_URI_WITH_PARAMETER_CONTAINING_SPACE = "/content/remote/simple.html?parameter%20with%20space=value";
   private static final String LOCAL_REQUEST_URI = "/content/local/simple.html";
+  private static final String LOCAL_FALLBACK_REQUEST_URI = "/content/local/fallback.html";
+  private static final String GLOBAL_FALLBACK_REQUEST_URI = "/content/local/globalFallback.html";
   private static final String MISSING_SERVICE_CONFIG_REQUEST_URI = "/content/local/missingServiceConfig.html";
   private static final String LOCAL_NO_BODY_REQUEST_URI = "/content/local/noBody.html";
   private static final String LOCAL_MULTIPLE_FORMS_URI = "/content/local/multiple-forms.html";
@@ -174,6 +176,20 @@ public class SampleApplicationIntegrationTest {
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, "/content/local/customSnippetTag.html",
         "localSimpleResultAngular.html");
+  }
+
+  @Test
+  @KnotxApplyConfiguration("knotx-test-app.conf")
+  public void whenRequestingFailingServiceWithFallback_expectFallback(
+      VertxTestContext context, Vertx vertx) {
+    testGetRequest(context, vertx, LOCAL_FALLBACK_REQUEST_URI, "localFallbackResult.html");
+  }
+
+  @Test
+  @KnotxApplyConfiguration({"knotx-test-app.conf", "knotx-test-fallback.conf"})
+  public void whenRequestingFailingServiceWithGlobalFallback_expectFallback(
+      VertxTestContext context, Vertx vertx) {
+    testGetRequest(context, vertx, GLOBAL_FALLBACK_REQUEST_URI, "globalFallbackResult.html");
   }
 
   private void testPostRequest(VertxTestContext context, Vertx vertx, String url,
