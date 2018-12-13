@@ -225,12 +225,12 @@ public class SampleApplicationIntegrationTest {
     new ServiceBinder(vertx.getDelegate())
         .setAddress("knotx.forms.mock.adapter")
         .register(FormsAdapterProxy.class, (request, result) -> {
-          String path = request.getParams().getString("path");
+          String path = request.getParams().getString("testedFormId");
           if (StringUtils.isNotBlank(path)) {
-            if (path.equals("/service/mock/post-competition.json")) {
+            if (path.equals("competitionForm")) {
               clientResponse.setStatusCode(200)
                   .setBody(new JsonObject().put("form", competitionData).toBuffer());
-            } else if (path.equals("/service/mock/post-newsletter.json")) {
+            } else if (path.equals("newsletterForm")) {
               clientResponse.setStatusCode(200)
                   .setBody(new JsonObject().put("form", newsletterData).toBuffer());
             }
