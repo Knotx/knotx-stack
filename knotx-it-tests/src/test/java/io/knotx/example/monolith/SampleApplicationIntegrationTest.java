@@ -56,15 +56,6 @@ public class SampleApplicationIntegrationTest {
 
   private static final int KNOTX_SERVER_PORT = 9092;
   private static final String KNOTX_SERVER_ADDRESS = "localhost";
-  private static final JsonObject COMPETITION_FORM_DATA = new JsonObject()
-      .put("name", "test")
-      .put("email", "email-1@example.com")
-      .put("_frmId", "competition");
-  private static final JsonObject NEWSLETTER_FORM_DATA = new JsonObject()
-      .put("name", "test")
-      .put("email", "email-2@example.com")
-      .put("_frmId", "newsletter");
-
 
   @KnotxWiremock
   protected WireMockServer mockService;
@@ -159,14 +150,22 @@ public class SampleApplicationIntegrationTest {
 
   @Test
   @KnotxApplyConfiguration("conf/it-tests-application.conf")
-  public void submitOneFormAfterAnother(
-      VertxTestContext context, Vertx vertx) {
-    mockFormsAdapter(vertx, COMPETITION_FORM_DATA, NEWSLETTER_FORM_DATA);
+  public void submitOneFormAfterAnother(VertxTestContext context, Vertx vertx) {
+    final JsonObject competitionFormData = new JsonObject()
+        .put("name", "test")
+        .put("email", "email-1@example.com")
+        .put("_frmId", "competition");
+    final JsonObject newsletterFormData = new JsonObject()
+        .put("name", "test")
+        .put("email", "email-2@example.com")
+        .put("_frmId", "newsletter");
+
+    mockFormsAdapter(vertx, competitionFormData, newsletterFormData);
     testPostRequest(context, vertx, "/content/local/formsBridgeTe.html",
-        COMPETITION_FORM_DATA.getMap(),
+        competitionFormData.getMap(),
         "results/submitCompetitionForm.html");
     testPostRequest(context, vertx, "/content/local/formsBridgeTe.html",
-        NEWSLETTER_FORM_DATA.getMap(),
+        newsletterFormData.getMap(),
         "results/submitNewsletterForm.html");
   }
 
