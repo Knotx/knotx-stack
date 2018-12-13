@@ -54,16 +54,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @TestInstance(Lifecycle.PER_CLASS)
 public class SampleApplicationIntegrationTest {
 
-  private static final String REMOTE_REQUEST_URI = "/content/remote/simple.html";
-  private static final String REMOTE_REQUEST_URI_WITH_PARAMETER_CONTAINING_SPACE = "/content/remote/simple.html?parameter%20with%20space=value";
-  private static final String LOCAL_REQUEST_URI = "/content/local/simple.html";
-  private static final String LOCAL_FALLBACK_REQUEST_URI = "/content/local/fallback.html";
-  private static final String GLOBAL_FALLBACK_REQUEST_URI = "/content/local/globalFallback.html";
-  private static final String MISSING_SERVICE_CONFIG_REQUEST_URI = "/content/local/missingServiceConfig.html";
-  private static final String LOCAL_NO_BODY_REQUEST_URI = "/content/local/noBody.html";
-  private static final String LOCAL_MULTIPLE_FORMS_URI = "/content/local/multiple-forms.html";
   private static final int KNOTX_SERVER_PORT = 9092;
   private static final String KNOTX_SERVER_ADDRESS = "localhost";
+  private static final JsonObject COMPETITION_FORM_DATA = new JsonObject()
+      .put("name", "test")
+      .put("email", "email-1@example.com")
+      .put("_frmId", "competition");
+  private static final JsonObject NEWSLETTER_FORM_DATA = new JsonObject()
+      .put("name", "test")
+      .put("email", "email-2@example.com")
+      .put("_frmId", "newsletter");
+
 
   @KnotxWiremock
   protected WireMockServer mockService;
@@ -94,106 +95,79 @@ public class SampleApplicationIntegrationTest {
 
   @Test
   @KnotxApplyConfiguration("conf/it-tests-application.conf")
-  public void whenRequestingLocalSimplePageWithGet_expectLocalSimpleHtml(
+  public void requestFsRepoSimplePage(
       VertxTestContext context, Vertx vertx) {
-    testGetRequest(context, vertx, LOCAL_REQUEST_URI, "results/localSimple.html");
+    testGetRequest(context, vertx, "/content/local/fullPage.html", "results/local-fullPage.html");
+  }
+
+  @Test
+  @KnotxApplyConfiguration("conf/it-tests-application.conf")
+  public void requestHttpRepoSimplePage(
+      VertxTestContext context, Vertx vertx) {
+    testGetRequest(context, vertx, "/content/remote/fullPage.html", "results/remote-fullPage.html");
+  }
+
+  @Test
+  @KnotxApplyConfiguration("conf/it-tests-application.conf")
+  public void requestPageWithRequestParameters(
+      VertxTestContext context, Vertx vertx) {
+    testGetRequest(context, vertx,
+        "/content/remote/fullPage.html?parameter%20with%20space=value&q=knotx",
+        "results/remote-fullPage.html");
+  }
+
+  @Test
+  @KnotxApplyConfiguration("conf/it-tests-application.conf")
+  public void requestPageWithMissingDataDefinitionWithoutConfiguration_expectServerError(
+      VertxTestContext context, Vertx vertx) {
+    testGetServerError(context, vertx, "/content/local/notExistingService.html");
+  }
+
+  @Test
+  @KnotxApplyConfiguration("conf/it-tests-application.conf")
+  public void requestPageWithMissingDataDefinitionAndFallbackDefined(
+      VertxTestContext context, Vertx vertx) {
+    testGetRequest(context, vertx, "/content/local/notExistingServiceWithFallback.html",
+        "results/notExistingServiceWithFallback.html");
   }
 
   @Test
   @KnotxApplyConfiguration({"conf/it-tests-application.conf",
-      "conf/overrides/knotx-test-handlebars-custom-symbol.conf"})
-  public void whenRequestingLocalSimplePageWithGetCustomSymbol_expectLocalSimpleHtml(
+      "conf/overrides/default-fallback.conf"})
+  public void requestPageWithMissingDataDefinitionWhenGlobalFallbackDefined(
       VertxTestContext context, Vertx vertx) {
-    testGetRequest(context, vertx, "/content/local/customSymbol.html",
-        "results/localSimpleAngular.html");
+    testGetRequest(context, vertx, "/content/local/notExistingService.html",
+        "results/notExistingServiceWithGlobalFallback.html");
   }
 
   @Test
   @KnotxApplyConfiguration({"conf/it-tests-application.conf",
-      "conf/overrides/knotx-test-handlebars-custom-symbol.conf"})
-  public void whenRequestingLocalSimplePageWithGetCustomAndDefaultSymbol_expectLocalSimpleHtmlWithDefault(
-      VertxTestContext context, Vertx vertx) {
-    testGetRequest(context, vertx, "/content/local/customAndDefaultSymbol.html",
-        "results/localSimpleCustomAndDefault.html");
-  }
-
-  @Test
-  @KnotxApplyConfiguration("conf/it-tests-application.conf")
-  public void whenRequestingLocalPageWhereInServiceIsMissingResponseBody_expectNoBodyHtml(
-      VertxTestContext context, Vertx vertx) {
-    testGetRequest(context, vertx, LOCAL_NO_BODY_REQUEST_URI, "results/noBody.html");
-  }
-
-  @Test
-  @KnotxApplyConfiguration("conf/it-tests-application.conf")
-  public void whenRequestingPageWithMissingServiceWithoutConfiguration_expectServerError(
-      VertxTestContext context, Vertx vertx) {
-    testGetServerError(context, vertx, MISSING_SERVICE_CONFIG_REQUEST_URI);
-  }
-
-  @Test
-  @KnotxApplyConfiguration("conf/it-tests-application.conf")
-  public void whenRequestingRemoteSimplePageWithGet_expectRemoteSimpleHtml(
-      VertxTestContext context, Vertx vertx) {
-    testGetRequest(context, vertx, REMOTE_REQUEST_URI, "results/remoteSimple.html");
-  }
-
-  @Test
-  @KnotxApplyConfiguration("conf/it-tests-application.conf")
-  public void whenRequestingRemoteSimplePageWithGetAndRequestParameterNameContainsSpace_expectRemoteSimpleHtml(
-      VertxTestContext context, Vertx vertx) {
-    testGetRequest(context, vertx, REMOTE_REQUEST_URI_WITH_PARAMETER_CONTAINING_SPACE,
-        "results/remoteSimple.html");
-  }
-
-  @Test
-  @KnotxApplyConfiguration("conf/it-tests-application.conf")
-  public void whenRequestingLocalMultipleFormsPageWithGet_expectMutlipleFormsWithGetResultHtml(
-      VertxTestContext context, Vertx vertx) {
-    testGetRequest(context, vertx, LOCAL_MULTIPLE_FORMS_URI, "results/multipleFormWithGet.html");
-  }
-
-  @Test
-  @KnotxApplyConfiguration("conf/it-tests-application.conf")
-  public void whenRequestingWithPostMethodFirstForm_expectFirstFormPresentingFormActionResult(
-      VertxTestContext context, Vertx vertx) {
-    mockFormsAdapter(vertx, getFirstTestFormData(), null);
-    testPostRequest(context, vertx, LOCAL_MULTIPLE_FORMS_URI, getFirstTestFormData().getMap(),
-        "results/multipleFormWithPost.html");
-  }
-
-  @Test
-  @KnotxApplyConfiguration("conf/it-tests-application.conf")
-  public void whenRequestingWithPostFirstFormTwiceWithDifferentData_expectDifferentResultOfFirstFormForEachRequest(
-      VertxTestContext context, Vertx vertx) {
-    mockFormsAdapter(vertx, getFirstTestFormData(), getSecondTestFormData());
-    testPostRequest(context, vertx, LOCAL_MULTIPLE_FORMS_URI, getFirstTestFormData().getMap(),
-        "results/multipleFormWithPost.html");
-    testPostRequest(context, vertx, LOCAL_MULTIPLE_FORMS_URI, getSecondTestFormData().getMap(),
-        "results/multipleFormWithPost2.html");
-  }
-
-  @Test
-  @KnotxApplyConfiguration({"conf/it-tests-application.conf",
-      "conf/overrides/knotx-test-custom-tag.conf"})
-  public void whenRequestingLocalSimplePageWithCustomTag_expectLocalSimpleHtml(
+      "conf/overrides/custom-tag-and-prefix.conf"})
+  public void requestPageWithCustomTagAndParamPrefix(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, "/content/local/customSnippetTag.html",
-        "results/localSimpleAngular.html");
+        "results/customSnippetTag.html");
   }
 
   @Test
   @KnotxApplyConfiguration("conf/it-tests-application.conf")
-  public void whenRequestingFailingServiceWithFallback_expectFallback(
+  public void requestPageThatUseFormsDatabridgeAndTe(
       VertxTestContext context, Vertx vertx) {
-    testGetRequest(context, vertx, LOCAL_FALLBACK_REQUEST_URI, "results/localFallback.html");
+    testGetRequest(context, vertx, "/content/local/formsBridgeTe.html",
+        "results/formsBridgeTe.html");
   }
 
   @Test
-  @KnotxApplyConfiguration({"conf/it-tests-application.conf", "conf/overrides/knotx-test-fallback.conf"})
-  public void whenRequestingFailingServiceWithGlobalFallback_expectFallback(
+  @KnotxApplyConfiguration("conf/it-tests-application.conf")
+  public void submitOneFormAfterAnother(
       VertxTestContext context, Vertx vertx) {
-    testGetRequest(context, vertx, GLOBAL_FALLBACK_REQUEST_URI, "results/globalFallback.html");
+    mockFormsAdapter(vertx, COMPETITION_FORM_DATA, NEWSLETTER_FORM_DATA);
+    testPostRequest(context, vertx, "/content/local/formsBridgeTe.html",
+        COMPETITION_FORM_DATA.getMap(),
+        "results/submitCompetitionForm.html");
+    testPostRequest(context, vertx, "/content/local/formsBridgeTe.html",
+        NEWSLETTER_FORM_DATA.getMap(),
+        "results/submitNewsletterForm.html");
   }
 
   private void testPostRequest(VertxTestContext context, Vertx vertx, String url,
@@ -242,20 +216,6 @@ public class SampleApplicationIntegrationTest {
       assertEquals(HttpResponseStatus.INTERNAL_SERVER_ERROR.code(), resp.statusCode());
       client.close();
     });
-  }
-
-  private JsonObject getFirstTestFormData() {
-    return new JsonObject()
-        .put("name", "test")
-        .put("email", "email-1@example.com")
-        .put("_frmId", "competition");
-  }
-
-  private JsonObject getSecondTestFormData() {
-    return new JsonObject()
-        .put("name", "test")
-        .put("email", "email-2@example.com")
-        .put("_frmId", "newsletter");
   }
 
   private void mockFormsAdapter(Vertx vertx, JsonObject competitionData,

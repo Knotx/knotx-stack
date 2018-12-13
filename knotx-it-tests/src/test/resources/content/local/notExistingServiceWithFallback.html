@@ -17,31 +17,40 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Custom snippet tag and prefix</title>
+  <title>Fallback</title>
 </head>
 <body>
   <div>
-    <cusotm:snippet it-test-knots="databridge,te"
-                    it-test-databridge-name="first-service"
-                    type="text/knotx-snippet">
+    <knotx:fallback fallback-id="CUSTOM">
+      <p class="error">local fallback</p>
+    </knotx:fallback>
+    <knotx:snippet knots="databridge,te"
+                   databridge-name="first-service"
+                   databridge-name-second="second-service"
+                   databridge-name-third="non-existing-service"
+                   fallback="CUSTOM"
+                   type="text/knotx-snippet">
+      <h2>Things below will be replaced by fallback markup</h2>
       <div>
         <h2>Snippet1 - {{_result.message}}</h2>
         <div>Snippet1 - {{_result.body.a}}</div>
       </div>
-    </cusotm:snippet>
-  </div>
-  <div>
-    <cusotm:snippet it-test-knots="databridge,te" it-test-databridge-name="second-service"
-                    type="text/knotx-snippet">
-      <h2>Snippet2 - {{_result.message}}</h2>
-      <p>Snippet2 - {{_result.body.a}}</p>
-      <p>Success!</p>
-    </cusotm:snippet>
+      <div>
+        <h2>Snippet1 - {{second._result.message}}</h2>
+        <div>Snippet1 - {{second._result.body.a}}</div>
+        <div>Success! Status code : {{second._response.statusCode}}</div>
+      </div>
+      <div>
+        <h2>Snippet1 - {{third._result.message}}</h2>
+        <div>Snippet1 - {{third._result.body.a}}</div>
+      </div>
+    </knotx:snippet>
   </div>
   <div>
     <knotx:snippet knots="databridge,te" databridge-name="second-service"
                    type="text/knotx-snippet">
-      <h2>This will be not processed!</h2>
+      <h2>This should still work</h2>
+      <p>Snippet2 - {{_result.message}}</p>
       <p>Snippet2 - {{_result.body.a}}</p>
       <p>Success!</p>
     </knotx:snippet>
