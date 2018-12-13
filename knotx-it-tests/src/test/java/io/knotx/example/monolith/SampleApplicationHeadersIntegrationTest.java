@@ -42,7 +42,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @ExtendWith(KnotxExtension.class)
 public class SampleApplicationHeadersIntegrationTest {
 
-  private static final String REMOTE_REQUEST_URI = "/content/remote/simple.html";
   private static final int KNOTX_SERVER_PORT = 9092;
   private static final String KNOTX_SERVER_ADDRESS = "localhost";
 
@@ -83,7 +82,7 @@ public class SampleApplicationHeadersIntegrationTest {
   @KnotxApplyConfiguration("conf/it-tests-application.conf")
   public void whenRequestingRemoteRepository_expectOnlyAllowedResponseHeaders(
       VertxTestContext context, Vertx vertx) {
-    testGetRequest(context, vertx, REMOTE_REQUEST_URI);
+    testGetRequest(context, vertx, "/content/remote/fullPage.html");
   }
 
   private void testGetRequest(VertxTestContext context, Vertx vertx, String url) {
