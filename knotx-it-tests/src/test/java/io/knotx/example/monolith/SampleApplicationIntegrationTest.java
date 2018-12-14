@@ -154,7 +154,7 @@ public class SampleApplicationIntegrationTest {
   @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
   public void requestPageWhenTemplateEngineProcessingFails_expectServerError(
       VertxTestContext context, Vertx vertx) {
-    testGetServerError(context, vertx, "/content/local/undefinedTemplateEngine.html",
+    testGetServerError(context, vertx, "/content/local/notExistingTemplateEngine.html",
         HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
   }
 
@@ -162,7 +162,7 @@ public class SampleApplicationIntegrationTest {
   @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
   public void requestPageWhenTemplateEngineProcessingFailsAndFallbackDefined(
       VertxTestContext context, Vertx vertx) {
-    testGetRequest(context, vertx, "/content/local/undefinedTemplateEngineWithFallback.html",
+    testGetRequest(context, vertx, "/content/local/notExistingTemplateEngineWithFallback.html",
         "results/pageWithFallback.html");
   }
 
@@ -171,7 +171,7 @@ public class SampleApplicationIntegrationTest {
       "conf/overrides/defaultFallback.conf"})
   public void requestPageWhenTemplateEngineProcessingFailsAndGlobalFallbackDefined(
       VertxTestContext context, Vertx vertx) {
-    testGetRequest(context, vertx, "/content/local/undefinedTemplateEngine.html",
+    testGetRequest(context, vertx, "/content/local/notExistingTemplateEngine.html",
         "results/pageWithGlobalFallback.html");
   }
 

@@ -21,22 +21,18 @@
 </head>
 <body>
   <div>
-  <knotx:fallback fallback-id="CUSTOM">
-    <p class="error">local fallback</p>
-  </knotx:fallback>
   <knotx:snippet knots="te"
-                 te-strategy="undefined"
-                 fallback="CUSTOM"
+                 te-strategy="not-existing-te"
                  type="text/knotx-snippet">
     <h2>Error expected</h2>
   </knotx:snippet>
   </div>
   <div>
   <knotx:snippet knots="databridge,te"
-                 databridge-name="second-service"
+                 databridge-name="third-service"
                  type="text/knotx-snippet">
-    <h2>This should still work</h2>
-    <p>Snippet2 - {{_result.message}}</p>
+    <h2>This should work when global fallback defined</h2>
+    <p>Snippet3 - {{_result.body.a}}</p>
   </knotx:snippet>
   </div>
 </body>
