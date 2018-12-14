@@ -61,6 +61,9 @@ public class SampleApplicationIntegrationTest {
   private WireMockServer mockService;
 
   @KnotxWiremock
+  private WireMockServer mockBrokenService;
+
+  @KnotxWiremock
   private WireMockServer mockRepository;
 
   @BeforeAll
@@ -72,6 +75,13 @@ public class SampleApplicationIntegrationTest {
                     .withHeader("Cache-control", "no-cache, no-store, must-revalidate")
                     .withHeader("Content-Type", "application/json; charset=UTF-8")
                     .withHeader("X-Server", "Knot.x")
+            ));
+
+    stubForServer(mockBrokenService,
+        get(urlMatching("/service/broken/.*"))
+            .willReturn(
+                aResponse()
+                    .withStatus(HttpResponseStatus.INTERNAL_SERVER_ERROR.code())
             ));
 
     stubForServer(mockRepository,
@@ -111,15 +121,24 @@ public class SampleApplicationIntegrationTest {
   @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
   public void requestPageWithMissingDataDefinitionWithoutConfiguration_expectServerError(
       VertxTestContext context, Vertx vertx) {
-    testGetServerError(context, vertx, "/content/local/notExistingService.html");
+    testGetServerError(context, vertx, "/content/local/notExistingDataDefinition.html",
+        HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
+  }
+
+  @Test
+  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
+  public void requestPageWithIntegrationPointThatReturns500(
+      VertxTestContext context, Vertx vertx) {
+    testGetRequest(context, vertx, "/content/local/brokenService.html",
+        "results/brokenService.html");
   }
 
   @Test
   @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
   public void requestPageWithMissingDataDefinitionAndFallbackDefined(
       VertxTestContext context, Vertx vertx) {
-    testGetRequest(context, vertx, "/content/local/notExistingServiceWithFallback.html",
-        "results/notExistingServiceWithFallback.html");
+    testGetRequest(context, vertx, "/content/local/notExistingDataDefinitionWithFallback.html",
+        "results/pageWithFallback.html");
   }
 
   @Test
@@ -127,8 +146,8 @@ public class SampleApplicationIntegrationTest {
       "conf/overrides/defaultFallback.conf"})
   public void requestPageWithMissingDataDefinitionWhenGlobalFallbackDefined(
       VertxTestContext context, Vertx vertx) {
-    testGetRequest(context, vertx, "/content/local/notExistingService.html",
-        "results/notExistingServiceWithGlobalFallback.html");
+    testGetRequest(context, vertx, "/content/local/notExistingDataDefinition.html",
+        "results/pageWithGlobalFallback.html");
   }
 
   @Test
@@ -205,14 +224,15 @@ public class SampleApplicationIntegrationTest {
     });
   }
 
-  private void testGetServerError(VertxTestContext context, Vertx vertx, String url) {
+  private void testGetServerError(VertxTestContext context, Vertx vertx, String url,
+      int expectedError) {
     WebClient client = WebClient.create(vertx);
     Single<HttpResponse<Buffer>> httpResponseSingle = client
         .get(KNOTX_SERVER_PORT, KNOTX_SERVER_ADDRESS, url)
         .rxSend();
 
     subscribeToResult_shouldSucceed(context, httpResponseSingle, resp -> {
-      assertEquals(HttpResponseStatus.INTERNAL_SERVER_ERROR.code(), resp.statusCode());
+      assertEquals(expectedError, resp.statusCode());
       client.close();
     });
   }
