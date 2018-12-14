@@ -17,27 +17,25 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Missing te</title>
+  <title>Missing forms adapter</title>
 </head>
 <body>
   <div>
-  <knotx:fallback fallback-id="CUSTOM">
-    <p class="error">local fallback</p>
-  </knotx:fallback>
-  <knotx:snippet knots="te"
-                 te-strategy="not-existing-te"
-                 fallback="CUSTOM"
-                 type="text/knotx-snippet">
-    <h2>Error expected</h2>
-  </knotx:snippet>
+    <knotx:fallback fallback-id="CUSTOM">
+      <p class="error">local fallback</p>
+    </knotx:fallback>
+    <knotx:snippet knots="form-not-existing-adapter"
+                   fallback="CUSTOM"
+                   type="text/knotx-snippet">
+      <h2>Error expected</h2>
+    </knotx:snippet>
   </div>
   <div>
-  <knotx:snippet knots="databridge,te"
-                 databridge-name="second-service"
-                 type="text/knotx-snippet">
-    <h2>This should still work</h2>
-    <p>Snippet2 - {{_result.message}}</p>
-  </knotx:snippet>
+    <knotx:snippet knots="databridge,te" databridge-name="second-service"
+                   type="text/knotx-snippet">
+      <h2>This should still work</h2>
+      <p>Snippet2 - {{_result.message}}</p>
+    </knotx:snippet>
   </div>
 </body>
 </html>

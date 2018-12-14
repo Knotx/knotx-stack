@@ -17,26 +17,28 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Missing te</title>
+  <title>Missing forms adapter</title>
 </head>
 <body>
   <div>
-  <knotx:fallback fallback-id="CUSTOM">
-    <p class="error">local fallback</p>
-  </knotx:fallback>
-  <knotx:snippet knots="te"
-                 te-strategy="not-existing-te"
-                 fallback="CUSTOM"
+  <knotx:snippet knots="form-not-existing-adapter"
                  type="text/knotx-snippet">
     <h2>Error expected</h2>
+    <form data-knotx-forms-adapter-name="not-existing-adapter"
+          data-knotx-forms-on-success="_self"
+          data-knotx-forms-on-error="_self"
+          method="post" class="form-inline">
+      <input type="text" name="name" id="name"/>
+      <button type="submit">Submit</button>
+    </form>
   </knotx:snippet>
   </div>
   <div>
   <knotx:snippet knots="databridge,te"
-                 databridge-name="second-service"
+                 databridge-name="third-service"
                  type="text/knotx-snippet">
-    <h2>This should still work</h2>
-    <p>Snippet2 - {{_result.message}}</p>
+    <h2>This should work when global fallback defined</h2>
+    <p>Snippet3 - {{_result.body.a}}</p>
   </knotx:snippet>
   </div>
 </body>

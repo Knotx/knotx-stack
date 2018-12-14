@@ -127,6 +127,31 @@ public class SampleApplicationIntegrationTest {
 
   @Test
   @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
+  public void requestPageWhenFormsProcessingFails_expectServerError(
+      VertxTestContext context, Vertx vertx) {
+    testGetServerError(context, vertx, "/content/local/notExistingFormsAdapter.html",
+        HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
+  }
+
+  @Test
+  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
+  public void requestPageWhenFormsProcessingFailsAndFallbackDefined(
+      VertxTestContext context, Vertx vertx) {
+    testGetRequest(context, vertx, "/content/local/notExistingFormsAdapterWithFallback.html",
+        "results/pageWithFallback.html");
+  }
+
+  @Test
+  @KnotxApplyConfiguration({"conf/integrationTestsStack.conf",
+      "conf/overrides/defaultFallback.conf"})
+  public void requestPageWhenFormsProcessingFailsAndGlobalFallbackDefined(
+      VertxTestContext context, Vertx vertx) {
+    testGetRequest(context, vertx, "/content/local/notExistingFormsAdapter.html",
+        "results/pageWithGlobalFallback.html");
+  }
+
+  @Test
+  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
   public void requestPageWhenDatabridgeProcessingFails_expectServerError(
       VertxTestContext context, Vertx vertx) {
     testGetServerError(context, vertx, "/content/local/notExistingDataDefinition.html",
