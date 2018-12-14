@@ -17,15 +17,23 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Fallback applied</title>
+  <title>Missing service</title>
 </head>
 <body>
   <div>
-    <p class="error">local fallback</p>
+  <knotx:snippet knots="te"
+                 te-strategy="undefined"
+                 type="text/knotx-snippet">
+    <h2>Error expected</h2>
+  </knotx:snippet>
   </div>
   <div>
-    <h2>This should still work</h2>
-    <p>Snippet2 - this is webservice no. 2</p>
+  <knotx:snippet knots="databridge,te"
+                 databridge-name="third-service"
+                 type="text/knotx-snippet">
+    <h2>This should work when global fallback defined</h2>
+    <p>Snippet3 - {{_result.body.a}}</p>
+  </knotx:snippet>
   </div>
 </body>
 </html>

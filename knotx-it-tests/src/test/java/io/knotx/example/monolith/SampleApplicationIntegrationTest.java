@@ -119,15 +119,7 @@ public class SampleApplicationIntegrationTest {
 
   @Test
   @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
-  public void requestPageWithMissingDataDefinitionWithoutConfiguration_expectServerError(
-      VertxTestContext context, Vertx vertx) {
-    testGetServerError(context, vertx, "/content/local/notExistingDataDefinition.html",
-        HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
-  }
-
-  @Test
-  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
-  public void requestPageWithIntegrationPointThatReturns500(
+  public void requestPageWithServiceThatReturns500(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, "/content/local/brokenService.html",
         "results/brokenService.html");
@@ -135,7 +127,15 @@ public class SampleApplicationIntegrationTest {
 
   @Test
   @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
-  public void requestPageWithMissingDataDefinitionAndFallbackDefined(
+  public void requestPageWhenDatabridgeProcessingFails_expectServerError(
+      VertxTestContext context, Vertx vertx) {
+    testGetServerError(context, vertx, "/content/local/notExistingDataDefinition.html",
+        HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
+  }
+
+  @Test
+  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
+  public void requestPageWhenDatabridgeProcessingFailsAndFallbackDefined(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, "/content/local/notExistingDataDefinitionWithFallback.html",
         "results/pageWithFallback.html");
@@ -144,9 +144,34 @@ public class SampleApplicationIntegrationTest {
   @Test
   @KnotxApplyConfiguration({"conf/integrationTestsStack.conf",
       "conf/overrides/defaultFallback.conf"})
-  public void requestPageWithMissingDataDefinitionWhenGlobalFallbackDefined(
+  public void requestPageWhenDatabridgeProcessingFailsAndGlobalFallbackDefined(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, "/content/local/notExistingDataDefinition.html",
+        "results/pageWithGlobalFallback.html");
+  }
+
+  @Test
+  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
+  public void requestPageWhenTemplateEngineProcessingFails_expectServerError(
+      VertxTestContext context, Vertx vertx) {
+    testGetServerError(context, vertx, "/content/local/undefinedTemplateEngine.html",
+        HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
+  }
+
+  @Test
+  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
+  public void requestPageWhenTemplateEngineProcessingFailsAndFallbackDefined(
+      VertxTestContext context, Vertx vertx) {
+    testGetRequest(context, vertx, "/content/local/undefinedTemplateEngineWithFallback.html",
+        "results/pageWithFallback.html");
+  }
+
+  @Test
+  @KnotxApplyConfiguration({"conf/integrationTestsStack.conf",
+      "conf/overrides/defaultFallback.conf"})
+  public void requestPageWhenTemplateEngineProcessingFailsAndGlobalFallbackDefined(
+      VertxTestContext context, Vertx vertx) {
+    testGetRequest(context, vertx, "/content/local/undefinedTemplateEngine.html",
         "results/pageWithGlobalFallback.html");
   }
 

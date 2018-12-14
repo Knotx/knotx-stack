@@ -26,23 +26,13 @@
     </knotx:fallback>
     <knotx:snippet knots="databridge,te"
                    databridge-name="first-service"
-                   databridge-name-second="second-service"
-                   databridge-name-third="non-existing-service"
+                   databridge-name-undefined="non-existing-service"
                    fallback="CUSTOM"
                    type="text/knotx-snippet">
       <h2>Things below will be replaced by fallback markup</h2>
       <div>
         <h2>Snippet1 - {{_result.message}}</h2>
         <div>Snippet1 - {{_result.body.a}}</div>
-      </div>
-      <div>
-        <h2>Snippet1 - {{second._result.message}}</h2>
-        <div>Snippet1 - {{second._result.body.a}}</div>
-        <div>Success! Status code : {{second._response.statusCode}}</div>
-      </div>
-      <div>
-        <h2>Snippet1 - {{third._result.message}}</h2>
-        <div>Snippet1 - {{third._result.body.a}}</div>
       </div>
     </knotx:snippet>
   </div>
@@ -51,8 +41,6 @@
                    type="text/knotx-snippet">
       <h2>This should still work</h2>
       <p>Snippet2 - {{_result.message}}</p>
-      <p>Snippet2 - {{_result.body.a}}</p>
-      <p>Success!</p>
     </knotx:snippet>
   </div>
 </body>
