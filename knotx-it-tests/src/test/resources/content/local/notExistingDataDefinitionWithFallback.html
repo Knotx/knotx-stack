@@ -37,10 +37,12 @@
     </knotx:snippet>
   </div>
   <div>
-    <knotx:snippet knots="databridge,te" databridge-name="second-service"
+    <knotx:snippet knots="databridge,te"
+                   databridge-name="authors"
                    type="text/knotx-snippet">
-      <h2>This should still work</h2>
-      <p>Snippet2 - {{_result.message}}</p>
+      <h2>This should work when global fallback defined</h2>
+      <h2>{{_result.name}}</h2>
+      <p>Bio: {{_result.info.bio}}</p>
     </knotx:snippet>
   </div>
 </body>

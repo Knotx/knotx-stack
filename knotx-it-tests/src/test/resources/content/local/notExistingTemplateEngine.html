@@ -21,19 +21,20 @@
 </head>
 <body>
   <div>
-  <knotx:snippet knots="te"
-                 te-strategy="not-existing-te"
-                 type="text/knotx-snippet">
-    <h2>Error expected</h2>
-  </knotx:snippet>
+    <knotx:snippet knots="te"
+                   te-strategy="not-existing-te"
+                   type="text/knotx-snippet">
+      <h2>Error expected</h2>
+    </knotx:snippet>
   </div>
   <div>
-  <knotx:snippet knots="databridge,te"
-                 databridge-name="third-service"
-                 type="text/knotx-snippet">
-    <h2>This should work when global fallback defined</h2>
-    <p>Snippet3 - {{_result.body.a}}</p>
-  </knotx:snippet>
+    <knotx:snippet knots="databridge,te"
+                   databridge-name="authors"
+                   type="text/knotx-snippet">
+      <h2>This should work when global fallback defined</h2>
+      <h2>{{_result.name}}</h2>
+      <p>Bio: {{_result.info.bio}}</p>
+    </knotx:snippet>
   </div>
 </body>
 </html>

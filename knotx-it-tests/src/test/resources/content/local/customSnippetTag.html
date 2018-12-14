@@ -22,28 +22,29 @@
 <body>
   <div>
     <custom:snippet it-test-knots="databridge,te"
-                    it-test-databridge-name="first-service"
+                    it-test-databridge-name="books"
                     type="text/knotx-snippet">
       <div>
-        <h2>Snippet1 - {{_result.message}}</h2>
-        <div>Snippet1 - {{_result.body.a}}</div>
+        <h2>{{_result.title}}</h2>
+        <div>Authors: {{_result.info.authors}}</div>
       </div>
     </custom:snippet>
   </div>
   <div>
-    <custom:snippet it-test-knots="databridge,te" it-test-databridge-name="second-service"
+    <custom:snippet it-test-knots="databridge,te"
+                    it-test-databridge-name="authors"
                     type="text/knotx-snippet">
-      <h2>Snippet2 - {{_result.message}}</h2>
-      <p>Snippet2 - {{_result.body.a}}</p>
-      <p>Success!</p>
+      <h2>{{_result.name}}</h2>
+      <p>Bio: {{_result.info.bio}}</p>
     </custom:snippet>
   </div>
   <div>
-    <knotx:snippet knots="databridge,te" databridge-name="second-service"
+    <knotx:snippet knots="databridge,te"
+                   databridge-name="authors"
                    type="text/knotx-snippet">
       <h2>This will be not processed!</h2>
-      <p>Snippet2 - {{_result.body.a}}</p>
-      <p>Success!</p>
+      <h2>{{_result.name}}</h2>
+      <p>Bio: {{_result.info.bio}}</p>
     </knotx:snippet>
   </div>
 </body>

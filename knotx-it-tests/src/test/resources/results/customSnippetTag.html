@@ -22,21 +22,19 @@
 <body>
   <div>
     <div>
-      <h2>Snippet1 - this is webservice no. 1</h2>
-      <div>Snippet1 - message - a</div>
+      <h2>Knot.x Integration Tests in Practice</h2>
+      <div>Authors: Knot.x Team</div>
     </div>
   </div>
   <div>
-    <h2>Snippet2 - this is webservice no. 2</h2>
-    <p>Snippet2 - message - a</p>
-    <p>Success!</p>
+    <h2>Knot X</h2>
+    <p>Bio: Aliquam cursus fermentum mi, vel tempus mi pellentesque vel. Nunc in feugiat lorem. Etiam placerat ante eget sem euismod, sit amet dictum sapien vulputate. Morbi pellentesque arcu a mauris ornare eleifend.</p>
   </div>
   <div>
-    <knotx:snippet knots="databridge,te" databridge-name="second-service"
-                   type="text/knotx-snippet">
+    <knotx:snippet knots="databridge,te" databridge-name="authors" type="text/knotx-snippet">
       <h2>This will be not processed!</h2>
-      <p>Snippet2 - {{_result.body.a}}</p>
-      <p>Success!</p>
+      <h2>{{_result.name}}</h2>
+      <p>Bio: {{_result.info.bio}}</p>
     </knotx:snippet>
   </div>
 </body>
