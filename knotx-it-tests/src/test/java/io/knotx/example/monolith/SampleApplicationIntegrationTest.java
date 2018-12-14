@@ -58,10 +58,10 @@ public class SampleApplicationIntegrationTest {
   private static final String KNOTX_SERVER_ADDRESS = "localhost";
 
   @KnotxWiremock
-  protected WireMockServer mockService;
+  private WireMockServer mockService;
 
   @KnotxWiremock
-  protected WireMockServer mockRepository;
+  private WireMockServer mockRepository;
 
   @BeforeAll
   void initMocks() {
@@ -85,21 +85,21 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration("conf/it-tests-application.conf")
+  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
   public void requestFsRepoSimplePage(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, "/content/local/fullPage.html", "results/local-fullPage.html");
   }
 
   @Test
-  @KnotxApplyConfiguration("conf/it-tests-application.conf")
+  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
   public void requestHttpRepoSimplePage(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, "/content/remote/fullPage.html", "results/remote-fullPage.html");
   }
 
   @Test
-  @KnotxApplyConfiguration("conf/it-tests-application.conf")
+  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
   public void requestPageWithRequestParameters(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx,
@@ -108,14 +108,14 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration("conf/it-tests-application.conf")
+  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
   public void requestPageWithMissingDataDefinitionWithoutConfiguration_expectServerError(
       VertxTestContext context, Vertx vertx) {
     testGetServerError(context, vertx, "/content/local/notExistingService.html");
   }
 
   @Test
-  @KnotxApplyConfiguration("conf/it-tests-application.conf")
+  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
   public void requestPageWithMissingDataDefinitionAndFallbackDefined(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, "/content/local/notExistingServiceWithFallback.html",
@@ -123,8 +123,8 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration({"conf/it-tests-application.conf",
-      "conf/overrides/default-fallback.conf"})
+  @KnotxApplyConfiguration({"conf/integrationTestsStack.conf",
+      "conf/overrides/defaultFallback.conf"})
   public void requestPageWithMissingDataDefinitionWhenGlobalFallbackDefined(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, "/content/local/notExistingService.html",
@@ -132,8 +132,8 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration({"conf/it-tests-application.conf",
-      "conf/overrides/custom-tag-and-prefix.conf"})
+  @KnotxApplyConfiguration({"conf/integrationTestsStack.conf",
+      "conf/overrides/customTagAndPrefix.conf"})
   public void requestPageWithCustomTagAndParamPrefix(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, "/content/local/customSnippetTag.html",
@@ -141,7 +141,7 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration("conf/it-tests-application.conf")
+  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
   public void requestPageThatUseFormsDatabridgeAndTe(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, "/content/local/formsBridgeTe.html",
@@ -149,7 +149,7 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration("conf/it-tests-application.conf")
+  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
   public void submitOneFormAfterAnother(VertxTestContext context, Vertx vertx) {
     final JsonObject competitionFormData = new JsonObject()
         .put("name", "test")

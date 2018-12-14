@@ -79,7 +79,7 @@ public class SampleApplicationHeadersIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration("conf/it-tests-application.conf")
+  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
   public void whenRequestingRemoteRepository_expectOnlyAllowedResponseHeaders(
       VertxTestContext context, Vertx vertx) {
     testGetRequest(context, vertx, "/content/remote/fullPage.html");

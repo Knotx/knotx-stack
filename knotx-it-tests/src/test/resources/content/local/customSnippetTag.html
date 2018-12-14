@@ -21,22 +21,22 @@
 </head>
 <body>
   <div>
-    <cusotm:snippet it-test-knots="databridge,te"
+    <custom:snippet it-test-knots="databridge,te"
                     it-test-databridge-name="first-service"
                     type="text/knotx-snippet">
       <div>
         <h2>Snippet1 - {{_result.message}}</h2>
         <div>Snippet1 - {{_result.body.a}}</div>
       </div>
-    </cusotm:snippet>
+    </custom:snippet>
   </div>
   <div>
-    <cusotm:snippet it-test-knots="databridge,te" it-test-databridge-name="second-service"
+    <custom:snippet it-test-knots="databridge,te" it-test-databridge-name="second-service"
                     type="text/knotx-snippet">
       <h2>Snippet2 - {{_result.message}}</h2>
       <p>Snippet2 - {{_result.body.a}}</p>
       <p>Success!</p>
-    </cusotm:snippet>
+    </custom:snippet>
   </div>
   <div>
     <knotx:snippet knots="databridge,te" databridge-name="second-service"
