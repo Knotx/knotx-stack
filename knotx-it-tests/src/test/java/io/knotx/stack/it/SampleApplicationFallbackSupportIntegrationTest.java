@@ -13,7 +13,6 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.Vertx;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -65,7 +64,6 @@ public class SampleApplicationFallbackSupportIntegrationTest {
 
   @Test
   @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
-  @Disabled("Bug in forms - when using undefined data adapter fallback is not applied")
   public void requestPageWhenFormsProcessingFailsAndFallbackDefined(
       VertxTestContext context, Vertx vertx) {
     knotxServerTester
@@ -76,7 +74,6 @@ public class SampleApplicationFallbackSupportIntegrationTest {
   @Test
   @KnotxApplyConfiguration({"conf/integrationTestsStack.conf",
       "conf/overrides/defaultFallback.conf"})
-  @Disabled("Bug in forms - when using undefined data adapter fallback is not applied")
   public void requestPageWhenFormsProcessingFailsAndGlobalFallbackDefined(
       VertxTestContext context, Vertx vertx) {
     knotxServerTester
