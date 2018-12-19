@@ -3,6 +3,7 @@ package io.knotx.stack.it;
 import static io.knotx.junit5.util.RequestUtil.subscribeToResult_shouldSucceed;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import io.knotx.junit5.assertions.HtmlMarkupAssertions;
 import io.knotx.junit5.util.FileReader;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.reactivex.Single;
@@ -14,7 +15,6 @@ import io.vertx.reactivex.core.buffer.Buffer;
 import io.vertx.reactivex.ext.web.client.HttpResponse;
 import io.vertx.reactivex.ext.web.client.WebClient;
 import java.util.Map;
-import org.jsoup.Jsoup;
 
 final class KnotxServerTester {
 
@@ -43,8 +43,8 @@ final class KnotxServerTester {
         .rxSendForm(getMultiMap(formData));
 
     subscribeToResult_shouldSucceed(context, httpResponseSingle, resp -> {
-      assertEquals(Jsoup.parse(FileReader.readTextSafe(expectedResponseFile)).body().html(),
-          Jsoup.parse(resp.body().toString()).body().html());
+      HtmlMarkupAssertions.assertHtmlBodyMarkupsEqual(FileReader.readTextSafe(expectedResponseFile),
+          resp.body().toString());
       assertEquals(HttpResponseStatus.OK.code(), resp.statusCode());
     });
   }
@@ -52,8 +52,8 @@ final class KnotxServerTester {
   void testGetRequest(VertxTestContext context, Vertx vertx, String url,
       String expectedResponseFile) {
     testGet(context, vertx, url, resp -> {
-      assertEquals(Jsoup.parse(FileReader.readTextSafe(expectedResponseFile)).body().html().trim(),
-          Jsoup.parse(resp.body().toString()).body().html().trim());
+      HtmlMarkupAssertions.assertHtmlBodyMarkupsEqual(FileReader.readTextSafe(expectedResponseFile),
+          resp.body().toString());
       assertEquals(HttpResponseStatus.OK.code(), resp.statusCode());
     });
   }
