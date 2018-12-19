@@ -36,11 +36,11 @@
     </dependency>
     <dependency>
       <groupId>io.knotx</groupId>
-      <artifactId>knotx-databridge-core</artifactId>
+      <artifactId>knotx-databridge-api</artifactId>
     </dependency>
     <dependency>
       <groupId>io.knotx</groupId>
-      <artifactId>knotx-databridge-api</artifactId>
+      <artifactId>knotx-databridge-core</artifactId>
     </dependency>
     <dependency>
       <groupId>io.knotx</groupId>
@@ -48,17 +48,11 @@
     </dependency>
     <dependency>
       <groupId>io.knotx</groupId>
-      <artifactId>knotx-forms-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.knotx</groupId>
       <artifactId>knotx-forms-api</artifactId>
     </dependency>
-    <!-- ToDo remove! -->
     <dependency>
       <groupId>io.knotx</groupId>
-      <artifactId>knotx-knot-action</artifactId>
-      <version>${project.version}</version>
+      <artifactId>knotx-forms-core</artifactId>
     </dependency>
     <dependency>
       <groupId>io.knotx</groupId>

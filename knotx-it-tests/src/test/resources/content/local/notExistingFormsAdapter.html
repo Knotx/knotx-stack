@@ -17,32 +17,27 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Custom snippet tag and prefix</title>
+  <title>Missing forms adapter</title>
 </head>
 <body>
   <div>
-    <custom:snippet it-test-knots="databridge,te"
-                    it-test-databridge-name="books"
-                    type="text/knotx-snippet">
-      <div>
-        <h2>{{_result.title}}</h2>
-        <div>Authors: {{_result.info.authors}}</div>
-      </div>
-    </custom:snippet>
-  </div>
-  <div>
-    <custom:snippet it-test-knots="databridge,te"
-                    it-test-databridge-name="authors"
-                    type="text/knotx-snippet">
-      <h2>{{_result.name}}</h2>
-      <p>Bio: {{_result.info.bio}}</p>
-    </custom:snippet>
+    <knotx:snippet knots="form-not-existing-adapter"
+                   type="text/knotx-snippet">
+      <h2>Error expected</h2>
+      <form data-knotx-forms-adapter-name="not-existing-adapter"
+            data-knotx-forms-on-success="_self"
+            data-knotx-forms-on-error="_self"
+            method="post" class="form-inline">
+        <input type="text" name="name" id="name"/>
+        <button type="submit">Submit</button>
+      </form>
+    </knotx:snippet>
   </div>
   <div>
     <knotx:snippet knots="databridge,te"
                    databridge-name="authors"
                    type="text/knotx-snippet">
-      <h2>This will be not processed!</h2>
+      <h2>This should work when global fallback defined</h2>
       <h2>{{_result.name}}</h2>
       <p>Bio: {{_result.info.bio}}</p>
     </knotx:snippet>

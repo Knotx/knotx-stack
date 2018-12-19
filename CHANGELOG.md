@@ -3,6 +3,7 @@ All notable changes to `knotx-stack` will be documented in this file.
 
 ## Unreleased
 List of changes that are finished but not yet released in any final version.
+- [PR-36](https://github.com/Knotx/knotx-stack/pull/36) - Cleanup integration tests
 - [PR-32](https://github.com/Knotx/knotx-stack/pull/32) - Extract assembler and splitter EB addresses to globals.
 - [PR-33](https://github.com/Knotx/knotx-stack/pull/33) - Knot.x Template Engine introduced instead of HBS Knot
 - [PR-35](https://github.com/Knotx/knotx-stack/pull/35) - implementation of [fallback handling](https://github.com/Cognifide/knotx/issues/466) - integration tests
