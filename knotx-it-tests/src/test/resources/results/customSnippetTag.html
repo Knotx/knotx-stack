@@ -1,0 +1,41 @@
+<!--
+  Copyright (C) 2018 Knot.x Project
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Custom snippet tag and prefix</title>
+</head>
+<body>
+  <div>
+    <div>
+      <h2>Knot.x Integration Tests in Practice</h2>
+      <div>Authors: Knot.x Team</div>
+    </div>
+  </div>
+  <div>
+    <h2>Knot X</h2>
+    <p>Bio: Aliquam cursus fermentum mi, vel tempus mi pellentesque vel. Nunc in feugiat lorem. Etiam placerat ante eget sem euismod, sit amet dictum sapien vulputate. Morbi pellentesque arcu a mauris ornare eleifend.</p>
+  </div>
+  <div>
+    <knotx:snippet knots="databridge,te" databridge-name="authors" type="text/knotx-snippet">
+      <h2>This will be not processed!</h2>
+      <h2>{{_result.name}}</h2>
+      <p>Bio: {{_result.info.bio}}</p>
+    </knotx:snippet>
+  </div>
+</body>
+</html>
