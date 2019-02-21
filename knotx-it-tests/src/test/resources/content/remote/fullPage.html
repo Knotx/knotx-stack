@@ -21,71 +21,71 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="shortcut icon" href="http://cognifide.com/favicon.ico?v=2"/>
   <title>Knot.x</title>
-  <link href="https://bootswatch.com/4/superhero/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://bootswatch.com/4/simplex/bootstrap.min.css" rel="stylesheet"/>
 </head>
 <body>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="jumbotron">
-          <h2>
-            Hello Knot.x - reactive micro-service assembler world!
-          </h2>
-          <p>
-            This template is served from the <strong>local</strong> repository.
-          </p>
-          <p>
-            <a class="btn btn-primary btn-large"
-               href="https://github.com/Cognifide/knotx">Learn more</a>
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <knotx:snippet knots="databridge,te"
-                     it-test-databridge-name-author="authors"
-                     it-test-databridge-name-book="books"
-                     type="text/knotx-snippet">
-        <div class="col-md-4">
-          <h2>Book</h2>
-          <p>{{book._result.title}}</p>
-          <p>Authors: {{book._result.info.authors}}</p>
-          <div>Success! Status code : {{book._response.statusCode}}</div>
-        </div>
-        <div class="col-md-4">
-          <h2>Author</h2>
-          <p>{{author._result.name}}</p>
-          <p>Bio: {{author._result.info.bio}}</p>
-          <div>Success! Status code : {{author._response.statusCode}}</div>
-        </div>
-      </knotx:snippet>
-    </div>
-    <div class="row">
-      <div class="col-md-4">
-        <knotx:snippet knots="databridge,te"
-                       databridge-name="authors"
-                       type="text/knotx-snippet">
-          <h2>Portfolio: </h2>
-          <ul>
-            {{#each _result.info.portfolio}}
-            <li>{{this}}</li>
-            {{/each}}
-          </ul>
-        </knotx:snippet>
-      </div>
-      <div class="col-md-4">
-        <knotx:snippet knots="databridge,te"
-                       databridge-name="books"
-                       type="text/knotx-snippet">
-          <h2>Tags: </h2>
-          <ul>
-            {{#each _result.info.tags}}
-            <li>{{this}}</li>
-            {{/each}}
-          </ul>
-        </knotx:snippet>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="jumbotron">
+        <h2>
+          Hello Knot.x - reactive micro-service assembler world!
+        </h2>
+        <p>
+          This template is served from the <strong>local</strong> repository.
+        </p>
+        <p>
+          <a class="btn btn-primary btn-large"
+             href="https://github.com/Cognifide/knotx">Learn more</a>
+        </p>
       </div>
     </div>
   </div>
+  <div class="row">
+    <knotx:snippet flow="knotx.knot.databridge,knotx.knot.te"
+                   databridge-name-author="authors"
+                   databridge-name-book="books"
+                   type="text/knotx-snippet">
+      <div class="col-md-4">
+        <h2>Book</h2>
+        <p>{{book._result.title}}</p>
+        <p>Authors: {{book._result.info.authors}}</p>
+        <div>Success! Status code : {{book._response.statusCode}}</div>
+      </div>
+      <div class="col-md-4">
+        <h2>Author</h2>
+        <p>{{author._result.name}}</p>
+        <p>Bio: {{author._result.info.bio}}</p>
+        <div>Success! Status code : {{author._response.statusCode}}</div>
+      </div>
+    </knotx:snippet>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <knotx:snippet flow="knotx.knot.databridge,knotx.knot.te"
+                     databridge-name="authors"
+                     type="text/knotx-snippet">
+        <h2>Portfolio: </h2>
+        <ul>
+          {{#each _result.info.portfolio}}
+          <li>{{this}}</li>
+          {{/each}}
+        </ul>
+      </knotx:snippet>
+    </div>
+    <div class="col-md-4">
+      <knotx:snippet flow="knotx.knot.databridge,knotx.knot.te"
+                     databridge-name="books"
+                     type="text/knotx-snippet">
+        <h2>Tags: </h2>
+        <ul>
+          {{#each _result.info.tags}}
+          <li>{{this}}</li>
+          {{/each}}
+        </ul>
+      </knotx:snippet>
+    </div>
+  </div>
+</div>
 </body>
 </html>

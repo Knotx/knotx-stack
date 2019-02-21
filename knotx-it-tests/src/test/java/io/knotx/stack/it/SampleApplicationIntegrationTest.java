@@ -25,9 +25,12 @@ import io.knotx.junit5.KnotxApplyConfiguration;
 import io.knotx.junit5.KnotxExtension;
 import io.knotx.junit5.wiremock.KnotxWiremock;
 import io.netty.handler.codec.http.HttpResponseStatus;
+import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.Vertx;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -43,7 +46,7 @@ public class SampleApplicationIntegrationTest {
   @KnotxWiremock
   private WireMockServer mockBrokenService;
 
-  @KnotxWiremock
+  @KnotxWiremock(port = 4001)
   private WireMockServer mockRepository;
 
   private KnotxServerTester knotxServerTester;
@@ -79,6 +82,7 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
+  @Tag("fs")
   @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
   public void requestFsRepoSimplePage(
       VertxTestContext context, Vertx vertx) {
@@ -112,6 +116,7 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
+  @Disabled
   @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
   public void requestPageThatUseFormsDatabridgeAndTe(
       VertxTestContext context, Vertx vertx) {
@@ -119,29 +124,30 @@ public class SampleApplicationIntegrationTest {
         "results/formsBridgeTe.html");
   }
 
-//  @Test
-//  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
-//  public void submitOneFormAfterAnother(VertxTestContext context, Vertx vertx) {
-//    final JsonObject competitionFormData = new JsonObject()
-//        .put("name", "test")
-//        .put("email", "email-1@example.com")
-//        .put("_frmId", "competition");
-//    final JsonObject newsletterFormData = new JsonObject()
-//        .put("name", "test")
-//        .put("email", "email-2@example.com")
-//        .put("_frmId", "newsletter");
-//
-//    mockFormsAdapter(vertx, competitionFormData, newsletterFormData);
-//    knotxServerTester.testPostRequest(context, vertx, "/content/local/formsBridgeTe.html",
-//        competitionFormData.getMap(),
-//        "results/submitCompetitionForm.html");
-//    knotxServerTester.testPostRequest(context, vertx, "/content/local/formsBridgeTe.html",
-//        newsletterFormData.getMap(),
-//        "results/submitNewsletterForm.html");
-//  }
-//
-//  private void mockFormsAdapter(Vertx vertx, JsonObject competitionData,
-//      JsonObject newsletterData) {
+  @Test
+  @Disabled
+  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
+  public void submitOneFormAfterAnother(VertxTestContext context, Vertx vertx) {
+    final JsonObject competitionFormData = new JsonObject()
+        .put("name", "test")
+        .put("email", "email-1@example.com")
+        .put("_frmId", "competition");
+    final JsonObject newsletterFormData = new JsonObject()
+        .put("name", "test")
+        .put("email", "email-2@example.com")
+        .put("_frmId", "newsletter");
+
+    mockFormsAdapter(vertx, competitionFormData, newsletterFormData);
+    knotxServerTester.testPostRequest(context, vertx, "/content/local/formsBridgeTe.html",
+        competitionFormData.getMap(),
+        "results/submitCompetitionForm.html");
+    knotxServerTester.testPostRequest(context, vertx, "/content/local/formsBridgeTe.html",
+        newsletterFormData.getMap(),
+        "results/submitNewsletterForm.html");
+  }
+
+  private void mockFormsAdapter(Vertx vertx, JsonObject competitionData,
+      JsonObject newsletterData) {
 //    ClientResponse clientResponse = new ClientResponse().setStatusCode(404);
 //    FormsAdapterResponse resp = new FormsAdapterResponse().setResponse(clientResponse);
 //
@@ -160,5 +166,5 @@ public class SampleApplicationIntegrationTest {
 //          }
 //          result.handle(Future.succeededFuture(resp));
 //        });
-//  }
+  }
 }
