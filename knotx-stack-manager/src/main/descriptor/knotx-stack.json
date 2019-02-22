@@ -19,51 +19,53 @@
     "knotx.version": "${knotx.version}"
   },
   "dependencies": [
-    // Knot.x dependencies
+    // Knot.x Launcher
     {
       "groupId": "io.knotx",
-      "artifactId": "knotx-core",
+      "artifactId": "knotx-launcher",
+      "version": "\${knotx.version}",
+      "included": true
+    },
+    // Knot.x Server
+    {
+      "groupId": "io.knotx",
+      "artifactId": "knotx-server-http-core",
       "version": "\${knotx.version}",
       "included": true
     },
     {
       "groupId": "io.knotx",
-      "artifactId": "knotx-knot-action",
+      "artifactId": "knotx-splitter-html",
       "version": "\${knotx.version}",
       "included": true
     },
     {
       "groupId": "io.knotx",
-      "artifactId": "knotx-adapter-common",
+      "artifactId": "knotx-assembler",
       "version": "\${knotx.version}",
       "included": true
     },
-    // Knot.x Template Engine
+    // Knot.x Repositories
     {
       "groupId": "io.knotx",
-      "artifactId": "knotx-template-engine-api",
-      "version": "\${knotx.version}",
-      "included": true
-    },
-    {
-      "groupId": "io.knotx",
-      "artifactId": "knotx-template-engine-core",
+      "artifactId": "knotx-repository-connector-http",
       "version": "\${knotx.version}",
       "included": true
     },
     {
       "groupId": "io.knotx",
-      "artifactId": "knotx-template-engine-handlebars",
+      "artifactId": "knotx-repository-connector-fs",
+      "version": "\${knotx.version}",
+      "included": true
+    },
+    // Knot.x Knot Engine
+    {
+      "groupId": "io.knotx",
+      "artifactId": "knotx-knot-engine-handler",
       "version": "\${knotx.version}",
       "included": true
     },
     // Knot.x Data Bridge
-    {
-      "groupId": "io.knotx",
-      "artifactId": "knotx-databridge-api",
-      "version": "\${knotx.version}",
-      "included": true
-    },
     {
       "groupId": "io.knotx",
       "artifactId": "knotx-databridge-core",
@@ -76,16 +78,16 @@
       "version": "\${knotx.version}",
       "included": true
     },
-    // Knot.x Forms
+    // Knot.x Template Engine
     {
       "groupId": "io.knotx",
-      "artifactId": "knotx-forms-api",
+      "artifactId": "knotx-template-engine-core",
       "version": "\${knotx.version}",
       "included": true
     },
     {
       "groupId": "io.knotx",
-      "artifactId": "knotx-forms-core",
+      "artifactId": "knotx-template-engine-handlebars",
       "version": "\${knotx.version}",
       "included": true
     },

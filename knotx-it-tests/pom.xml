@@ -56,12 +56,6 @@
       <groupId>io.knotx</groupId>
       <artifactId>knotx-repository-connector-fs</artifactId>
     </dependency>
-    <dependency>
-      <groupId>io.knotx</groupId>
-      <artifactId>knotx-junit5</artifactId>
-      <version>${project.version}</version>
-      <scope>test</scope>
-    </dependency>
     <!-- Knot.x Knot Engine -->
     <dependency>
       <groupId>io.knotx</groupId>
