@@ -83,7 +83,7 @@ public class SampleApplicationIntegrationTest {
 
   @Test
   @Tag("fs")
-  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
+  @KnotxApplyConfiguration("conf/application.conf")
   public void requestFsRepoSimplePage(
       VertxTestContext context, Vertx vertx) {
     knotxServerTester.testGetRequest(context, vertx, "/content/local/fullPage.html",
@@ -91,7 +91,7 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
+  @KnotxApplyConfiguration("conf/application.conf")
   public void requestHttpRepoSimplePage(
       VertxTestContext context, Vertx vertx) {
     knotxServerTester.testGetRequest(context, vertx, "/content/remote/fullPage.html",
@@ -99,7 +99,7 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
+  @KnotxApplyConfiguration("conf/application.conf")
   public void requestPageWithRequestParameters(
       VertxTestContext context, Vertx vertx) {
     knotxServerTester.testGetRequest(context, vertx,
@@ -108,7 +108,7 @@ public class SampleApplicationIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
+  @KnotxApplyConfiguration("conf/application.conf")
   public void requestPageWithServiceThatReturns500(
       VertxTestContext context, Vertx vertx) {
     knotxServerTester.testGetRequest(context, vertx, "/content/local/brokenService.html",
@@ -117,7 +117,7 @@ public class SampleApplicationIntegrationTest {
 
   @Test
   @Disabled
-  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
+  @KnotxApplyConfiguration("conf/application.conf")
   public void requestPageThatUseFormsDatabridgeAndTe(
       VertxTestContext context, Vertx vertx) {
     knotxServerTester.testGetRequest(context, vertx, "/content/local/formsBridgeTe.html",
@@ -126,7 +126,7 @@ public class SampleApplicationIntegrationTest {
 
   @Test
   @Disabled
-  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
+  @KnotxApplyConfiguration("conf/application.conf")
   public void submitOneFormAfterAnother(VertxTestContext context, Vertx vertx) {
     final JsonObject competitionFormData = new JsonObject()
         .put("name", "test")

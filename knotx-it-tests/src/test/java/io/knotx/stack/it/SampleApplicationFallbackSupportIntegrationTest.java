@@ -56,7 +56,7 @@ public class SampleApplicationFallbackSupportIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
+  @KnotxApplyConfiguration("conf/application.conf")
   public void requestPageWhenFormsProcessingFails_expectServerError(
       VertxTestContext context, Vertx vertx) {
     knotxServerTester
@@ -65,7 +65,7 @@ public class SampleApplicationFallbackSupportIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
+  @KnotxApplyConfiguration("conf/application.conf")
   @Disabled("Bug in forms - when using undefined data adapter fallback is not applied")
   public void requestPageWhenFormsProcessingFailsAndFallbackDefined(
       VertxTestContext context, Vertx vertx) {
@@ -75,7 +75,7 @@ public class SampleApplicationFallbackSupportIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration({"conf/integrationTestsStack.conf",
+  @KnotxApplyConfiguration({"conf/application.conf",
       "conf/overrides/defaultFallback.conf"})
   @Disabled("Bug in forms - when using undefined data adapter fallback is not applied")
   public void requestPageWhenFormsProcessingFailsAndGlobalFallbackDefined(
@@ -86,7 +86,7 @@ public class SampleApplicationFallbackSupportIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
+  @KnotxApplyConfiguration("conf/application.conf")
   public void requestPageWhenDatabridgeProcessingFails_expectServerError(
       VertxTestContext context, Vertx vertx) {
     knotxServerTester
@@ -95,7 +95,7 @@ public class SampleApplicationFallbackSupportIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
+  @KnotxApplyConfiguration("conf/application.conf")
   public void requestPageWhenDatabridgeProcessingFailsAndFallbackDefined(
       VertxTestContext context, Vertx vertx) {
     knotxServerTester
@@ -104,7 +104,7 @@ public class SampleApplicationFallbackSupportIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration({"conf/integrationTestsStack.conf",
+  @KnotxApplyConfiguration({"conf/application.conf",
       "conf/overrides/defaultFallback.conf"})
   public void requestPageWhenDatabridgeProcessingFailsAndGlobalFallbackDefined(
       VertxTestContext context, Vertx vertx) {
@@ -114,7 +114,7 @@ public class SampleApplicationFallbackSupportIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
+  @KnotxApplyConfiguration("conf/application.conf")
   public void requestPageWhenTemplateEngineProcessingFails_expectServerError(
       VertxTestContext context, Vertx vertx) {
     knotxServerTester
@@ -123,7 +123,7 @@ public class SampleApplicationFallbackSupportIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
+  @KnotxApplyConfiguration("conf/application.conf")
   public void requestPageWhenTemplateEngineProcessingFailsAndFallbackDefined(
       VertxTestContext context, Vertx vertx) {
     knotxServerTester
@@ -132,7 +132,7 @@ public class SampleApplicationFallbackSupportIntegrationTest {
   }
 
   @Test
-  @KnotxApplyConfiguration({"conf/integrationTestsStack.conf",
+  @KnotxApplyConfiguration({"conf/application.conf",
       "conf/overrides/defaultFallback.conf"})
   public void requestPageWhenTemplateEngineProcessingFailsAndGlobalFallbackDefined(
       VertxTestContext context, Vertx vertx) {
