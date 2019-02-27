@@ -29,9 +29,12 @@ final class KnotxServerTester {
     this.serverPort = serverPort;
   }
 
-  static KnotxServerTester defatultInstance() {
-    return new KnotxServerTester(KNOTX_TESTS_SERVER_ADDRESS_DEFAULT,
-        KNOTX_TESTS_SERVER_PORT_DEFAULT);
+  static KnotxServerTester defaultInstance() {
+    return defaultInstance(KNOTX_TESTS_SERVER_PORT_DEFAULT);
+  }
+
+  static KnotxServerTester defaultInstance(int port) {
+    return new KnotxServerTester(KNOTX_TESTS_SERVER_ADDRESS_DEFAULT, port);
   }
 
   void testPostRequest(VertxTestContext context, Vertx vertx, String url,

@@ -8,7 +8,7 @@ import static io.knotx.junit5.wiremock.KnotxWiremockExtension.stubForServer;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import io.knotx.junit5.KnotxApplyConfiguration;
 import io.knotx.junit5.KnotxExtension;
-import io.knotx.junit5.wiremock.KnotxWiremock;
+import io.knotx.junit5.wiremock.ClasspathResourcesMockServer;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.Vertx;
@@ -22,12 +22,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @Disabled("Fallbacks need to be reimplemented.")
 @ExtendWith(KnotxExtension.class)
 @TestInstance(Lifecycle.PER_CLASS)
-public class SampleApplicationFallbackSupportIntegrationTest {
+class SampleApplicationFallbackSupportIntegrationTest {
 
-  @KnotxWiremock
+  @ClasspathResourcesMockServer
   private WireMockServer mockService;
 
-  @KnotxWiremock
+  @ClasspathResourcesMockServer
   private WireMockServer mockRepository;
 
   private KnotxServerTester knotxServerTester;
@@ -52,12 +52,12 @@ public class SampleApplicationFallbackSupportIntegrationTest {
                     .withHeader("X-Server", "Knot.x")
             ));
 
-    knotxServerTester = KnotxServerTester.defatultInstance();
+    knotxServerTester = KnotxServerTester.defaultInstance();
   }
 
   @Test
   @KnotxApplyConfiguration("conf/application.conf")
-  public void requestPageWhenFormsProcessingFails_expectServerError(
+  void requestPageWhenFormsProcessingFails_expectServerError(
       VertxTestContext context, Vertx vertx) {
     knotxServerTester
         .testGetServerError(context, vertx, "/content/local/notExistingFormsAdapter.html",
@@ -67,7 +67,7 @@ public class SampleApplicationFallbackSupportIntegrationTest {
   @Test
   @KnotxApplyConfiguration("conf/application.conf")
   @Disabled("Bug in forms - when using undefined data adapter fallback is not applied")
-  public void requestPageWhenFormsProcessingFailsAndFallbackDefined(
+  void requestPageWhenFormsProcessingFailsAndFallbackDefined(
       VertxTestContext context, Vertx vertx) {
     knotxServerTester
         .testGetRequest(context, vertx, "/content/local/notExistingFormsAdapterWithFallback.html",
@@ -76,9 +76,9 @@ public class SampleApplicationFallbackSupportIntegrationTest {
 
   @Test
   @KnotxApplyConfiguration({"conf/application.conf",
-      "conf/overrides/defaultFallback.conf"})
+      "conf/overrides/defaultFallback.conf" })
   @Disabled("Bug in forms - when using undefined data adapter fallback is not applied")
-  public void requestPageWhenFormsProcessingFailsAndGlobalFallbackDefined(
+  void requestPageWhenFormsProcessingFailsAndGlobalFallbackDefined(
       VertxTestContext context, Vertx vertx) {
     knotxServerTester
         .testGetRequest(context, vertx, "/content/local/notExistingFormsAdapter.html",
@@ -87,7 +87,7 @@ public class SampleApplicationFallbackSupportIntegrationTest {
 
   @Test
   @KnotxApplyConfiguration("conf/application.conf")
-  public void requestPageWhenDatabridgeProcessingFails_expectServerError(
+  void requestPageWhenDatabridgeProcessingFails_expectServerError(
       VertxTestContext context, Vertx vertx) {
     knotxServerTester
         .testGetServerError(context, vertx, "/content/local/notExistingDataDefinition.html",
@@ -96,7 +96,7 @@ public class SampleApplicationFallbackSupportIntegrationTest {
 
   @Test
   @KnotxApplyConfiguration("conf/application.conf")
-  public void requestPageWhenDatabridgeProcessingFailsAndFallbackDefined(
+  void requestPageWhenDatabridgeProcessingFailsAndFallbackDefined(
       VertxTestContext context, Vertx vertx) {
     knotxServerTester
         .testGetRequest(context, vertx, "/content/local/notExistingDataDefinitionWithFallback.html",
@@ -105,8 +105,8 @@ public class SampleApplicationFallbackSupportIntegrationTest {
 
   @Test
   @KnotxApplyConfiguration({"conf/application.conf",
-      "conf/overrides/defaultFallback.conf"})
-  public void requestPageWhenDatabridgeProcessingFailsAndGlobalFallbackDefined(
+      "conf/overrides/defaultFallback.conf" })
+  void requestPageWhenDatabridgeProcessingFailsAndGlobalFallbackDefined(
       VertxTestContext context, Vertx vertx) {
     knotxServerTester
         .testGetRequest(context, vertx, "/content/local/notExistingDataDefinition.html",
@@ -115,7 +115,7 @@ public class SampleApplicationFallbackSupportIntegrationTest {
 
   @Test
   @KnotxApplyConfiguration("conf/application.conf")
-  public void requestPageWhenTemplateEngineProcessingFails_expectServerError(
+  void requestPageWhenTemplateEngineProcessingFails_expectServerError(
       VertxTestContext context, Vertx vertx) {
     knotxServerTester
         .testGetServerError(context, vertx, "/content/local/notExistingTemplateEngine.html",
@@ -124,7 +124,7 @@ public class SampleApplicationFallbackSupportIntegrationTest {
 
   @Test
   @KnotxApplyConfiguration("conf/application.conf")
-  public void requestPageWhenTemplateEngineProcessingFailsAndFallbackDefined(
+  void requestPageWhenTemplateEngineProcessingFailsAndFallbackDefined(
       VertxTestContext context, Vertx vertx) {
     knotxServerTester
         .testGetRequest(context, vertx, "/content/local/notExistingTemplateEngineWithFallback.html",
@@ -133,8 +133,8 @@ public class SampleApplicationFallbackSupportIntegrationTest {
 
   @Test
   @KnotxApplyConfiguration({"conf/application.conf",
-      "conf/overrides/defaultFallback.conf"})
-  public void requestPageWhenTemplateEngineProcessingFailsAndGlobalFallbackDefined(
+      "conf/overrides/defaultFallback.conf" })
+  void requestPageWhenTemplateEngineProcessingFailsAndGlobalFallbackDefined(
       VertxTestContext context, Vertx vertx) {
     knotxServerTester
         .testGetRequest(context, vertx, "/content/local/notExistingTemplateEngine.html",

@@ -23,8 +23,7 @@
   <div>
     <knotx:snippet knots="form-competition,databridge,te"
                    databridge-name-labelsrepository="labelsRepository"
-                   databridge-params-labelsrepository='{"path":"/service/mock/labelsRepository.json"}'
-                   type="text/knotx-snippet">
+                   databridge-params-labelsrepository='{"path":"/service/mock/labelsRepository.json"}'>
       <h1>{{labelsrepository._result.welcomeInCompetition}}</h1>
       {{#if form._result}}
       <p>{{labelsrepository._result.thankYouForSubscribingToCompetition}}</p>
@@ -52,8 +51,7 @@
   <div>
     <knotx:snippet knots="form-newsletter,databridge,te"
                    databridge-name-labelsrepository="labelsRepository"
-                   databridge-params-labelsrepository='{"path":"/service/mock/labelsRepository.json"}'
-                   type="text/knotx-snippet">
+                   databridge-params-labelsrepository='{"path":"/service/mock/labelsRepository.json"}'>
       <div id="newsletter-form-wrapper">
         <h1>{{labelsrepository._result.subscribeToNewsletter}}</h1>
         {{#if form._result}}

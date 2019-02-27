@@ -23,14 +23,14 @@ import static io.knotx.junit5.wiremock.KnotxWiremockExtension.stubForServer;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import io.knotx.junit5.KnotxApplyConfiguration;
 import io.knotx.junit5.KnotxExtension;
-import io.knotx.junit5.wiremock.KnotxWiremock;
+import io.knotx.junit5.RandomPort;
+import io.knotx.junit5.wiremock.ClasspathResourcesMockServer;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.Vertx;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -38,18 +38,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(KnotxExtension.class)
 @TestInstance(Lifecycle.PER_CLASS)
-public class SampleApplicationIntegrationTest {
+class SampleApplicationIntegrationTest {
 
-  @KnotxWiremock
+  @ClasspathResourcesMockServer
   private WireMockServer mockService;
 
-  @KnotxWiremock
+  @ClasspathResourcesMockServer
   private WireMockServer mockBrokenService;
 
-  @KnotxWiremock(port = 4001)
+  @ClasspathResourcesMockServer
   private WireMockServer mockRepository;
-
-  private KnotxServerTester knotxServerTester;
 
   @BeforeAll
   void initMocks() {
@@ -77,57 +75,61 @@ public class SampleApplicationIntegrationTest {
                     .withHeader("Content-Type", "text/html; charset=UTF-8")
                     .withHeader("X-Server", "Knot.x")
             ));
-
-    knotxServerTester = KnotxServerTester.defatultInstance();
   }
 
   @Test
-  @Tag("fs")
   @KnotxApplyConfiguration("conf/application.conf")
-  public void requestFsRepoSimplePage(
-      VertxTestContext context, Vertx vertx) {
-    knotxServerTester.testGetRequest(context, vertx, "/content/local/fullPage.html",
+  void requestFsRepoSimplePage(VertxTestContext context, Vertx vertx,
+      @RandomPort Integer globalServerPort) {
+    KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
+    serverTester.testGetRequest(context, vertx, "/content/local/fullPage.html",
         "results/local-fullPage.html");
   }
 
   @Test
   @KnotxApplyConfiguration("conf/application.conf")
-  public void requestHttpRepoSimplePage(
-      VertxTestContext context, Vertx vertx) {
-    knotxServerTester.testGetRequest(context, vertx, "/content/remote/fullPage.html",
+  void requestHttpRepoSimplePage(VertxTestContext context, Vertx vertx,
+      @RandomPort Integer globalServerPort) {
+    KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
+    serverTester.testGetRequest(context, vertx, "/content/remote/fullPage.html",
         "results/remote-fullPage.html");
   }
 
   @Test
   @KnotxApplyConfiguration("conf/application.conf")
-  public void requestPageWithRequestParameters(
-      VertxTestContext context, Vertx vertx) {
-    knotxServerTester.testGetRequest(context, vertx,
+  void requestPageWithRequestParameters(VertxTestContext context, Vertx vertx,
+      @RandomPort Integer globalServerPort) {
+    KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
+    serverTester.testGetRequest(context, vertx,
         "/content/remote/fullPage.html?parameter%20with%20space=value&q=knotx",
         "results/remote-fullPage.html");
   }
 
   @Test
   @KnotxApplyConfiguration("conf/application.conf")
-  public void requestPageWithServiceThatReturns500(
-      VertxTestContext context, Vertx vertx) {
-    knotxServerTester.testGetRequest(context, vertx, "/content/local/brokenService.html",
+  void requestPageWithServiceThatReturns500(VertxTestContext context, Vertx vertx,
+      @RandomPort Integer globalServerPort) {
+    KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
+    serverTester.testGetRequest(context, vertx, "/content/local/brokenService.html",
         "results/brokenService.html");
   }
 
   @Test
   @Disabled
   @KnotxApplyConfiguration("conf/application.conf")
-  public void requestPageThatUseFormsDatabridgeAndTe(
-      VertxTestContext context, Vertx vertx) {
-    knotxServerTester.testGetRequest(context, vertx, "/content/local/formsBridgeTe.html",
+  void requestPageThatUseFormsDatabridgeAndTe(VertxTestContext context, Vertx vertx,
+      @RandomPort Integer globalServerPort) {
+    KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
+    serverTester.testGetRequest(context, vertx, "/content/local/formsBridgeTe.html",
         "results/formsBridgeTe.html");
   }
 
   @Test
   @Disabled
   @KnotxApplyConfiguration("conf/application.conf")
-  public void submitOneFormAfterAnother(VertxTestContext context, Vertx vertx) {
+  void submitOneFormAfterAnother(VertxTestContext context, Vertx vertx,
+      @RandomPort Integer globalServerPort) {
+    KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
     final JsonObject competitionFormData = new JsonObject()
         .put("name", "test")
         .put("email", "email-1@example.com")
@@ -138,10 +140,10 @@ public class SampleApplicationIntegrationTest {
         .put("_frmId", "newsletter");
 
     mockFormsAdapter(vertx, competitionFormData, newsletterFormData);
-    knotxServerTester.testPostRequest(context, vertx, "/content/local/formsBridgeTe.html",
+    serverTester.testPostRequest(context, vertx, "/content/local/formsBridgeTe.html",
         competitionFormData.getMap(),
         "results/submitCompetitionForm.html");
-    knotxServerTester.testPostRequest(context, vertx, "/content/local/formsBridgeTe.html",
+    serverTester.testPostRequest(context, vertx, "/content/local/formsBridgeTe.html",
         newsletterFormData.getMap(),
         "results/submitNewsletterForm.html");
   }

@@ -44,8 +44,7 @@
   <div class="row">
     <knotx:snippet flow="knotx.knot.databridge,knotx.knot.te"
                    databridge-name-author="authors"
-                   databridge-name-book="books"
-                   type="text/knotx-snippet">
+                   databridge-name-book="books">
       <div class="col-md-4">
         <h2>Book</h2>
         <p>{{book._result.title}}</p>
@@ -63,8 +62,7 @@
   <div class="row">
     <div class="col-md-4">
       <knotx:snippet flow="knotx.knot.databridge,knotx.knot.te"
-                     databridge-name="authors"
-                     type="text/knotx-snippet">
+                     databridge-name="authors">
         <h2>Portfolio: </h2>
         <ul>
           {{#each _result.info.portfolio}}
@@ -75,8 +73,7 @@
     </div>
     <div class="col-md-4">
       <knotx:snippet flow="knotx.knot.databridge,knotx.knot.te"
-                     databridge-name="books"
-                     type="text/knotx-snippet">
+                     databridge-name="books">
         <h2>Tags: </h2>
         <ul>
           {{#each _result.info.tags}}
