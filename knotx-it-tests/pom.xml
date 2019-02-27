@@ -29,15 +29,39 @@
   <name>Knot.x - Integration Tests</name>
 
   <dependencies>
-    <!-- Knot.x core -->
+    <!-- Knot.x Launcher -->
     <dependency>
       <groupId>io.knotx</groupId>
-      <artifactId>knotx-core</artifactId>
+      <artifactId>knotx-launcher</artifactId>
+    </dependency>
+    <!-- Knot.x Server -->
+    <dependency>
+      <groupId>io.knotx</groupId>
+      <artifactId>knotx-server-http-core</artifactId>
     </dependency>
     <dependency>
       <groupId>io.knotx</groupId>
-      <artifactId>knotx-databridge-api</artifactId>
+      <artifactId>knotx-splitter-html</artifactId>
     </dependency>
+    <dependency>
+      <groupId>io.knotx</groupId>
+      <artifactId>knotx-assembler</artifactId>
+    </dependency>
+    <!-- Knot.x Repositories -->
+    <dependency>
+      <groupId>io.knotx</groupId>
+      <artifactId>knotx-repository-connector-http</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.knotx</groupId>
+      <artifactId>knotx-repository-connector-fs</artifactId>
+    </dependency>
+    <!-- Knot.x Knot Engine -->
+    <dependency>
+      <groupId>io.knotx</groupId>
+      <artifactId>knotx-knot-engine-handler</artifactId>
+    </dependency>
+    <!-- Knot.x Data Bridge -->
     <dependency>
       <groupId>io.knotx</groupId>
       <artifactId>knotx-databridge-core</artifactId>
@@ -46,18 +70,7 @@
       <groupId>io.knotx</groupId>
       <artifactId>knotx-databridge-adapter-http</artifactId>
     </dependency>
-    <dependency>
-      <groupId>io.knotx</groupId>
-      <artifactId>knotx-forms-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.knotx</groupId>
-      <artifactId>knotx-forms-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.knotx</groupId>
-      <artifactId>knotx-template-engine-api</artifactId>
-    </dependency>
+    <!-- Knot.x Template Engine -->
     <dependency>
       <groupId>io.knotx</groupId>
       <artifactId>knotx-template-engine-core</artifactId>
@@ -66,6 +79,8 @@
       <groupId>io.knotx</groupId>
       <artifactId>knotx-template-engine-handlebars</artifactId>
     </dependency>
+
+    <!-- Vert.x -->
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-core</artifactId>
@@ -122,12 +137,6 @@
       <artifactId>vertx-config</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>io.knotx</groupId>
-      <artifactId>knotx-core</artifactId>
-      <type>test-jar</type>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <build>
@@ -144,6 +153,11 @@
         <configuration>
           <source>8</source>
           <target>8</target>
+          <compilerArgs>
+            <arg>-verbose</arg>
+            <arg>-Xlint:all</arg>
+            <arg>-parameters</arg>
+          </compilerArgs>
         </configuration>
       </plugin>
     </plugins>

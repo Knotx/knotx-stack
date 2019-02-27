@@ -14,16 +14,22 @@ Structure of the stack is following
 ├── bin
 │   └── knotx                     // shell script used to resolve and run knotx instance
 ├── conf                          // contains application and logger configuration files
-│   ├── application.conf          // defines all modules that Knot.x instance is running, provides configuration for Knot.x Core and global variables for other config files
+│   ├── application.conf          // defines / includes all modules that Knot.x instance is running
 │   ├── bootstrap.json            // config retriever options, defines application configuration stores (e.g. points to `application.conf` - the main configuration)
 │   ├── default-cluster.xml       // basic configuration of Knot.x instance cluster
-│   ├── includes                  // additional modules configuration which are included in `application.conf`
-│   │   ├── actionKnot.conf
-│   │   ├── hbsKnot.conf
-│   │   ├── httpRepo.conf
-│   │   ├── server.conf
-│   │   ├── serviceAdapter.conf
-│   │   └── serviceKnot.conf
+│   ├── openapi.yaml              // Open API 3.0 configuration that is loaded via Knot.x HTTP Server
+│   ├── server.conf               // Knot.x HTTP server configuration which is included in `application.conf`
+│   ├── routes                    // server routes configurations 
+│   │   ├── operation-get.conf
+│   │   └── handlers              // handlers used in API operations definitions
+|   │   │   ├── knotEngineHandler.conf
+|   │   │   └── httpRepoConnectorHandler.conf
+│   ├── knots                     // Knot modules configurations which are included in `application.conf`
+│   │   ├── dataBridgeStack.conf
+│   │   ├── dataBridgeKnot.conf
+│   │   ├── dataBridgeSourceHttp.conf
+│   │   ├── templateEngineStack.conf
+│   │   └── templateEngineKnot.conf
 │   └── logback.xml          // logger configuration
 ├── knotx-stack.json         // stack descriptor, defines instance libraries and dependencies
 ├── lib                      // contains instance libraries and dependencies, instance classpath

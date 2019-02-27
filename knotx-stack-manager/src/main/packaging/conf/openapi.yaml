@@ -23,7 +23,7 @@ servers:
 paths:
   /content/*:
     get:
-      operationId: templating
+      operationId: operation-get
       responses:
         default:
           description: remote repository response with templating

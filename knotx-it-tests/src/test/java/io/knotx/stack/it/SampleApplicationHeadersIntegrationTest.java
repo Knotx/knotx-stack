@@ -25,7 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import io.knotx.junit5.KnotxApplyConfiguration;
 import io.knotx.junit5.KnotxExtension;
-import io.knotx.junit5.wiremock.KnotxWiremock;
+import io.knotx.junit5.RandomPort;
+import io.knotx.junit5.wiremock.ClasspathResourcesMockServer;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.MultiMap;
@@ -35,20 +36,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(KnotxExtension.class)
-public class SampleApplicationHeadersIntegrationTest {
+class SampleApplicationHeadersIntegrationTest {
 
   private MultiMap expectedHeaders = MultiMap.caseInsensitiveMultiMap();
 
-  @KnotxWiremock
-  protected WireMockServer mockService;
+  @ClasspathResourcesMockServer
+  private WireMockServer mockService;
 
-  @KnotxWiremock
-  protected WireMockServer mockRepository;
-
-  private KnotxServerTester knotxServerTester;
+  @ClasspathResourcesMockServer
+  private WireMockServer mockRepository;
 
   @BeforeEach
-  public void before() {
+  void before() {
     stubForServer(mockService,
         get(urlMatching("/service/mock/.*"))
             .willReturn(
@@ -64,21 +63,20 @@ public class SampleApplicationHeadersIntegrationTest {
                 aResponse()
                     .withHeader("Cache-control", "no-cache, no-store, must-revalidate")
                     .withHeader("Content-Type", "text/html; charset=UTF-8")
-                    .withHeader("X-Server", "Knot.x")
+                    .withHeader("X-Server", "Knot.x-Custom-Header")
             ));
 
     expectedHeaders.clear();
     expectedHeaders.add("Content-Type", "text/html; charset=UTF-8");
     expectedHeaders.add("X-Server", "Knot.x-Custom-Header");
-
-    knotxServerTester = KnotxServerTester.defatultInstance();
   }
 
   @Test
-  @KnotxApplyConfiguration("conf/integrationTestsStack.conf")
-  public void whenRequestingRemoteRepository_expectOnlyAllowedResponseHeaders(
-      VertxTestContext context, Vertx vertx) {
-    knotxServerTester.testGet(context, vertx, "/content/remote/fullPage.html", resp -> {
+  @KnotxApplyConfiguration("conf/application.conf")
+  void whenRequestingRemoteRepository_expectOnlyAllowedResponseHeaders(VertxTestContext context,
+      Vertx vertx, @RandomPort Integer globalServerPort) {
+    KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
+    serverTester.testGet(context, vertx, "/content/remote/fullPage.html", resp -> {
       MultiMap headers = resp.headers();
       expectedHeaders.names().forEach(name -> {
         assertTrue(headers.contains(name), "Header " + name + " is expected to be present.");
