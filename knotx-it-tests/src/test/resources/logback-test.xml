@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright (C) 2018 Knot.x Project
+  Copyright (C) 2019 Knot.x Project
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -17,17 +17,12 @@
 <configuration debug="true">
   <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener"/>
 
-  <property name="CONSOLE_KNOTX_LOG_PATTERN" value="%d{${KNOTX_LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} [%thread] %-5level %logger{36} - %msg%n"/>
-  <include resource="io/knotx/logging/logback/console-appender.xml" />
+  <include resource="io/knotx/logging/logback/defaults.xml"/>
+  <include resource="io/knotx/logging/logback/console-appender.xml"/>
 
-  <root level="INFO" additivity="false">
+  <logger name="io.knotx" level="TRACE"/>
+
+  <root level="INFO">
     <appender-ref ref="CONSOLE"/>
   </root>
-
-  <logger name="io.netty" level="ERROR" additivity="false"/>
-  <logger name="io.vertx" level="ERROR" additivity="false"/>
-
-  <logger name="io.knotx" level="TRACE" additivity="false">
-    <appender-ref ref="CONSOLE"/>
-  </logger>
 </configuration>
