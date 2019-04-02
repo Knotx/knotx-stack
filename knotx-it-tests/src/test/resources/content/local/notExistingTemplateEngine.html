@@ -21,14 +21,14 @@
 </head>
 <body>
   <div>
-    <knotx:snippet knots="te"
+    <knotx:snippet data-knotx-task="templating"
                    te-strategy="not-existing-te"
                    type="text/knotx-snippet">
       <h2>Error expected</h2>
     </knotx:snippet>
   </div>
   <div>
-    <knotx:snippet knots="databridge,te"
+    <knotx:snippet data-knotx-task="templating"
                    databridge-name="authors"
                    type="text/knotx-snippet">
       <h2>This should work when global fallback defined</h2>

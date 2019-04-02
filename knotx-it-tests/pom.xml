@@ -59,7 +59,7 @@
     <!-- Knot.x Knot Engine -->
     <dependency>
       <groupId>io.knotx</groupId>
-      <artifactId>knotx-knot-engine-handler</artifactId>
+      <artifactId>knotx-fragments-handler-core</artifactId>
     </dependency>
     <!-- Knot.x Data Bridge -->
     <dependency>
