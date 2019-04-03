@@ -1,5 +1,5 @@
 <!--
-  Copyright (C) 2018 Knot.x Project
+  Copyright (C) 2019 Knot.x Project
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -44,8 +44,7 @@
   <div class="row">
     <knotx:snippet data-knotx-task="templating"
                    databridge-name-author="authors"
-                   databridge-name-book="books"
-                   type="text/knotx-snippet">
+                   databridge-name-book="books">
       <div class="col-md-4">
         <h2>Book</h2>
         <p>{{book._result.title}}</p>
@@ -63,8 +62,7 @@
   <div class="row">
     <div class="col-md-4">
       <knotx:snippet data-knotx-task="templating"
-                     databridge-name="authors"
-                     type="text/knotx-snippet">
+                     databridge-name="authors">
         <h2>Portfolio: </h2>
         <ul>
           {{#each _result.info.portfolio}}
@@ -75,8 +73,7 @@
     </div>
     <div class="col-md-4">
       <knotx:snippet data-knotx-task="templating"
-                     databridge-name="books"
-                     type="text/knotx-snippet">
+                     databridge-name="books">
         <h2>Tags: </h2>
         <ul>
           {{#each _result.info.tags}}
