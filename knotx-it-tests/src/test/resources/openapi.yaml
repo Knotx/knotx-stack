@@ -35,20 +35,11 @@ servers:
       default: '9092'
 
 paths:
-  /content/local/*:
-    get:
-      operationId: te-local-get
-      responses:
-        default:
-          description: local repository response with templating
-    post:
-      operationId: te-local-post
-      responses:
-        default:
-          description: local repository response with templating
   /content/*:
     get:
-      operationId: te-remote-get
+      operationId: te-get
       responses:
         default:
-          description: remote repository response with templating
+          description: HTTP repository response continaing fragments with
+            Data Bridge (https://github.com/Knotx/knotx-data-bridge) and
+            Template Engine (https://github.com/Knotx/knotx-template-engine) processing

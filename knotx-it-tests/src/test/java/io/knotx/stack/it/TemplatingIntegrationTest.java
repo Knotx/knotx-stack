@@ -19,8 +19,6 @@ import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
 import static io.knotx.junit5.wiremock.KnotxWiremockExtension.stubForServer;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import io.knotx.junit5.KnotxApplyConfiguration;
@@ -29,25 +27,29 @@ import io.knotx.junit5.RandomPort;
 import io.knotx.junit5.wiremock.ClasspathResourcesMockServer;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.junit5.VertxTestContext;
-import io.vertx.reactivex.core.MultiMap;
 import io.vertx.reactivex.core.Vertx;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(KnotxExtension.class)
-class SampleApplicationHeadersIntegrationTest {
-
-  private MultiMap expectedHeaders = MultiMap.caseInsensitiveMultiMap();
+@TestInstance(Lifecycle.PER_CLASS)
+class TemplatingIntegrationTest {
 
   @ClasspathResourcesMockServer
   private WireMockServer mockService;
 
   @ClasspathResourcesMockServer
+  private WireMockServer mockBrokenService;
+
+  @ClasspathResourcesMockServer
   private WireMockServer mockRepository;
 
-  @BeforeEach
-  void before() {
+  @BeforeAll
+  void initMocks() {
     stubForServer(mockService,
         get(urlMatching("/service/mock/.*"))
             .willReturn(
@@ -57,36 +59,51 @@ class SampleApplicationHeadersIntegrationTest {
                     .withHeader("X-Server", "Knot.x")
             ));
 
+    stubForServer(mockBrokenService,
+        get(urlMatching("/service/broken/.*"))
+            .willReturn(
+                aResponse()
+                    .withStatus(HttpResponseStatus.INTERNAL_SERVER_ERROR.code())
+            ));
+
     stubForServer(mockRepository,
         get(urlMatching("/content/.*"))
             .willReturn(
                 aResponse()
                     .withHeader("Cache-control", "no-cache, no-store, must-revalidate")
                     .withHeader("Content-Type", "text/html; charset=UTF-8")
-                    .withHeader("X-Server", "Knot.x-Custom-Header")
+                    .withHeader("X-Server", "Knot.x")
             ));
-
-    expectedHeaders.clear();
-    expectedHeaders.add("Content-Type", "text/html; charset=UTF-8");
-    expectedHeaders.add("X-Server", "Knot.x-Custom-Header");
   }
 
   @Test
+  @DisplayName("Expect page with fragments containing data from services.")
   @KnotxApplyConfiguration("conf/application.conf")
-  void whenRequestingRemoteRepository_expectOnlyAllowedResponseHeaders(VertxTestContext context,
-      Vertx vertx, @RandomPort Integer globalServerPort) {
+  void requestPageWithTemplating(VertxTestContext context, Vertx vertx,
+      @RandomPort Integer globalServerPort) {
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
-    serverTester.testGet(context, vertx, "/content/remote/fullPage.html", resp -> {
-      MultiMap headers = resp.headers();
-      expectedHeaders.names().forEach(name -> {
-        assertTrue(headers.contains(name), "Header " + name + " is expected to be present.");
-        assertEquals(expectedHeaders.get(name), headers.get(name),
-            "Wrong value of " + name + " header.");
-      });
-      assertEquals(HttpResponseStatus.OK.code(), resp.statusCode(), "Wrong status code received.");
-      assertTrue(headers.contains("content-length"),
-          "content-length header is expected to be present.");
-    });
+    serverTester.testGetRequest(context, vertx, "/content/fullPage.html", "results/fullPage.html");
+  }
+
+  @Test
+  @DisplayName("Expect page with fragments containing not updated placeholders.")
+  @KnotxApplyConfiguration("conf/application.conf")
+  void requestPageWithServiceThatReturns500(VertxTestContext context, Vertx vertx,
+      @RandomPort Integer globalServerPort) {
+    KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
+    serverTester.testGetRequest(context, vertx, "/content/brokenService.html",
+        "results/brokenService.html");
+  }
+
+  // TODO move to https://github.com/Knotx/knotx-server-http
+  @Test
+  @KnotxApplyConfiguration("conf/application.conf")
+  void requestPageWithRequestParameters(VertxTestContext context, Vertx vertx,
+      @RandomPort Integer globalServerPort) {
+    KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
+    serverTester.testGetRequest(context, vertx,
+        "/content/fullPage.html?parameter%20with%20space=value&q=knotx",
+        "results/fullPage.html");
   }
 
 }
