@@ -52,16 +52,10 @@
       "version": "\${knotx.version}",
       "included": true
     },
-    // Knot.x Knot Engine
+    // Knot.x Fragments Handler
     {
       "groupId": "io.knotx",
-      "artifactId": "knotx-knot-engine-core",
-      "version": "\${knotx.version}",
-      "included": true
-    },
-    {
-      "groupId": "io.knotx",
-      "artifactId": "knotx-knot-engine-handler",
+      "artifactId": "knotx-fragments-handler-core",
       "version": "\${knotx.version}",
       "included": true
     },

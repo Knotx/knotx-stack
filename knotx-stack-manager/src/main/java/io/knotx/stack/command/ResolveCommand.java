@@ -13,7 +13,7 @@
  *
  *  You may elect to redistribute this code under either of these licenses.
  *
- *  Modifications Copyright (C) 2016 Cognifide Limited
+ *  Modifications Copyright (C) 2019 Knot.x Project
  */
 
 package io.knotx.stack.command;
