@@ -42,7 +42,7 @@
     </div>
   </div>
   <div class="row">
-    <knotx:snippet data-knotx-task="templating">
+    <knotx:snippet data-knotx-task="book-and-author-listing">
       <div class="col-md-4">
         <h2>Book</h2>
         <p>{{book._result.title}}</p>
@@ -59,7 +59,7 @@
   </div>
   <div class="row">
     <div class="col-md-4">
-      <knotx:snippet data-knotx-task="templating">
+      <knotx:snippet data-knotx-task="author-listing">
         <h2>Portfolio: </h2>
         <ul>
           {{#each author._result.info.portfolio}}
@@ -69,10 +69,10 @@
       </knotx:snippet>
     </div>
     <div class="col-md-4">
-      <knotx:snippet data-knotx-task="templating">
+      <knotx:snippet data-knotx-task="tags-listing">
         <h2>Tags: </h2>
         <ul>
-          {{#each book._result.info.tags}}
+          {{#each tags._result.tags}}
           <li>{{this}}</li>
           {{/each}}
         </ul>
