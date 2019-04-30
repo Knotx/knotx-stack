@@ -62,13 +62,7 @@
     // Knot.x Data Bridge
     {
       "groupId": "io.knotx",
-      "artifactId": "knotx-databridge-core",
-      "version": "\${knotx.version}",
-      "included": true
-    },
-    {
-      "groupId": "io.knotx",
-      "artifactId": "knotx-databridge-adapter-http",
+      "artifactId": "knotx-action-http",
       "version": "\${knotx.version}",
       "included": true
     },
