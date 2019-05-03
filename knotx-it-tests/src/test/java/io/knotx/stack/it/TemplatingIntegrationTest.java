@@ -92,7 +92,7 @@ class TemplatingIntegrationTest {
   void requestPageWithFallback(VertxTestContext context, Vertx vertx,
       @RandomPort Integer globalServerPort) {
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
-    serverTester.testGetRequest(context, vertx, "/content/fullPage.html", "results/fullPage.html");
+    serverTester.testGetRequest(context, vertx, "/content/fullPage.html", "results/fullPage-fallback.html");
   }
 
   @Test
