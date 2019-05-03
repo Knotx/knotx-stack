@@ -64,11 +64,7 @@
     <!-- Knot.x Data Bridge -->
     <dependency>
       <groupId>io.knotx</groupId>
-      <artifactId>knotx-databridge-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.knotx</groupId>
-      <artifactId>knotx-databridge-adapter-http</artifactId>
+      <artifactId>knotx-action-http</artifactId>
     </dependency>
     <!-- Knot.x Template Engine -->
     <dependency>

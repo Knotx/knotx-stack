@@ -29,6 +29,7 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.Vertx;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -77,27 +78,34 @@ class TemplatingIntegrationTest {
   }
 
   @Test
-  @DisplayName("Expect page with fragments containing data from services.")
-  @KnotxApplyConfiguration("conf/application.conf")
-  void requestPageWithTemplating(VertxTestContext context, Vertx vertx,
+  @DisplayName("Expect page containing data from services.")
+  @KnotxApplyConfiguration({"conf/application.conf", "conf/tasks/default-task.conf"})
+  void requestPage(VertxTestContext context, Vertx vertx,
       @RandomPort Integer globalServerPort) {
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
     serverTester.testGetRequest(context, vertx, "/content/fullPage.html", "results/fullPage.html");
   }
 
   @Test
-  @DisplayName("Expect page with fragments containing not updated placeholders.")
-  @KnotxApplyConfiguration("conf/application.conf")
-  void requestPageWithServiceThatReturns500(VertxTestContext context, Vertx vertx,
+  @DisplayName("Expect page containing data from services and fallback data for broken service.")
+  @KnotxApplyConfiguration({"conf/application.conf", "conf/tasks/action-with-fallback-task.conf"})
+  void requestPageWithFallback(VertxTestContext context, Vertx vertx,
       @RandomPort Integer globalServerPort) {
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
-    serverTester.testGetRequest(context, vertx, "/content/brokenService.html",
-        "results/brokenService.html");
+    serverTester.testGetRequest(context, vertx, "/content/fullPage.html", "results/fullPage.html");
+  }
+
+  @Test
+  @Disabled
+  @DisplayName("Expect page containing data from services and single service invocation.")
+  void requestPageWithServiceCache() {
+
   }
 
   // TODO move to https://github.com/Knotx/knotx-server-http
   @Test
-  @KnotxApplyConfiguration("conf/application.conf")
+  @DisplayName("Expect page containing data from services when parameters specified.")
+  @KnotxApplyConfiguration({"conf/application.conf", "conf/tasks/default-task.conf"})
   void requestPageWithRequestParameters(VertxTestContext context, Vertx vertx,
       @RandomPort Integer globalServerPort) {
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);

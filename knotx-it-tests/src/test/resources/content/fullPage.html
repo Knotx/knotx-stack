@@ -42,41 +42,37 @@
     </div>
   </div>
   <div class="row">
-    <knotx:snippet data-knotx-task="templating"
-                   databridge-name-author="authors"
-                   databridge-name-book="books">
+    <knotx:snippet data-knotx-task="book-and-author-listing">
       <div class="col-md-4">
         <h2>Book</h2>
         <p>{{book._result.title}}</p>
         <p>Authors: {{book._result.info.authors}}</p>
-        <div>Success! Status code : {{book._response.statusCode}}</div>
+        <div>Success! Status code : {{book._response.metadata.statusCode}}</div>
       </div>
       <div class="col-md-4">
         <h2>Author</h2>
         <p>{{author._result.name}}</p>
         <p>Bio: {{author._result.info.bio}}</p>
-        <div>Success! Status code : {{author._response.statusCode}}</div>
+        <div>Success! Status code : {{author._response.metadata.statusCode}}</div>
       </div>
     </knotx:snippet>
   </div>
   <div class="row">
     <div class="col-md-4">
-      <knotx:snippet data-knotx-task="templating"
-                     databridge-name="authors">
+      <knotx:snippet data-knotx-task="author-listing">
         <h2>Portfolio: </h2>
         <ul>
-          {{#each _result.info.portfolio}}
+          {{#each author._result.info.portfolio}}
           <li>{{this}}</li>
           {{/each}}
         </ul>
       </knotx:snippet>
     </div>
     <div class="col-md-4">
-      <knotx:snippet data-knotx-task="templating"
-                     databridge-name="books">
+      <knotx:snippet data-knotx-task="tags-listing">
         <h2>Tags: </h2>
         <ul>
-          {{#each _result.info.tags}}
+          {{#each tags._result.tags}}
           <li>{{this}}</li>
           {{/each}}
         </ul>
