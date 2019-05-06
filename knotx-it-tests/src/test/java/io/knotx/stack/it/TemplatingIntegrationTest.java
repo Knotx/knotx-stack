@@ -79,7 +79,7 @@ class TemplatingIntegrationTest {
 
   @Test
   @DisplayName("Expect page containing data from services.")
-  @KnotxApplyConfiguration({"conf/application.conf", "conf/tasks/default-task.conf"})
+  @KnotxApplyConfiguration({"conf/application.conf", "conf/tasks/task.conf"})
   void requestPage(VertxTestContext context, Vertx vertx,
       @RandomPort Integer globalServerPort) {
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
@@ -88,7 +88,7 @@ class TemplatingIntegrationTest {
 
   @Test
   @DisplayName("Expect page containing data from services and fallback data for broken service.")
-  @KnotxApplyConfiguration({"conf/application.conf", "conf/tasks/action-with-fallback-task.conf"})
+  @KnotxApplyConfiguration({"conf/application.conf", "conf/tasks/task-with-fallback-action.conf"})
   void requestPageWithFallback(VertxTestContext context, Vertx vertx,
       @RandomPort Integer globalServerPort) {
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
@@ -105,7 +105,7 @@ class TemplatingIntegrationTest {
   // TODO move to https://github.com/Knotx/knotx-server-http
   @Test
   @DisplayName("Expect page containing data from services when parameters specified.")
-  @KnotxApplyConfiguration({"conf/application.conf", "conf/tasks/default-task.conf"})
+  @KnotxApplyConfiguration({"conf/application.conf", "conf/tasks/task.conf"})
   void requestPageWithRequestParameters(VertxTestContext context, Vertx vertx,
       @RandomPort Integer globalServerPort) {
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
