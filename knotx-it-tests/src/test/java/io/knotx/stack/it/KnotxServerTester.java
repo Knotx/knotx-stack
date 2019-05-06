@@ -55,9 +55,9 @@ final class KnotxServerTester {
   void testGetRequest(VertxTestContext context, Vertx vertx, String url,
       String expectedResponseFile) {
     testGet(context, vertx, url, resp -> {
+      assertEquals(HttpResponseStatus.OK.code(), resp.statusCode());
       HtmlMarkupAssertions.assertHtmlBodyMarkupsEqual(FileReader.readTextSafe(expectedResponseFile),
           resp.body().toString());
-      assertEquals(HttpResponseStatus.OK.code(), resp.statusCode());
     });
   }
 
