@@ -21,6 +21,7 @@
   <include resource="io/knotx/logging/logback/console-appender.xml"/>
 
   <logger name="io.knotx" level="TRACE"/>
+  <logger name="io.vertx" level="TRACE"/>
 
   <root level="INFO">
     <appender-ref ref="CONSOLE"/>
