@@ -38,8 +38,8 @@
   </developers>
 
   <modules>
-    <module>knotx-stack-manager</module>
     <module>knotx-it-tests</module>
+    <module>knotx-stack-manager</module>
     <module>knotx-docker</module>
   </modules>
 
