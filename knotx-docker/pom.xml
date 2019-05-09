@@ -107,8 +107,7 @@
                 </goals>
                 <configuration>
                   <includeArtifactIds>knotx-stack-manager</includeArtifactIds>
-                  <outputDirectory>${project.build.directory}/docker/${docker.domain}/knotx-alpine/build
-                  </outputDirectory>
+                  <outputDirectory>${project.build.directory}/docker/${docker.domain}/knotx-alpine/build</outputDirectory>
                   <markersDirectory>${project.build.directory}/marker-dependency-alpine</markersDirectory>
                 </configuration>
               </execution>

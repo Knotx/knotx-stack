@@ -1,8 +1,7 @@
 # A base Dockerfile for Knot.x
 
-FROM openjdk:8u151-jre-alpine
-
-MAINTAINER Marcin Czeczko <marcin.czeczko@gmail.com>
+FROM openjdk:8-jre-alpine
+LABEL maintainer="Knot.x Project"
 
 COPY ./ /usr/local/
 RUN apk add --update bash && rm -rf /var/cache/apk/*

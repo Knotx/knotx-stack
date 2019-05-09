@@ -1,8 +1,7 @@
 # A base Dockerfile for Knot.x
 
-FROM openjdk:8u151-jre
-
-MAINTAINER Marcin Czeczko <marcin.czeczko@gmail.com>
+FROM openjdk:8-jre
+LABEL maintainer="Knot.x Project"
 
 COPY ./ /usr/local/
 RUN chmod +x /usr/local/knotx/bin/knotx
