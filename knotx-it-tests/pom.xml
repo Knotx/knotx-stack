@@ -34,6 +34,11 @@
       <groupId>io.knotx</groupId>
       <artifactId>knotx-launcher</artifactId>
     </dependency>
+    <!-- Knot.x Commons -->
+    <dependency>
+      <groupId>io.knotx</groupId>
+      <artifactId>knotx-commons</artifactId>
+    </dependency>
     <!-- Knot.x Server -->
     <dependency>
       <groupId>io.knotx</groupId>

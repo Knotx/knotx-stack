@@ -29,7 +29,6 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.Vertx;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -77,35 +76,12 @@ class TemplatingIntegrationTest {
             ));
   }
 
-  @Test
-  @DisplayName("Expect page containing data from services.")
-  @KnotxApplyConfiguration({"conf/application.conf", "conf/tasks/task.conf"})
-  void requestPage(VertxTestContext context, Vertx vertx,
-      @RandomPort Integer globalServerPort) {
-    KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
-    serverTester.testGetRequest(context, vertx, "/content/fullPage.html", "results/fullPage.html");
-  }
-
-  @Test
-  @DisplayName("Expect page containing data from services and fallback data for broken service.")
-  @KnotxApplyConfiguration({"conf/application.conf", "conf/tasks/task-with-fallback-action.conf"})
-  void requestPageWithFallback(VertxTestContext context, Vertx vertx,
-      @RandomPort Integer globalServerPort) {
-    KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
-    serverTester.testGetRequest(context, vertx, "/content/fullPage.html", "results/fullPage-fallback.html");
-  }
-
-  @Test
-  @Disabled
-  @DisplayName("Expect page containing data from services and single service invocation.")
-  void requestPageWithServiceCache() {
-
-  }
-
   // TODO move to https://github.com/Knotx/knotx-server-http
   @Test
   @DisplayName("Expect page containing data from services when parameters specified.")
-  @KnotxApplyConfiguration({"conf/application.conf", "conf/tasks/task.conf"})
+  @KnotxApplyConfiguration({"conf/application.conf",
+      "scenarios/task-with-http-action/mocks.conf",
+      "scenarios/task-with-http-action/tasks.conf"})
   void requestPageWithRequestParameters(VertxTestContext context, Vertx vertx,
       @RandomPort Integer globalServerPort) {
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
