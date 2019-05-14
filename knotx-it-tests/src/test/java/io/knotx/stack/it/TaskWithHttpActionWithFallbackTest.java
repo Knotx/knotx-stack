@@ -19,8 +19,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @ExtendWith(KnotxExtension.class)
 class TaskWithHttpActionWithFallbackTest {
 
-  @ClasspathResourcesMockServer
-  private WireMockServer mockService;
+//  @ClasspathResourcesMockServer
+//  private WireMockServer mockService;
 
   @ClasspathResourcesMockServer
   private WireMockServer mockRepository;

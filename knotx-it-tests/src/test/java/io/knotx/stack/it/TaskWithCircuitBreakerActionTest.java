@@ -11,6 +11,7 @@ import io.knotx.junit5.RandomPort;
 import io.knotx.junit5.wiremock.ClasspathResourcesMockServer;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.Vertx;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -28,6 +29,7 @@ class TaskWithCircuitBreakerActionTest {
   private WireMockServer mockRepository;
 
   @Test
+  @Disabled
   @DisplayName("Expect page containing data from services and fallback data for broken service.")
   @KnotxApplyConfiguration({"conf/application.conf", "scenarios/task-with-circuit-breaker/mocks.conf",
       "scenarios/task-with-circuit-breaker/tasks.conf"})
