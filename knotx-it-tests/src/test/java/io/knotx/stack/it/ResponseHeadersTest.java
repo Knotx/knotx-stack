@@ -37,7 +37,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(KnotxExtension.class)
-class ResponseHeadersIntegrationTest {
+class ResponseHeadersTest {
 
   private MultiMap expectedHeaders = MultiMap.caseInsensitiveMultiMap();
 
@@ -74,7 +74,7 @@ class ResponseHeadersIntegrationTest {
 
   @Test
   @DisplayName("Expect allowed headers in Server response.")
-  @KnotxApplyConfiguration("conf/application.conf")
+  @KnotxApplyConfiguration({"conf/application.conf", "scenarios/response-headers/mocks.conf"})
   void whenRequestingRemoteRepository_expectOnlyAllowedResponseHeaders(VertxTestContext context,
       Vertx vertx, @RandomPort Integer globalServerPort) {
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);

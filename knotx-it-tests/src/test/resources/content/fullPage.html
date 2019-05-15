@@ -69,10 +69,10 @@
       </knotx:snippet>
     </div>
     <div class="col-md-4">
-      <knotx:snippet data-knotx-task="tags-listing">
+      <knotx:snippet data-knotx-task="books-listing">
         <h2>Tags: </h2>
         <ul>
-          {{#each tags._result.tags}}
+          {{#each book._result.info.tags}}
           <li>{{this}}</li>
           {{/each}}
         </ul>
