@@ -81,8 +81,8 @@ class TemplatingIntegrationTest {
   @Test
   @DisplayName("Expect page containing data from services when parameters specified.")
   @KnotxApplyConfiguration({"conf/application.conf",
-      "scenarios/task-with-http-action/mocks.conf",
-      "scenarios/task-with-http-action/tasks.conf"})
+      "scenarios/http-service/mocks.conf",
+      "scenarios/http-service/tasks.conf"})
   void requestPageWithRequestParameters(VertxTestContext context, Vertx vertx,
       @RandomPort Integer globalServerPort) {
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
