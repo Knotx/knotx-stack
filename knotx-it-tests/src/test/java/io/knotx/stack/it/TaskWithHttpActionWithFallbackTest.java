@@ -19,9 +19,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @ExtendWith(KnotxExtension.class)
 class TaskWithHttpActionWithFallbackTest {
 
-//  @ClasspathResourcesMockServer
-//  private WireMockServer mockService;
-
   @ClasspathResourcesMockServer
   private WireMockServer mockRepository;
 
@@ -42,7 +39,8 @@ class TaskWithHttpActionWithFallbackTest {
 
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
     serverTester
-        .testGetRequest(context, vertx, "/content/fullPage.html", "results/fullPage-fallback.html");
+        .testGetRequest(context, vertx, "/content/fullPage.html",
+            "scenarios/task-with-http-action-with-fallback/result/fullPage.html");
   }
 
 }

@@ -11,7 +11,6 @@ import io.knotx.junit5.RandomPort;
 import io.knotx.junit5.wiremock.ClasspathResourcesMockServer;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.Vertx;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -29,9 +28,9 @@ class TaskWithCircuitBreakerActionTest {
   private WireMockServer mockRepository;
 
   @Test
-  @Disabled
   @DisplayName("Expect page containing data from services and fallback data for broken service.")
-  @KnotxApplyConfiguration({"conf/application.conf", "scenarios/task-with-circuit-breaker/mocks.conf",
+  @KnotxApplyConfiguration({"conf/application.conf",
+      "scenarios/task-with-circuit-breaker/mocks.conf",
       "scenarios/task-with-circuit-breaker/tasks.conf"})
   void taskWithCircuitBreaker(VertxTestContext context, Vertx vertx,
       @RandomPort Integer delayedServicePort,
@@ -46,9 +45,8 @@ class TaskWithCircuitBreakerActionTest {
     // when
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
     serverTester
-        .testGetRequest(context, vertx, "/content/fullPage.html", "results/fullPage-fallback.html");
-
-
+        .testGetRequest(context, vertx, "/content/fullPage.html",
+            "scenarios/task-with-circuit-breaker/result/fullPage.html");
   }
 
 }
