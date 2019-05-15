@@ -19,7 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(KnotxExtension.class)
 @TestInstance(Lifecycle.PER_CLASS)
-class TaskWithCircuitBreakerActionTest {
+class LongRunningHttpServiceWithCircuitBreakerIntegrationTest {
 
   @ClasspathResourcesMockServer
   private WireMockServer mockService;
@@ -30,8 +30,8 @@ class TaskWithCircuitBreakerActionTest {
   @Test
   @DisplayName("Expect page containing data from services and fallback data for broken service.")
   @KnotxApplyConfiguration({"conf/application.conf",
-      "scenarios/task-with-circuit-breaker/mocks.conf",
-      "scenarios/task-with-circuit-breaker/tasks.conf"})
+      "scenarios/long-running-http-service-with-circuit-breaker/mocks.conf",
+      "scenarios/long-running-http-service-with-circuit-breaker/tasks.conf"})
   void taskWithCircuitBreaker(VertxTestContext context, Vertx vertx,
       @RandomPort Integer delayedServicePort,
       @RandomPort Integer globalServerPort) {
@@ -46,7 +46,7 @@ class TaskWithCircuitBreakerActionTest {
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
     serverTester
         .testGetRequest(context, vertx, "/content/fullPage.html",
-            "scenarios/task-with-circuit-breaker/result/fullPage.html");
+            "scenarios/long-running-http-service-with-circuit-breaker/result/fullPage.html");
   }
 
 }
