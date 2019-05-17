@@ -33,52 +33,63 @@
     <dependency>
       <groupId>io.knotx</groupId>
       <artifactId>knotx-launcher</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <!-- Knot.x Commons -->
     <dependency>
       <groupId>io.knotx</groupId>
       <artifactId>knotx-commons</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <!-- Knot.x Server -->
     <dependency>
       <groupId>io.knotx</groupId>
       <artifactId>knotx-server-http-core</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>io.knotx</groupId>
       <artifactId>knotx-splitter-html</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>io.knotx</groupId>
       <artifactId>knotx-assembler</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <!-- Knot.x Repositories -->
     <dependency>
       <groupId>io.knotx</groupId>
       <artifactId>knotx-repository-connector-http</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>io.knotx</groupId>
       <artifactId>knotx-repository-connector-fs</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <!-- Knot.x Fragments Handler -->
     <dependency>
       <groupId>io.knotx</groupId>
       <artifactId>knotx-fragments-handler-core</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <!-- Knot.x Data Bridge -->
     <dependency>
       <groupId>io.knotx</groupId>
       <artifactId>knotx-action-http</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <!-- Knot.x Template Engine -->
     <dependency>
       <groupId>io.knotx</groupId>
       <artifactId>knotx-template-engine-core</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>io.knotx</groupId>
       <artifactId>knotx-template-engine-handlebars</artifactId>
+      <version>${project.version}</version>
     </dependency>
 
     <!-- Vert.x -->
@@ -111,6 +122,7 @@
     <dependency>
       <groupId>io.knotx</groupId>
       <artifactId>knotx-junit5</artifactId>
+      <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
