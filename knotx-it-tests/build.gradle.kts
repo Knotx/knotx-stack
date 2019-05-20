@@ -8,12 +8,9 @@
 plugins {
     id("java-library")
     id("idea")
-    id("org.ajoberstar.grgit")
 }
 
 group = "io.knotx"
-
-grgi
 
 dependencies {
     testImplementation(platform("io.knotx:knotx-dependencies:${project.version}"))
