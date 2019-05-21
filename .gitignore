@@ -32,6 +32,7 @@ generated
 *.rar
 *.tar
 *.zip
+!gradle-wrapper.jar
 
 # Logs and databases #
 ######################
