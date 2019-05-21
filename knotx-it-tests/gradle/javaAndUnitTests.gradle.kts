@@ -33,8 +33,9 @@ allprojects {
             failFast = true
             useJUnitPlatform()
             testLogging {
-                events = setOf(TestLogEvent.FAILED)
-                exceptionFormat = TestExceptionFormat.SHORT
+                events = setOf(TestLogEvent.PASSED, TestLogEvent.FAILED)
+                exceptionFormat = TestExceptionFormat.FULL
+                showStandardStreams = true
             }
 
             dependencies {
