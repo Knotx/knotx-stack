@@ -15,12 +15,14 @@
  */
 rootProject.name = "Knot.x - Integration Tests"
 
-includeBuild("../../knotx-commons")
-includeBuild("../../knotx-launcher")
-includeBuild("../../knotx-junit5")
-includeBuild("../../knotx-fragment-api")
-includeBuild("../../knotx-server-http")
-includeBuild("../../knotx-repository-connector")
-includeBuild("../../knotx-fragments-handler")
-includeBuild("../../knotx-data-bridge")
-includeBuild("../../knotx-template-engine")
+if (file("../.composite-enabled").exists()) {
+    includeBuild("../../knotx-commons")
+    includeBuild("../../knotx-launcher")
+    includeBuild("../../knotx-junit5")
+    includeBuild("../../knotx-fragment-api")
+    includeBuild("../../knotx-server-http")
+    includeBuild("../../knotx-repository-connector")
+    includeBuild("../../knotx-fragments-handler")
+    includeBuild("../../knotx-data-bridge")
+    includeBuild("../../knotx-template-engine")
+}

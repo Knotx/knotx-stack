@@ -8,6 +8,7 @@
 plugins {
     id("java-library")
     id("idea")
+    id("maven-publish")
 }
 
 group = "io.knotx"
