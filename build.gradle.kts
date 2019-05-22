@@ -1,26 +1,12 @@
-/*
- * Copyright (C) 2019 Knot.x Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 plugins {
-    id("java-library")
-    id("idea")
-    id("maven-publish")
+    `java-library`
 }
 
-group = "io.knotx"
+repositories {
+    jcenter()
+    maven { url = uri("https://oss.sonatype.org/content/groups/staging/") }
+    maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
+}
 
 dependencies {
     testImplementation(platform("io.knotx:knotx-dependencies:${project.version}"))
@@ -48,18 +34,6 @@ dependencies {
     testImplementation("io.knotx:knotx-template-engine-handlebars:${project.version}")
 }
 
-tasks.register("publish-all") {
-    dependsOn(gradle.includedBuilds.stream().map { ib -> ib.task(":publish")}.toArray() )
-}
-
-tasks.register("publish-local-all") {
-    dependsOn(gradle.includedBuilds.stream().map { ib -> ib.task(":publishToMavenLocal") }.toArray() )
-}
-
-repositories {
-    jcenter()
-    maven { url = uri("https://oss.sonatype.org/content/groups/staging/") }
-    maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
-}
-
 apply(from = "gradle/javaAndUnitTests.gradle.kts")
+apply(from = "gradle/distribution.gradle.kts")
+
