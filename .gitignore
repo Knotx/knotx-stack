@@ -32,6 +32,7 @@ generated
 *.rar
 *.tar
 *.zip
+!gradle-wrapper.jar
 
 # Logs and databases #
 ######################
@@ -54,11 +55,11 @@ Thumbs.db
 # Intellij           #
 ######################
 .idea
+**/build/
 
-# Netbeans           #
+# Gradle
 ######################
-nb-configuration.xml
-nbactions.xml
+.gradle
 
 # Templates           #
 ######################
@@ -81,3 +82,4 @@ atlassian-ide-plugin.xml
 .vertx
 file-uploads
 **/src/main/resources/*-js
+.composite-enabled
