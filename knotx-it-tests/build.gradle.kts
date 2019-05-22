@@ -48,6 +48,14 @@ dependencies {
     testImplementation("io.knotx:knotx-template-engine-handlebars:${project.version}")
 }
 
+tasks.register("publish-all") {
+    dependsOn(gradle.includedBuilds.stream().map { ib -> ib.task(":publish")}.toArray() )
+}
+
+tasks.register("publish-local-all") {
+    dependsOn(gradle.includedBuilds.stream().map { ib -> ib.task(":publishToMavenLocal") }.toArray() )
+}
+
 repositories {
     jcenter()
     maven { url = uri("https://oss.sonatype.org/content/groups/staging/") }

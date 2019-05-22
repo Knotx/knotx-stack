@@ -15,7 +15,7 @@
  */
 rootProject.name = "Knot.x - Integration Tests"
 
-if (file("../.composite-enabled").exists()) {
+if (file(".composite-enabled").exists()) {
     includeBuild("../../knotx-commons")
     includeBuild("../../knotx-launcher")
     includeBuild("../../knotx-junit5")
