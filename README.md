@@ -40,18 +40,12 @@ Simply run `gradlew build` to build your version of Knot.x stack or simply use o
 [latest release](https://github.com/Knotx/knotx-stack/releases/latest). Knot.x stack artifact is a ZIP file
 with the structure described above. To start playing with Knot.x stack unzip the archive.
 
-### Running Stack
+## Running Stack
 From the root stack folder, execute:
 ```cmd
 bin/knotx run-knotx
 ```
 to run the instance.
-
-### Debug resolver
-Enable TRACE level logging on your logback.xml
-```xml
-<logger name="knotx-stack-resolver" level="TRACE"/>
-```
 
 
 [travis]:https://travis-ci.org/Knotx/knotx-stack
