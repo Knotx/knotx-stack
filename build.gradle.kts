@@ -20,6 +20,7 @@ plugins {
     id("maven-publish")
     id("signing")
     id("org.nosphere.apache.rat") version "0.4.0"
+    id("idea")
 }
 
 project.group = "io.knotx"
@@ -49,6 +50,14 @@ tasks {
 // -----------------------------------------------------------------------------
 // Publication
 // -----------------------------------------------------------------------------
+tasks.register("publish-all") {
+    dependsOn(gradle.includedBuilds.stream().map { ib -> ib.task(":publish")}.toArray() )
+}
+
+tasks.register("publish-local-all") {
+    dependsOn(gradle.includedBuilds.stream().map { ib -> ib.task(":publishToMavenLocal") }.toArray() )
+}
+
 publishing {
     publications {
         create<MavenPublication>("knotxDistribution") {
