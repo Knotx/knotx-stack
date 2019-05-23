@@ -16,7 +16,7 @@
 
 val downloadDir = file("${buildDir}/download")
 val distributionDir = file("${buildDir}/out")
-val stackName = "knotx-stack"
+val stackName = "knotx"
 val stackDistribution = "knotx-stack-${version}.zip"
 
 configurations {
