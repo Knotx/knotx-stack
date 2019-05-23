@@ -8,7 +8,7 @@ import org.gradle.kotlin.dsl.register
 val downloadDir = file("${buildDir}/download")
 val distributionDir = file("${buildDir}/out")
 val stackName = "knotx-stack"
-val acmeDistribution = "knotx-stack-${version}.zip"
+val stackDistribution = "knotx-stack-${version}.zip"
 
 configurations {
     register("dist")
@@ -42,7 +42,7 @@ val downloadDeps = tasks.register<Copy>("downloadDeps") {
 }
 
 val assembleDistribution = tasks.register<Zip>("assembleDistribution") {
-    archiveName = acmeDistribution
+    archiveName = stackDistribution
     from(distributionDir)
 }
 
