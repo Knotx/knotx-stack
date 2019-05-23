@@ -36,6 +36,34 @@ Simply run `gradlew build` to build your version of Knot.x stack or simply use o
 [latest release](https://github.com/Knotx/knotx-stack/releases/latest). Knot.x stack artifact is a 
 ZIP file (see the `build/distributions` folder) with the structure described above.
 
+## Knot.x developers support
+To develop Knot.x stack and any of its dependencies locally do following steps:
+1. clone all Knot.x stack repositories into one directory (this will be a `{KNOTX_ROOT}`):
+```
+https://github.com/Knotx/knotx-dependencies
+https://github.com/Knotx/knotx-commons
+https://github.com/Knotx/knotx-junit5
+https://github.com/Knotx/knotx-launcher
+https://github.com/Knotx/knotx-fragment-api
+https://github.com/Knotx/knotx-server-http
+https://github.com/Knotx/knotx-repository-connector
+https://github.com/Knotx/knotx-fragments-handler
+https://github.com/Knotx/knotx-data-bridge
+https://github.com/Knotx/knotx-template-engine
+https://github.com/Knotx/knotx-stack
+```
+2. create `.composite-enabled` file in the `Knotx/knotx-stack`
+```
+touch knotx-stack/.composite-enabled
+```
+3. import `knotx-stack` project in IntelliJ as a Gradle project.
+
+You should see after a while all the Knot.x stack projects in single Idea window. Congratulations! 
+We now wait for your contribution :)
+
+> Note: You may use [Knot.x aggregator](https://github.com/Knotx/knotx-aggregator#development-process)
+that will do (1) and (2) steps for you.
+
 ## Running Stack
 To start playing with Knot.x stack unzip the archive.
 From the `knotx-stack` folder, execute:
