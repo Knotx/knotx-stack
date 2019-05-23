@@ -34,7 +34,7 @@ dependencies {
     "dist"("io.knotx:knotx-action-http:${project.version}")
     "dist"("io.knotx:knotx-template-engine-core:${project.version}")
     "dist"("io.knotx:knotx-template-engine-handlebars:${project.version}")
-    "dist"("io.netty:netty-tcnative-boringssl-static:2.0.7.Final")
+    "dist"("io.netty:netty-tcnative-boringssl-static:2.0.17.Final")
 }
 
 val cleanDistribution = tasks.register<Delete>("cleanDistribution") {
