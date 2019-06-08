@@ -18,8 +18,8 @@ Structure of the stack is following
 │   ├── openapi.yaml              // Open API 3.0 configuration that is loaded via Knot.x HTTP Server
 │   ├── server.conf               // Knot.x HTTP server configuration which is included in `application.conf`
 │   ├── routes                    // server routes configurations 
-│   │   ├── operation-get.conf
-│   │   └── handlers              // handlers used in API operations definitions
+│   │   ├── operations.conf       // defines handlers per Open API operation ids
+│   │   └── handlers              // handlers configurations used in `operations.conf`
 |   │   │   ├── fragmentsHandler.conf
 |   │   │   └── httpRepoConnectorHandler.conf
 │   ├── knots                     // Knot modules configurations which are included in `application.conf`
