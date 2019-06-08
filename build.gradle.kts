@@ -28,6 +28,7 @@ project.group = "io.knotx"
 // we do not use mavenLocal - instead please setup composite build environment (https://github.com/Knotx/knotx-aggregator)
 repositories {
     jcenter()
+    mavenLocal()
     maven { url = uri("https://plugins.gradle.org/m2/") }
     maven { url = uri("https://oss.sonatype.org/content/groups/staging/") }
     maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
