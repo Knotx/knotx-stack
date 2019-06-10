@@ -33,7 +33,7 @@ import java.util.Map;
 
 final class KnotxServerTester {
 
-  private static final int KNOTX_TESTS_SERVER_PORT_DEFAULT = 9092;
+  private static final int KNOTX_TESTS_SERVER_PORT_DEFAULT = 8092;
   private static final String KNOTX_TESTS_SERVER_ADDRESS_DEFAULT = "localhost";
 
   private final String serverHost;
