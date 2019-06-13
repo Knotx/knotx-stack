@@ -52,12 +52,12 @@ tasks {
 // Publication
 // -----------------------------------------------------------------------------
 tasks.register("publish-all") {
-    dependsOn(gradle.includedBuilds.stream().map { ib -> ib.task(":publish")}.toArray() )
+    dependsOn(gradle.includedBuilds.stream().map { ib -> ib.task(":publish") }.toArray())
     dependsOn(tasks.named("publish"))
 }
 
 tasks.register("publish-local-all") {
-    dependsOn(gradle.includedBuilds.stream().map { ib -> ib.task(":publishToMavenLocal") }.toArray() )
+    dependsOn(gradle.includedBuilds.stream().map { ib -> ib.task(":publishToMavenLocal") }.toArray())
     dependsOn(tasks.named("publishToMavenLocal"))
 }
 
@@ -114,6 +114,12 @@ publishing {
         }
     }
 }
+val subProjectPath = this.path
 signing {
+    setRequired({
+        gradle.taskGraph.hasTask("$subProjectPath:publish") ||
+                gradle.taskGraph.hasTask("$subProjectPath:publishMavenJavaPublicationToMavenRepository")
+    })
+
     sign(publishing.publications["knotxDistribution"])
 }
