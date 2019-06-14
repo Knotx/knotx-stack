@@ -44,7 +44,6 @@ https://github.com/Knotx/knotx-dependencies
 https://github.com/Knotx/knotx-commons
 https://github.com/Knotx/knotx-junit5
 https://github.com/Knotx/knotx-launcher
-https://github.com/Knotx/knotx-fragment-api
 https://github.com/Knotx/knotx-server-http
 https://github.com/Knotx/knotx-repository-connector
 https://github.com/Knotx/knotx-fragments-handler
