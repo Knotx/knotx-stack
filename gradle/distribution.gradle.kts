@@ -26,10 +26,10 @@ configurations {
 dependencies {
     "dist"("io.knotx:knotx-launcher:${project.version}")
     "dist"("io.knotx:knotx-server-http-core:${project.version}")
-    "dist"("io.knotx:knotx-splitter-html:${project.version}")
-    "dist"("io.knotx:knotx-assembler:${project.version}")
     "dist"("io.knotx:knotx-repository-connector-fs:${project.version}")
     "dist"("io.knotx:knotx-repository-connector-http:${project.version}")
+    "dist"("io.knotx:knotx-fragments-supplier-html-splitter:${project.version}")
+    "dist"("io.knotx:knotx-fragments-assembler:${project.version}")
     "dist"("io.knotx:knotx-fragments-handler-core:${project.version}")
     "dist"("io.knotx:knotx-action-http:${project.version}")
     "dist"("io.knotx:knotx-template-engine-core:${project.version}")
