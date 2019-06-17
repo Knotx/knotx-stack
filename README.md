@@ -44,10 +44,9 @@ https://github.com/Knotx/knotx-dependencies
 https://github.com/Knotx/knotx-commons
 https://github.com/Knotx/knotx-junit5
 https://github.com/Knotx/knotx-launcher
-https://github.com/Knotx/knotx-fragment-api
 https://github.com/Knotx/knotx-server-http
 https://github.com/Knotx/knotx-repository-connector
-https://github.com/Knotx/knotx-fragments-handler
+https://github.com/Knotx/knotx-fragments
 https://github.com/Knotx/knotx-data-bridge
 https://github.com/Knotx/knotx-template-engine
 https://github.com/Knotx/knotx-stack
@@ -80,5 +79,5 @@ to run the instance.
 [travis]:https://travis-ci.org/Knotx/knotx-stack
 [travis img]:https://travis-ci.org/Knotx/knotx-stack.svg?branch=master
 
-[license]:https://github.com/Cognifide/knotx/blob/master/LICENSE
+[license]:https://github.com/Knotx/knotx-stack/blob/master/LICENSE
 [license img]:https://img.shields.io/badge/License-Apache%202.0-blue.svg

@@ -17,10 +17,10 @@
 rootProject.name = "knotx-stack"
 
 if (file(".composite-enabled").exists()) {
+    includeBuild("../knotx-gradle-plugins")
     includeBuild("../knotx-commons")
     includeBuild("../knotx-launcher")
     includeBuild("../knotx-junit5")
-    includeBuild("../knotx-fragment-api")
     includeBuild("../knotx-server-http")
     includeBuild("../knotx-repository-connector")
     includeBuild("../knotx-fragments-handler")
