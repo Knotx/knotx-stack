@@ -16,7 +16,8 @@
 import org.nosphere.apache.rat.RatTask
 
 plugins {
-    id("java-library")
+    id("io.knotx.java-library") version "0.1.0"
+    id("io.knotx.unit-test") version "0.1.0"
     id("maven-publish")
     id("signing")
     id("org.nosphere.apache.rat") version "0.4.0"
@@ -34,7 +35,6 @@ repositories {
     maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
 }
 
-apply(from = "gradle/javaAndUnitTests.gradle.kts")
 apply(from = "gradle/integrationTests.gradle.kts")
 apply(from = "gradle/distribution.gradle.kts")
 
