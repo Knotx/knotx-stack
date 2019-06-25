@@ -29,6 +29,7 @@ dependencies {
     "dist"("io.knotx:knotx-repository-connector-fs:${project.version}")
     "dist"("io.knotx:knotx-repository-connector-http:${project.version}")
     "dist"("io.knotx:knotx-fragments-supplier-html-splitter:${project.version}")
+    "dist"("io.knotx:knotx-fragments-supplier-single-fragment:${project.version}")
     "dist"("io.knotx:knotx-fragments-assembler:${project.version}")
     "dist"("io.knotx:knotx-fragments-handler-core:${project.version}")
     "dist"("io.knotx:knotx-action-http:${project.version}")
