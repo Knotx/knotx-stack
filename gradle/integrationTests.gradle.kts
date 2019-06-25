@@ -31,6 +31,7 @@ dependencies {
     "testImplementation"("io.knotx:knotx-fragments-api:${project.version}")
     "testImplementation"("io.knotx:knotx-server-http-core:${project.version}")
     "testImplementation"("io.knotx:knotx-fragments-supplier-html-splitter:${project.version}")
+    "testImplementation"("io.knotx:knotx-fragments-supplier-single-fragment:${project.version}")
     "testImplementation"("io.knotx:knotx-fragments-assembler:${project.version}")
     "testImplementation"("io.knotx:knotx-repository-connector-fs:${project.version}")
     "testImplementation"("io.knotx:knotx-repository-connector-http:${project.version}")

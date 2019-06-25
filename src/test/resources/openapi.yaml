@@ -43,3 +43,9 @@ paths:
           description: HTTP repository response continaing fragments with
             Data Bridge (https://github.com/Knotx/knotx-data-bridge) and
             Template Engine (https://github.com/Knotx/knotx-template-engine) processing
+  /api/author-info:
+    get:
+      operationId: author-info
+      responses:
+        default:
+          description: Gateway API endpoint that uses Data Bridge (https://github.com/Knotx/knotx-data-bridge)
