@@ -12,22 +12,24 @@ pool:
 steps:
 - script: |
     git clone https://github.com/Knotx/knotx-aggregator.git
-    cd knotx-aggregator/development
-    mkdir modules
+    mkdir knotx-repos
   displayName: "Prepare Knot.x Aggregator"
 - task: CmdLine@2
   inputs:
     script: |
       cd knotx-aggregator/development
-      ./pull-all.sh -r modules -b $(Build.SourceBranchName) -a https
+      ./pull-all.sh -r ../../knotx-repos -b $(Build.SourceBranchName) -a https
   displayName: "Clone all Knot.x repositories"
 - task: CmdLine@2
   inputs:
     script: |
       cd knotx-aggregator/development
-      ./build-all.sh -r modules
+      ./build-all.sh -r ../../knotx-repos
   displayName: "Build Knot.x Stack"
 - script: |
-    cd knotx-aggregator/development/modules/knotx-docker
+    cd knotx-repos/knotx-docker
     mvn clean package
   displayName: "Build Docker image"
+- script: |
+    cd knotx-repos/knotx-starter-kit
+    ./gradlew -Pknotx.version=2.0.0-SNAPSHOT build
