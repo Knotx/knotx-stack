@@ -19,4 +19,4 @@ steps:
       cd knotx-aggregator/development
       mkdir modules
       ./pull-all.sh -r modules -b $(Build.SourceBranchName) -a $(System.AccessToken)
-      ./build-all.sh -r modules -d
+      ./build-all.sh -r modules
