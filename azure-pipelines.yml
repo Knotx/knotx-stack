@@ -16,4 +16,4 @@ steps:
     git clone https://github.com/Knotx/knotx-aggregator.git
     cd knotx-aggregator/development
     mkdir modules
-    ./pull-all.sh -r modules -b $(Build.SourceBranchName) -a $(System.AccessToken)
+    ./pull-all.sh -r modules -b $(Build.SourceBranchName) -a test
