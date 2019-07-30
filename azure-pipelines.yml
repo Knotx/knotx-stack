@@ -19,7 +19,7 @@ steps:
   inputs:
     script: |
       cd knotx-aggregator/development
-      ./pull-all.sh -r modules -b $(Build.SourceBranchName) -a
+      ./pull-all.sh -r modules -b $(Build.SourceBranchName) -a https
   displayName: "Clone all Knot.x repositories"
 - task: CmdLine@2
   inputs:
