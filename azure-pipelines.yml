@@ -10,6 +10,11 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+- bash: |
+    mkdir ~/.ssh
+    chmod 700 ~/.ssh
+    ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+
 - script: |
     echo "Knot.x Stack"
     git clone https://github.com/Knotx/knotx-aggregator.git
