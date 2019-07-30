@@ -13,7 +13,10 @@ steps:
 - script: |
     echo "Knot.x Stack"
     git clone https://github.com/Knotx/knotx-aggregator.git
-    cd knotx-aggregator/development
-    mkdir modules
-    ./pull-all.sh -r modules -b $(Build.SourceBranchName) -a $(System.AccessToken)
-    ./build-all.sh -r modules -d
+- task: CmdLine@2
+  inputs:
+    script: |     
+      cd knotx-aggregator/development
+      mkdir modules
+      ./pull-all.sh -r modules -b $(Build.SourceBranchName) -a $(System.AccessToken)
+      ./build-all.sh -r modules -d
