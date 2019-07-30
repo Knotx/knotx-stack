@@ -14,6 +14,7 @@ steps:
     echo "Knot.x Stack"
     git clone https://github.com/Knotx/knotx-aggregator.git
     cd knotx-aggregator/development
+    mkdir modules
     ./pull-all.sh -r modules -b $(Build.SourceBranchName)
     ./build-all.sh -r modules -d
 
