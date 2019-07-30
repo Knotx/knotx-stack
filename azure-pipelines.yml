@@ -13,19 +13,19 @@ steps:
 - script: |
     git clone https://github.com/Knotx/knotx-aggregator.git
     mkdir knotx-repos
-  displayName: "Prepare Knot.x Aggregator"
+  displayName: "Prepare Aggregator"
 - task: CmdLine@2
   inputs:
     script: |
       cd knotx-aggregator/development
       ./pull-all.sh -r ../../knotx-repos -b $(Build.SourceBranchName) -a https
-  displayName: "Clone all Knot.x repositories"
+  displayName: "Clone all repositories"
 - task: CmdLine@2
   inputs:
     script: |
       cd knotx-aggregator/development
       ./build-all.sh -r ../../knotx-repos
-  displayName: "Build Knot.x Stack"
+  displayName: "Build Stack"
 - script: |
     cd knotx-repos/knotx-docker
     mvn clean package
@@ -33,3 +33,4 @@ steps:
 - script: |
     cd knotx-repos/knotx-starter-kit
     ./gradlew -Pknotx.version=2.0.0-SNAPSHOT build
+  displayName: "Build Starter Kit"
