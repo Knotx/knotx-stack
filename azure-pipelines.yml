@@ -10,10 +10,11 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- task: CmdLine@2
-  inputs:
-    script: |
-    git clone https://github.com/Knotx/knotx-aggregator.git |
-    cd knotx-aggregator/development |
-    mkdir modules |
-    ./pull-all.sh -r modules -b $(Build.SourceBranchName) -a test
+  
+  - task: CmdLine@2
+    inputs:
+      script: |
+      cd knotx-aggregator/development
+      mkdir modules
+      ./pull-all.sh -r modules -b $(Build.SourceBranchName) -a test
+
