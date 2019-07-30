@@ -13,19 +13,20 @@ steps:
 - script: |
     git clone https://github.com/Knotx/knotx-aggregator.git
     mkdir modules
-    cd knotx-aggregator/development
   displayName: "Prepare Knot.x Aggregator"
 - task: CmdLine@2
   inputs:
-    script: |     
+    script: |
+      cd knotx-aggregator/development
       ./pull-all.sh -r ../../modules -b $(Build.SourceBranchName) -a
   displayName: "Clone all Knot.x repositories"
 - task: CmdLine@2
   inputs:
     script: |
+      cd knotx-aggregator/development
       ./build-all.sh -r ../../modules
   displayName: "Build Knot.x Stack"
 - script: |
-    cd ../../knotx-docker
+    cd modules/knotx-docker
     mvn clean package
   displayName: "Build Docker image"
