@@ -13,18 +13,7 @@ steps:
 - task: CmdLine@2
   inputs:
     script: |
+    git clone https://github.com/Knotx/knotx-aggregator.git
     cd knotx-aggregator/development
     mkdir modules
     ./pull-all.sh -r modules -b $(Build.SourceBranchName) -a $(System.AccessToken)
-    ./build-all.sh -r modules -d
-
-- task: PublishPipelineArtifact@1
-  inputs:
-    targetPath: '$(Pipeline.Workspace)'
-    artifact: 'distribution'
-
-- script: |
-    echo "Knot.x Docker"
-    git clone https://github.com/Knotx/knotx-docker.git
-    cd knotx-docker
-    mvn clean package
