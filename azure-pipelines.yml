@@ -15,6 +15,5 @@ steps:
     inputs:
       script: |
       cd knotx-aggregator/development
-      mkdir modules
       ./pull-all.sh -r modules -b $(Build.SourceBranchName) -a test
 
