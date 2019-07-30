@@ -10,19 +10,20 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- task: Gradle@2
-  inputs:
-    workingDirectory: ''
-    gradleWrapperFile: 'gradlew'
-    gradleOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.8'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: false
-    testResultsFiles: '**/TEST-*.xml'
-    tasks: 'build'
+- script: |
+    echo "Knot.x Stack"
+    git clone https://github.com/Knotx/knotx-aggregator.git
+    cd knotx-aggregator/development
+    ./pull-all.sh -r modules -b $(Build.SourceBranchName)
+    ./build-all.sh -r modules -d
 
 - task: PublishPipelineArtifact@1
   inputs:
     targetPath: '$(Pipeline.Workspace)'
     artifact: 'distribution'
+
+- script: |
+    echo "Knot.x Docker"
+    git clone https://github.com/Knotx/knotx-docker.git
+    cd knotx-docker
+    mvn clean package
