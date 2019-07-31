@@ -43,7 +43,7 @@ apply(from = "gradle/distribution.gradle.kts")
 // -----------------------------------------------------------------------------
 tasks {
     named<RatTask>("rat") {
-        excludes.addAll("*.md", "**/*.md", "**/bin/*", ".travis.yml", "azure-pipelines.yml", "**/build/*", "**/out/*", "**/*.json", "**/*.conf", "**/*.html", "**/*.properties", ".idea", ".composite-enabled")
+        excludes.addAll("*.md", "**/*.md", "**/bin/*", "azure-pipelines.yml", "**/build/*", "**/out/*", "**/*.json", "**/*.conf", "**/*.html", "**/*.properties", ".idea", ".composite-enabled")
     }
     getByName("build").dependsOn("rat")
 }
