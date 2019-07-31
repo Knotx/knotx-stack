@@ -1,4 +1,3 @@
-[![][license img]][license]
 [![Build Status](https://dev.azure.com/knotx/Knotx/_apis/build/status/Knotx.knotx-stack?branchName=master)](https://dev.azure.com/knotx/Knotx/_build/latest?definitionId=1&branchName=master)
 
 # Knot.x Stack
