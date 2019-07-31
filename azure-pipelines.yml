@@ -18,6 +18,7 @@ steps:
   inputs:
     script: |
       cd knotx-aggregator/development
+      echo "Branch name [$(Build.SourceBranchName)]"
       ./pull-all.sh -r ../../knotx-repos -b $(Build.SourceBranchName) -a
   displayName: "Clone all repositories"
 - task: CmdLine@2
