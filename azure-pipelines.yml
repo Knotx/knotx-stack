@@ -18,10 +18,8 @@ steps:
   inputs:
     script: |
       cd knotx-aggregator/development
-      echo "PR number [$(SYSTEM_PULLREQUEST_PULLREQUESTNUMBER)]"
-      echo "PR branch name [$($(System.PullRequest.SourceBranch))]"
-      echo "PR branch name2 [$(SYSTEM_PULLREQUEST_SOURCEBRANCH)]"
-      echo "Branch name [$(Build.SourceBranchName)]"
+      echo "PR branch name [$(System.PullRequest.SourceBranch)]"
+      echo "PR id [$(System.PullRequest.PullRequestId)]"
       ./pull-all.sh -r ../../knotx-repos -b $(Build.SourceBranchName) -a
   displayName: "Clone all repositories"
 - task: CmdLine@2
