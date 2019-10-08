@@ -3,7 +3,7 @@ All notable changes to `knotx-stack` will be documented in this file.
 
 ## Unreleased
 List of changes that are finished but not yet released in any final version.
-- [PR-XX](https://github.com/Knotx/knotx-stack/pull/XX) - Vert.x upgrade to 3.8.1.
+- [PR-58](https://github.com/Knotx/knotx-stack/pull/58) - Vert.x upgrade to 3.8.1.
 
 ## 2.0.0
 - [PR-55](https://github.com/Knotx/knotx-stack/pull/55) - Update `fragmentsProviderHtmlSplitter` to `htmlFragmentsSupplier` and `fragmentsAssemblerHandler` to `fragmentsAssembler`.
