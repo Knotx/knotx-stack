@@ -1,0 +1,90 @@
+<!--
+  Copyright (C) 2019 Knot.x Project
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="http://cognifide.com/favicon.ico?v=2"/>
+  <title>Knot.x</title>
+  <link href="https://bootswatch.com/4/simplex/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+<knotx:snippet data-knotx-task="pdp-task" data-knotx-task-actions='{"@pdp":[{"action":"author","namespace":"author-1","extra":{"id":"1"}},{"action":"book","namespace":"book-1","extra":{"id":"1"}},{"action":"book","namespace":"book-2","extra":{"id":"2"}}]}'>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="jumbotron">
+          <h2>
+            Hello Knot.x - reactive micro-service assembler world!
+          </h2>
+          <p>
+            This template is served from the <strong>local</strong> repository.
+          </p>
+          <p>
+            <a class="btn btn-primary btn-large"
+               href="https://github.com/Knotx/knotx">Learn more</a>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <h2>Book</h2>
+        <p>{{book-1._result.title}}</p>
+        <p>Authors: {{book-1._result.info.authors}}</p>
+        <div>Success! Status code : {{book-1._response.metadata.statusCode}}</div>
+      </div>
+      <div class="col-md-4">
+        <h2>Author</h2>
+        <p>{{author-1._result.name}}</p>
+        <p>Bio: {{author-1._result.info.bio}}</p>
+        <div>Success! Status code : {{author-1._response.metadata.statusCode}}</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-1">
+        <h2>Portfolio: </h2>
+        <ul>
+          {{#each author-1._result.info.portfolio}}
+          <li>{{this}}</li>
+          {{/each}}
+        </ul>
+      </div>
+      <div class="col-md-1">
+        <h2>Tags: </h2>
+        <ul>
+          {{#each book-1._result.info.tags}}
+          <li>{{this}}</li>
+          {{/each}}
+        </ul>
+      </div>
+    </div>
+
+    <div class="row">
+      <h2>Related books:</h2>
+      <div class="col-md-4">
+        <ul>
+          <li>Title: {{book-2._result.title}}</li>
+          <li>Authors: {{book-2._result.info.authors}}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</knotx:snippet>
+</body>
+</html>

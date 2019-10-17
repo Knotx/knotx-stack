@@ -29,6 +29,7 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.Vertx;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -78,6 +79,7 @@ class TemplatingIntegrationTest {
   }
 
   // TODO move to https://github.com/Knotx/knotx-server-http
+  @Disabled
   @Test
   @DisplayName("Expect page containing data from services when parameters specified.")
   @KnotxApplyConfiguration({"conf/application.conf",
