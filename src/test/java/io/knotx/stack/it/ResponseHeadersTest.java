@@ -32,6 +32,7 @@ import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.MultiMap;
 import io.vertx.reactivex.core.Vertx;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -72,6 +73,7 @@ class ResponseHeadersTest {
     expectedHeaders.add("X-Server", "Knot.x-Custom-Header");
   }
 
+  @Disabled("This test actually should be moved to http-server. It only checks if the server properly computes content-length and content-type headers.")
   @Test
   @DisplayName("Expect allowed headers in Server response.")
   @KnotxApplyConfiguration({"conf/application.conf", "scenarios/response-headers/mocks.conf"})
