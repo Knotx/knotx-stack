@@ -3,7 +3,8 @@ All notable changes to `knotx-stack` will be documented in this file.
 
 ## Unreleased
 List of changes that are finished but not yet released in any final version.
-- [PR-59](https://github.com/Knotx/knotx-stack/pull/59) - Vert.x upgrade to 3.8.1.
+- [PR-62](https://github.com/Knotx/knotx-stack/pull/62) - Configure task and node factories in Fragments Handler module.
+- [PR-59](https://github.com/Knotx/knotx-stack/pull/59) - Remove cookie handler, it is not required from Vert.x 3.8.1.
 
 ## 2.0.0
 - [PR-55](https://github.com/Knotx/knotx-stack/pull/55) - Update `fragmentsProviderHtmlSplitter` to `htmlFragmentsSupplier` and `fragmentsAssemblerHandler` to `fragmentsAssembler`.
