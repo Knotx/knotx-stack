@@ -13,45 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.knotx.stack.it;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+package io.knotx.stack.functional;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import io.knotx.junit5.KnotxApplyConfiguration;
 import io.knotx.junit5.KnotxExtension;
 import io.knotx.junit5.RandomPort;
-import io.knotx.junit5.util.FileReader;
 import io.knotx.junit5.wiremock.ClasspathResourcesMockServer;
-import io.vertx.core.json.JsonObject;
+import io.knotx.stack.KnotxServerTester;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.Vertx;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(KnotxExtension.class)
-@TestInstance(Lifecycle.PER_CLASS)
-class GatewayAPIIntegrationTest {
+class HttpServiceIntegrationTest {
 
   @ClasspathResourcesMockServer
   private WireMockServer mockService;
 
+  @ClasspathResourcesMockServer
+  private WireMockServer mockRepository;
+
   @Test
-  @DisplayName("Expect response containing data from HTTP service")
+  @DisplayName("Expect page containing data from HTTP services.")
   @KnotxApplyConfiguration({"conf/application.conf",
-      "scenarios/gateway-api-with-fragments/mocks.conf",
-      "scenarios/gateway-api-with-fragments/tasks.conf"})
-  void requestPage(VertxTestContext context, Vertx vertx, @RandomPort Integer globalServerPort) {
+      "scenarios/http-service/mocks.conf",
+      "scenarios/http-service/tasks.conf"})
+  void requestPage(VertxTestContext context, Vertx vertx,
+      @RandomPort Integer globalServerPort) {
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
-    serverTester.testGet(context, vertx, "/api/author-info",
-        resp -> {
-          String expectedResponse = FileReader
-              .readTextSafe("scenarios/gateway-api-with-fragments/result/author-info.json");
-          assertEquals(new JsonObject(expectedResponse), resp.body().toJsonObject());
-        });
+    serverTester.testGetRequest(context, vertx, "/content/fullPage.html", "results/fullPage.html");
   }
 
 }

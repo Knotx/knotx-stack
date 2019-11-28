@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.knotx.stack.it;
+package io.knotx.stack;
 
 import static io.knotx.junit5.util.RequestUtil.subscribeToResult_shouldSucceed;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,7 +31,7 @@ import io.vertx.reactivex.ext.web.client.HttpResponse;
 import io.vertx.reactivex.ext.web.client.WebClient;
 import java.util.Map;
 
-final class KnotxServerTester {
+public final class KnotxServerTester {
 
   private static final int KNOTX_TESTS_SERVER_PORT_DEFAULT = 8092;
   private static final String KNOTX_TESTS_SERVER_ADDRESS_DEFAULT = "localhost";
@@ -39,20 +39,20 @@ final class KnotxServerTester {
   private final String serverHost;
   private final int serverPort;
 
-  KnotxServerTester(String serverHost, int serverPort) {
+  private KnotxServerTester(String serverHost, int serverPort) {
     this.serverHost = serverHost;
     this.serverPort = serverPort;
   }
 
-  static KnotxServerTester defaultInstance() {
+  public static KnotxServerTester defaultInstance() {
     return defaultInstance(KNOTX_TESTS_SERVER_PORT_DEFAULT);
   }
 
-  static KnotxServerTester defaultInstance(int port) {
+  public static KnotxServerTester defaultInstance(int port) {
     return new KnotxServerTester(KNOTX_TESTS_SERVER_ADDRESS_DEFAULT, port);
   }
 
-  void testPostRequest(VertxTestContext context, Vertx vertx, String url,
+  public void testPostRequest(VertxTestContext context, Vertx vertx, String url,
       Map<String, Object> formData, String expectedResponseFile) {
 
     WebClient client = WebClient.create(vertx);
@@ -67,7 +67,7 @@ final class KnotxServerTester {
     });
   }
 
-  void testGetRequest(VertxTestContext context, Vertx vertx, String url,
+  public void testGetRequest(VertxTestContext context, Vertx vertx, String url,
       String expectedResponseFile) {
     testGet(context, vertx, url, resp -> {
       assertEquals(HttpResponseStatus.OK.code(), resp.statusCode());
@@ -76,14 +76,14 @@ final class KnotxServerTester {
     });
   }
 
-  void testGetServerError(VertxTestContext context, Vertx vertx, String url,
+  public void testGetServerError(VertxTestContext context, Vertx vertx, String url,
       int expectedError) {
     testGet(context, vertx, url, resp -> {
       assertEquals(expectedError, resp.statusCode());
     });
   }
 
-  void testGet(VertxTestContext context, Vertx vertx, String url,
+  public void testGet(VertxTestContext context, Vertx vertx, String url,
       Consumer<HttpResponse<Buffer>> assertions) {
     WebClient client = WebClient.create(vertx);
     Single<HttpResponse<Buffer>> httpResponseSingle = client

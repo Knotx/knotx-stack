@@ -20,22 +20,9 @@ val stackName = "knotx"
 val stackDistribution = "knotx-stack-${version}.zip"
 
 configurations {
-    register("dist")
-}
-
-dependencies {
-    "dist"("io.knotx:knotx-launcher:${project.version}")
-    "dist"("io.knotx:knotx-server-http-core:${project.version}")
-    "dist"("io.knotx:knotx-repository-connector-fs:${project.version}")
-    "dist"("io.knotx:knotx-repository-connector-http:${project.version}")
-    "dist"("io.knotx:knotx-fragments-supplier-html-splitter:${project.version}")
-    "dist"("io.knotx:knotx-fragments-supplier-single-fragment:${project.version}")
-    "dist"("io.knotx:knotx-fragments-assembler:${project.version}")
-    "dist"("io.knotx:knotx-fragments-handler-core:${project.version}")
-    "dist"("io.knotx:knotx-action-http:${project.version}")
-    "dist"("io.knotx:knotx-template-engine-core:${project.version}")
-    "dist"("io.knotx:knotx-template-engine-handlebars:${project.version}")
-    "dist"("io.netty:netty-tcnative-boringssl-static:2.0.17.Final")
+    create("dist") {
+        extendsFrom(configurations.named("implementation").get())
+    }
 }
 
 val cleanDistribution = tasks.register<Delete>("cleanDistribution") {

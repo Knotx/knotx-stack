@@ -35,15 +35,77 @@ repositories {
     maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
 }
 
-apply(from = "gradle/integrationTests.gradle.kts")
+sourceSets {
+    register("functionalTest") {
+        compileClasspath += sourceSets.test.get().output.classesDirs
+        runtimeClasspath += sourceSets.test.get().output.classesDirs
+    }
+    test {
+        resources {
+            srcDir("src/main/packaging/conf")
+        }
+    }
+}
+
 apply(from = "gradle/distribution.gradle.kts")
+
+val functionalTestImplementation: Configuration by configurations.getting { extendsFrom(configurations.named("implementation").get()) }
+val functionalTestRuntimeOnly: Configuration by configurations.getting
+
+dependencies {
+    implementation(platform("io.knotx:knotx-dependencies:${project.version}"))
+    testImplementation(platform("io.knotx:knotx-dependencies:${project.version}"))
+
+    implementation("io.knotx:knotx-launcher:${project.version}")
+    implementation("io.knotx:knotx-server-http-core:${project.version}")
+    implementation("io.knotx:knotx-repository-connector-fs:${project.version}")
+    implementation("io.knotx:knotx-repository-connector-http:${project.version}")
+    implementation("io.knotx:knotx-fragments-supplier-html-splitter:${project.version}")
+    implementation("io.knotx:knotx-fragments-supplier-single-fragment:${project.version}")
+    implementation("io.knotx:knotx-fragments-assembler:${project.version}")
+    implementation("io.knotx:knotx-fragments-handler-core:${project.version}")
+    implementation("io.knotx:knotx-action-http:${project.version}")
+    implementation("io.knotx:knotx-template-engine-core:${project.version}")
+    implementation("io.knotx:knotx-template-engine-handlebars:${project.version}")
+    implementation("io.netty:netty-tcnative-boringssl-static")
+
+    testImplementation("io.knotx:knotx-junit5:${project.version}")
+    testImplementation(group = "io.vertx", name = "vertx-junit5")
+    testImplementation(group = "io.vertx", name = "vertx-unit")
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine")
+    testImplementation(group = "com.github.tomakehurst", name = "wiremock")
+    testImplementation(group = "io.rest-assured", name = "rest-assured", version = "3.3.0")
+
+    functionalTestImplementation(platform("io.knotx:knotx-dependencies:${project.version}"))
+    functionalTestImplementation("io.knotx:knotx-junit5:${project.version}")
+    functionalTestImplementation(group = "io.vertx", name = "vertx-junit5")
+    functionalTestImplementation(group = "io.vertx", name = "vertx-unit")
+    functionalTestImplementation("org.junit.jupiter:junit-jupiter-api")
+    functionalTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    functionalTestImplementation(group = "com.github.tomakehurst", name = "wiremock")
+}
+
+tasks {
+    register<Test>("functionalTest") {
+        description = "Runs functional tests."
+        group = "verification"
+
+        classpath = sourceSets["functionalTest"].runtimeClasspath
+        testClassesDirs = sourceSets["functionalTest"].output.classesDirs
+
+        shouldRunAfter("test")
+    }
+
+    named("check") { dependsOn("functionalTest") }
+}
 
 // -----------------------------------------------------------------------------
 // License headers validation
 // -----------------------------------------------------------------------------
 tasks {
     named<RatTask>("rat") {
-        excludes.addAll("*.md", "**/*.md", "**/bin/*", "azure-pipelines.yml", "**/build/*", "**/out/*", "**/*.json", "**/*.conf", "**/*.html", "**/*.properties", ".idea", ".composite-enabled")
+        excludes.addAll("*.md", "**/*.md", "**/bin/*", "azure-pipelines.yml", "**/build/*", "**/out/*", "**/*.json", "**/*.conf", "**/*.html", "**/*.properties", ".idea", ".composite-enabled", "/logs/**")
     }
     getByName("build").dependsOn("rat")
 }
@@ -123,3 +185,5 @@ signing {
 
     sign(publishing.publications["knotxDistribution"])
 }
+
+
