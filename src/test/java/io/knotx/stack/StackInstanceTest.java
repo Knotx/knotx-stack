@@ -34,14 +34,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 class StackInstanceTest {
 
   @Test
-  @DisplayName("Expect page containing data from services when parameters specified.")
+  @DisplayName("Expect instance is running and responds with HTTP 404.")
   @KnotxApplyConfiguration({"application.conf", "wiremock.conf"})
-  void requestPageWithRequestParameters(VertxTestContext context, Vertx vertx,
+  void checkInstance(VertxTestContext context, Vertx vertx,
       @RandomPort Integer globalServerPort) {
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
     serverTester.testGet(context, vertx, "/any/resource", resp -> {
       assertEquals(HttpResponseStatus.NOT_FOUND.code(), resp.statusCode());
     });
   }
-
 }
