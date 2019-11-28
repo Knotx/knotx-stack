@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.knotx.stack.it;
+package io.knotx.stack.functional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -23,6 +23,7 @@ import io.knotx.junit5.KnotxExtension;
 import io.knotx.junit5.RandomPort;
 import io.knotx.junit5.util.FileReader;
 import io.knotx.junit5.wiremock.ClasspathResourcesMockServer;
+import io.knotx.stack.KnotxServerTester;
 import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.Vertx;

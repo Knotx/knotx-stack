@@ -36,7 +36,10 @@ repositories {
 }
 
 sourceSets {
-    register("functionalTest")
+    register("functionalTest") {
+        compileClasspath += sourceSets.test.get().output.classesDirs
+        runtimeClasspath += sourceSets.test.get().output.classesDirs
+    }
     test {
         resources {
             srcDir("src/main/packaging/conf")
