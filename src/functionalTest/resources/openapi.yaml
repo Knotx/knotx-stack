@@ -49,3 +49,9 @@ paths:
       responses:
         default:
           description: Gateway API endpoint that uses Data Bridge (https://github.com/Knotx/knotx-data-bridge)
+  /api/ecommerce/checkout:
+    get:
+      operationId: checkout-operation
+      responses:
+        default:
+          description: Endpoint which uses HttpAction

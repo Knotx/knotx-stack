@@ -1,0 +1,21 @@
+[{
+  "id": 1,
+  "product": "Scallops - U - 10",
+  "price": "$5.92"
+}, {
+  "id": 2,
+  "product": "Bread - Kimel Stick Poly",
+  "price": "$2.74"
+}, {
+  "id": 3,
+  "product": "Foil Wrap",
+  "price": "$3.79"
+}, {
+  "id": 4,
+  "product": "Bread - French Baquette",
+  "price": "$2.72"
+}, {
+  "id": 5,
+  "product": "Extract - Almond",
+  "price": "$2.77"
+}]
