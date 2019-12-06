@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <element>
+    <id>1</id>
+    <price>$5.92</price>
+    <product>Scallops - U - 10</product>
+  </element>
+  <element>
+    <id>2</id>
+    <price>$2.74</price>
+    <product>Bread - Kimel Stick Poly</product>
+  </element>
+  <element>
+    <id>3</id>
+    <price>$3.79</price>
+    <product>Foil Wrap</product>
+  </element>
+  <element>
+    <id>4</id>
+    <price>$2.72</price>
+    <product>Bread - French Baquette</product>
+  </element>
+  <element>
+    <id>5</id>
+    <price>$2.77</price>
+    <product>Extract - Almond</product>
+  </element>
+</root>

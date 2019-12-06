@@ -34,6 +34,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @ExtendWith(KnotxExtension.class)
 public class HttpActionIntegrationTest {
 
+  private static final String UNAVAILABLE_MESSAGE = "Offers service is currently unavailable, impossible to fetch offers from external data sorce";
+
   @ClasspathResourcesMockServer
   private WireMockServer mockService;
 
@@ -49,7 +51,9 @@ public class HttpActionIntegrationTest {
         resp -> {
           assertNotNull(resp.body());
           assertEquals(HttpResponseStatus.OK.code(), resp.statusCode());
-          // ToDo: more assertions here about JsonObject body
+          assertEquals(UNAVAILABLE_MESSAGE,
+              resp.body().toJsonObject().getJsonObject("get-available-offers")
+                  .getJsonObject("_result").getJsonObject("offers").getString("message"));
         });
   }
 }
