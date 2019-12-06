@@ -15,6 +15,7 @@
  */
 package io.knotx.stack.functional;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
@@ -23,6 +24,7 @@ import io.knotx.junit5.KnotxExtension;
 import io.knotx.junit5.RandomPort;
 import io.knotx.junit5.wiremock.ClasspathResourcesMockServer;
 import io.knotx.stack.KnotxServerTester;
+import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.Vertx;
 import org.junit.jupiter.api.DisplayName;
@@ -45,7 +47,9 @@ public class HttpActionIntegrationTest {
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
     serverTester.testGet(testContext, vertx, "/api/ecommerce/checkout",
         resp -> {
-          assertNotNull(resp.body().toJsonObject());
+          assertNotNull(resp.body());
+          assertEquals(HttpResponseStatus.OK.code(), resp.statusCode());
+          // ToDo: more assertions here about JsonObject body
         });
   }
 }
