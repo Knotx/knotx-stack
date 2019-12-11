@@ -28,6 +28,7 @@ import io.knotx.stack.KnotxServerTester;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.Vertx;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,6 +39,13 @@ class FailingHttpServicesWithFallbacksIntegrationTest {
   @ClasspathResourcesMockServer
   private WireMockServer mockRepository;
 
+  private WireMockServer mockBrokenService;
+
+  @AfterEach
+  void tearDown() {
+    mockBrokenService.stop();
+  }
+
   @Test
   @DisplayName("Expect page containing data from services and fallback data for broken service.")
   @KnotxApplyConfiguration({"conf/application.conf",
@@ -46,17 +54,18 @@ class FailingHttpServicesWithFallbacksIntegrationTest {
   void requestPage(VertxTestContext context, Vertx vertx, @RandomPort Integer mockBrokenServicePort,
       @RandomPort Integer globalServerPort) {
     // when
-    WireMockServer mockBrokenService = new WireMockServer(mockBrokenServicePort);
-    mockBrokenService.stubFor(get(urlMatching("/service/broken/.*"))
+    mockBrokenService = new WireMockServer(mockBrokenServicePort);
+    mockBrokenService.stubFor(get(urlMatching("/service/broken/500.json"))
         .willReturn(
             aResponse()
+                .withHeader("Hello", "World")
                 .withStatus(HttpResponseStatus.INTERNAL_SERVER_ERROR.code())
         ));
+    mockBrokenService.start();
 
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
     serverTester
         .testGetRequest(context, vertx, "/content/fullPage.html",
             "scenarios/failing-http-services-with-fallbacks/result/fullPage.html");
   }
-
 }
