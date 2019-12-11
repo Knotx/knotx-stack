@@ -58,7 +58,7 @@ class FailingHttpServicesWithFallbacksIntegrationTest {
     mockBrokenService.stubFor(get(urlMatching("/service/broken/500.json"))
         .willReturn(
             aResponse()
-                .withHeader("Hello", "World")
+                .withHeader("Content-Type", "application/json")
                 .withStatus(HttpResponseStatus.INTERNAL_SERVER_ERROR.code())
         ));
     mockBrokenService.start();
