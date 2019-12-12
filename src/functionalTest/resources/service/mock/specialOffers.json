@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "product": "Knot.x Basics - Paperback",
+    "price": "$5.92",
+    "isbn13": 9781234567897
+  },
+  {
+    "id": 2,
+    "product": "Hello Knot.x - Paperback",
+    "price": "$2.74",
+    "isbn13": 3456789797812
+  },
+  {
+    "id": 3,
+    "product": "Knot.x for Dummies - Paperback",
+    "price": "$3.79",
+    "isbn13": 8123456977897
+  },
+  {
+    "id": 4,
+    "product": "Knot.x for Dummies - Ebook",
+    "price": "$2.72",
+    "isbn13": 7897129785634
+  },
+  {
+    "id": 5,
+    "product": "Knot.x Starter Kit - Paperback",
+    "price": "$2.77",
+    "isbn13": 8156797892347
+  }
+]

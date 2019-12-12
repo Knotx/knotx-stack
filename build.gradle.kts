@@ -105,7 +105,7 @@ tasks {
 // -----------------------------------------------------------------------------
 tasks {
     named<RatTask>("rat") {
-        excludes.addAll("*.md", "**/*.md", "**/bin/*", "azure-pipelines.yml", "**/build/*", "**/out/*", "**/*.json", "**/*.conf", "**/*.html", "**/*.properties", ".idea", ".composite-enabled", "/logs/**")
+        excludes.addAll("*.md", "**/*.md", "**/bin/*", "azure-pipelines.yml", "**/build/*", "**/out/*", "**/*.json", "**/*.conf", "**/*.xml", "**/*.html", "**/*.properties", ".idea", ".composite-enabled", "/logs/**")
     }
     getByName("build").dependsOn("rat")
 }
