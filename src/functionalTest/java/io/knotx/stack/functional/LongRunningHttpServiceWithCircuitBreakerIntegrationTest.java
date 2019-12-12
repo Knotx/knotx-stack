@@ -27,6 +27,7 @@ import io.knotx.junit5.wiremock.ClasspathResourcesMockServer;
 import io.knotx.stack.KnotxServerTester;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.Vertx;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -44,6 +45,13 @@ class LongRunningHttpServiceWithCircuitBreakerIntegrationTest {
   @ClasspathResourcesMockServer
   private WireMockServer mockRepository;
 
+  private WireMockServer delayedServiceServer;
+
+  @AfterEach
+  void tearDown() {
+    delayedServiceServer.stop();
+  }
+
   @Test
   @DisplayName("Expect page containing data from services and fallback data for broken service.")
   @KnotxApplyConfiguration({"conf/application.conf",
@@ -53,11 +61,12 @@ class LongRunningHttpServiceWithCircuitBreakerIntegrationTest {
       @RandomPort Integer delayedServicePort,
       @RandomPort Integer globalServerPort) {
     // given
-    WireMockServer wireMockServer = new WireMockServer(delayedServicePort);
-    wireMockServer.stubFor(get(urlEqualTo("/service/mock/delayed")).willReturn(
+    delayedServiceServer = new WireMockServer(delayedServicePort);
+    delayedServiceServer.stubFor(get(urlEqualTo("/service/mock/delayed")).willReturn(
         aResponse()
             .withStatus(200)
             .withFixedDelay(2000)));
+    delayedServiceServer.start();
 
     // when
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
