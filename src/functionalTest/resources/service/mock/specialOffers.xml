@@ -2,27 +2,32 @@
 <root>
   <element>
     <id>1</id>
+    <isbn13>9781234567897</isbn13>
     <price>$5.92</price>
-    <product>Scallops - U - 10</product>
+    <product>Knot.x Basics - Paperback</product>
   </element>
   <element>
     <id>2</id>
+    <isbn13>3456789797812</isbn13>
     <price>$2.74</price>
-    <product>Bread - Kimel Stick Poly</product>
+    <product>Hello Knot.x - Paperback</product>
   </element>
   <element>
     <id>3</id>
+    <isbn13>8123456977897</isbn13>
     <price>$3.79</price>
-    <product>Foil Wrap</product>
+    <product>Knot.x for Dummies - Paperback</product>
   </element>
   <element>
     <id>4</id>
+    <isbn13>7897129785634</isbn13>
     <price>$2.72</price>
-    <product>Bread - French Baquette</product>
+    <product>Knot.x for Dummies - Ebook</product>
   </element>
   <element>
     <id>5</id>
+    <isbn13>8156797892347</isbn13>
     <price>$2.77</price>
-    <product>Extract - Almond</product>
+    <product>Knot.x Starter Kit - Paperback</product>
   </element>
 </root>

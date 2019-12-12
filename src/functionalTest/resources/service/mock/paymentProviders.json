@@ -11,7 +11,7 @@
   },
   {
     "verified": true,
-    "paymentYrl": "https://cc-example.com/pay/19g8esry9se8rgyse90r8ug4",
+    "paymentUrl": "https://cc-example.com/pay/19g8esry9se8rgyse90r8ug4",
     "name": "Credit Card"
   }
 ]
