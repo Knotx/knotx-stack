@@ -17,6 +17,7 @@ package io.knotx.stack.functional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import io.knotx.junit5.KnotxApplyConfiguration;
@@ -25,6 +26,7 @@ import io.knotx.junit5.RandomPort;
 import io.knotx.junit5.wiremock.ClasspathResourcesMockServer;
 import io.knotx.stack.KnotxServerTester;
 import io.netty.handler.codec.http.HttpResponseStatus;
+import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.Vertx;
 import org.junit.jupiter.api.DisplayName;
@@ -49,11 +51,13 @@ public class HttpActionIntegrationTest {
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
     serverTester.testGet(testContext, vertx, "/api/ecommerce/checkout",
         resp -> {
-          assertNotNull(resp.body());
           assertEquals(HttpResponseStatus.OK.code(), resp.statusCode());
-          assertEquals(UNAVAILABLE_MESSAGE,
-              resp.body().toJsonObject().getJsonObject("get-available-offers")
-                  .getJsonObject("_result").getJsonObject("offers").getString("message"));
+          JsonObject responseBody = resp.bodyAsJsonObject();
+          assertNotNull(responseBody);
+          assertTrue(responseBody.containsKey("fetch-user-info"));
+          assertTrue(responseBody.containsKey("get-available-payment-providers"));
+          assertEquals(UNAVAILABLE_MESSAGE, responseBody.getJsonObject("get-available-offers")
+              .getJsonObject("_result").getJsonObject("offers").getString("message"));
         });
   }
 }
