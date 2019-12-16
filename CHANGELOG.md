@@ -3,6 +3,8 @@ All notable changes to `knotx-stack` will be documented in this file.
 
 ## Unreleased
 List of changes that are finished but not yet released in any final version.
+
+## Version 2.1.0
 - [PR-62](https://github.com/Knotx/knotx-stack/pull/62) - Configure task and node factories in Fragments Handler module.
 - [PR-64](https://github.com/Knotx/knotx-stack/pull/64) - Add Unit tests for default stack configuration files.
 - [PR-59](https://github.com/Knotx/knotx-stack/pull/59) - Remove cookie handler, it is not required from Vert.x 3.8.1.
