@@ -25,10 +25,12 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.Vertx;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -40,19 +42,35 @@ public class HttpActionTimeoutWithCircuitBreakerTest {
   @ClasspathResourcesMockServer
   private WireMockServer mockService;
 
+  private WireMockServer delayedServiceServer;
+
+  @AfterEach
+  void tearDown() {
+    delayedServiceServer.stop();
+  }
+
   @Test
   @DisplayName("HttpAction timeout with circuit breaker integration test")
   @KnotxApplyConfiguration({"conf/application.conf",
       "scenarios/http-action-timeout-with-circuit-breaker/mocks.conf",
       "scenarios/http-action-timeout-with-circuit-breaker/tasks.conf"})
-  public void requestPage(VertxTestContext testContext, Vertx vertx, @RandomPort Integer globalServerPort) {
+  public void requestPage(VertxTestContext testContext, Vertx vertx,
+      @RandomPort Integer delayedServicePort, @RandomPort Integer globalServerPort) {
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
+    delayedServiceServer = new WireMockServer(delayedServicePort);
+    delayedServiceServer.stubFor(get(urlEqualTo("/service/mock/delayed")).willReturn(
+        aResponse()
+            .withStatus(200)
+            .withFixedDelay(200)));
+    delayedServiceServer.start();
+
     serverTester.testGet(testContext, vertx, "/api/http-action-timeout", resp -> {
       assertEquals(HttpResponseStatus.OK.code(), resp.statusCode());
       assertNotNull(resp.body().toJsonObject());
       JsonObject response = resp.body().toJsonObject();
-      assertEquals(TIMEOUT_MESSAGE, response.getJsonObject("get-available-offers-http").getJsonObject("_result")
-          .getJsonObject("offers").getString("message"));
+      assertEquals(TIMEOUT_MESSAGE,
+          response.getJsonObject("get-available-offers-http").getJsonObject("_result")
+              .getJsonObject("offers").getString("message"));
     });
   }
 }
