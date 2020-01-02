@@ -3,6 +3,7 @@ All notable changes to `knotx-stack` will be documented in this file.
 
 ## Unreleased
 List of changes that are finished but not yet released in any final version.
+- [PR-69](https://github.com/Knotx/knotx-stack/pull/69) - Circuit breaker: `_fallback` transition && fallback on failure strategy
 
 ## 2.1.0
 - [PR-68](https://github.com/Knotx/knotx-stack/pull/68) - Fix unit tests with custom wiremock instance.
