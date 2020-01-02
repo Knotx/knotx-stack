@@ -20,6 +20,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.stubbing.Scenario.STARTED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import io.knotx.junit5.KnotxApplyConfiguration;
@@ -29,6 +31,7 @@ import io.knotx.junit5.util.FileReader;
 import io.knotx.junit5.wiremock.ClasspathResourcesMockServer;
 import io.knotx.stack.KnotxServerTester;
 import io.netty.handler.codec.http.HttpResponseStatus;
+import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.Vertx;
 import org.junit.jupiter.api.DisplayName;
@@ -76,6 +79,10 @@ public class HttpActionSuccessfulRetryWithCircuitBreakerIntegrationTest {
 
     serverTester.testGet(testContext, vertx, "/api/http-with-retry", resp -> {
       assertEquals(HttpResponseStatus.OK.code(), resp.statusCode());
+      JsonObject response = resp.body().toJsonObject();
+      assertNotNull(response);
+      assertEquals(5,
+          response.getJsonObject("get-available-offers-http").getJsonArray("_result").size());
     });
   }
 }
