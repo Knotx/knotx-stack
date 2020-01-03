@@ -19,11 +19,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import com.github.tomakehurst.wiremock.WireMockServer;
 import io.knotx.junit5.KnotxApplyConfiguration;
 import io.knotx.junit5.KnotxExtension;
 import io.knotx.junit5.RandomPort;
-import io.knotx.junit5.wiremock.ClasspathResourcesMockServer;
 import io.knotx.stack.KnotxServerTester;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.json.JsonObject;
@@ -34,29 +32,25 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(KnotxExtension.class)
-public class HttpActionIntegrationTest {
+class HttpServiceRespondingWithInvalidJsonScenarioTest {
 
-  private static final String UNAVAILABLE_MESSAGE = "Offers service is currently unavailable, impossible to fetch offers from external data sorce";
-
-  @ClasspathResourcesMockServer
-  private WireMockServer mockService;
+  private static final String OFFERS_FALLBACK_MESSAGE = "The offers are currently unavailable.";
 
   @Test
-  @DisplayName("HttpAction integration test")
+  @DisplayName("Expect offers fallback when endpoint responds with invalid JSON.")
   @KnotxApplyConfiguration({"conf/application.conf",
-      "scenarios/http-action-integration/mocks.conf",
-      "scenarios/http-action-integration/tasks.conf"})
-  void requestPage(VertxTestContext testContext, Vertx vertx,
-      @RandomPort Integer globalServerPort) {
+      "scenarios/http-service-responding-with-invalid-json/mocks.conf",
+      "scenarios/http-service-responding-with-invalid-json/tasks.conf"})
+  void requestWebApi(VertxTestContext ctx, Vertx vertx, @RandomPort Integer globalServerPort) {
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
-    serverTester.testGet(testContext, vertx, "/api/ecommerce/checkout",
+    serverTester.testGet(ctx, vertx, "/api/ecommerce/checkout",
         resp -> {
           assertEquals(HttpResponseStatus.OK.code(), resp.statusCode());
           JsonObject responseBody = resp.bodyAsJsonObject();
           assertNotNull(responseBody);
           assertTrue(responseBody.containsKey("fetch-user-info"));
-          assertTrue(responseBody.containsKey("get-available-payment-providers"));
-          assertEquals(UNAVAILABLE_MESSAGE, responseBody.getJsonObject("get-available-offers")
+          assertTrue(responseBody.containsKey("fetch-payment-providers"));
+          assertEquals(OFFERS_FALLBACK_MESSAGE, responseBody.getJsonObject("fetch-offers")
               .getJsonObject("_result").getJsonObject("offers").getString("message"));
         });
   }
