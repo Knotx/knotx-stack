@@ -19,7 +19,6 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import io.knotx.junit5.KnotxApplyConfiguration;
 import io.knotx.junit5.KnotxExtension;
 import io.knotx.junit5.RandomPort;
-import io.knotx.junit5.wiremock.ClasspathResourcesMockServer;
 import io.knotx.stack.KnotxServerTester;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.json.JsonObject;
@@ -31,32 +30,22 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(KnotxExtension.class)
-public class HttpActionTimeoutWithCircuitBreakerTest {
-
-  private static final String TIMEOUT_MESSAGE = "HttpAction timed out";
-
-  @ClasspathResourcesMockServer
-  private WireMockServer mockService;
+class CircuitBreakerTimesOutScenarioTest {
 
   private WireMockServer delayedServiceServer;
 
-  @AfterEach
-  void tearDown() {
-    delayedServiceServer.stop();
-  }
-
   @Test
-  @DisplayName("HttpAction timeout with circuit breaker integration test")
+  @DisplayName("Expect offers fallback while circuit breaker times out offers service.")
   @KnotxApplyConfiguration({"conf/application.conf",
-      "scenarios/http-action-timeout-with-circuit-breaker/mocks.conf",
-      "scenarios/http-action-timeout-with-circuit-breaker/tasks.conf"})
-  public void requestPage(VertxTestContext testContext, Vertx vertx,
+      "scenarios/circuit-breaker-times-out/mocks.conf",
+      "scenarios/circuit-breaker-times-out/tasks.conf"})
+  void requestApi(VertxTestContext testContext, Vertx vertx,
       @RandomPort Integer delayedServicePort, @RandomPort Integer globalServerPort) {
-    KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
     delayedServiceServer = new WireMockServer(delayedServicePort);
     delayedServiceServer.stubFor(get(urlEqualTo("/service/mock/delayed")).willReturn(
         aResponse()
@@ -64,13 +53,22 @@ public class HttpActionTimeoutWithCircuitBreakerTest {
             .withFixedDelay(200)));
     delayedServiceServer.start();
 
-    serverTester.testGet(testContext, vertx, "/api/http-action-timeout", resp -> {
-      assertEquals(HttpResponseStatus.OK.code(), resp.statusCode());
-      assertNotNull(resp.body().toJsonObject());
-      JsonObject response = resp.body().toJsonObject();
-      assertEquals(TIMEOUT_MESSAGE,
-          response.getJsonObject("get-available-offers-http").getJsonObject("_result")
-              .getJsonObject("offers").getString("message"));
-    });
+    KnotxServerTester.defaultInstance(globalServerPort)
+        .testGet(testContext, vertx, "/api/user",
+            resp -> {
+              assertEquals(HttpResponseStatus.OK.code(), resp.statusCode());
+              assertNotNull(resp.body().toJsonObject());
+              JsonObject response = resp.body().toJsonObject();
+              assertTrue(response.containsKey("fetch-user-info"));
+              assertTrue(response.containsKey("fetch-payment-providers"));
+              assertEquals("timeout",
+                  response.getJsonObject("fetch-offers").getJsonObject("_result")
+                      .getString("fallback"));
+            });
+  }
+
+  @AfterEach
+  void tearDown() {
+    delayedServiceServer.stop();
   }
 }

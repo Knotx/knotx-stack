@@ -21,68 +21,65 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.stubbing.Scenario.STARTED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import io.knotx.junit5.KnotxApplyConfiguration;
 import io.knotx.junit5.KnotxExtension;
 import io.knotx.junit5.RandomPort;
 import io.knotx.junit5.util.FileReader;
-import io.knotx.junit5.wiremock.ClasspathResourcesMockServer;
 import io.knotx.stack.KnotxServerTester;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.Vertx;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(KnotxExtension.class)
-public class HttpActionSuccessfulRetryWithCircuitBreakerIntegrationTest {
+class CircuitBreakerTimesOutAndRetriesScenarioTest {
 
-  private static final String SCENARIO = "HttpAction with retry";
-  private static final String RETRY = "RETRY";
-  private static final String OFFERS_FILE_PATH = "service/mock/specialOffers.json";
-
-  @ClasspathResourcesMockServer
-  private WireMockServer mockService;
+  private static final String SCENARIO_NAME = "Circuit breaker times out HTTP Action and retries.";
+  private static final String RETRY_SCENARIO_STATE = "RETRY";
 
   private WireMockServer scenarioMockService;
 
   @Test
-  @DisplayName("HttpAction successful retry with circuit breaker integration test")
+  @DisplayName("Expect offers from second service invocation (retry) following the first attempt timeout.")
   @KnotxApplyConfiguration({"conf/application.conf",
-      "scenarios/http-action-successful-retry-with-circuit-breaker/mocks.conf",
-      "scenarios/http-action-successful-retry-with-circuit-breaker/tasks.conf"})
-  public void requestPage(VertxTestContext testContext, Vertx vertx,
-      @RandomPort Integer delayedServicePort, @RandomPort Integer globalServerPort) {
-    KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
-    scenarioMockService = new WireMockServer(delayedServicePort);
-
-    scenarioMockService.stubFor(get(urlEqualTo("/service/mock/scenario")).inScenario(SCENARIO)
+      "scenarios/circuit-breaker-times-out-and-retries/mocks.conf",
+      "scenarios/circuit-breaker-times-out-and-retries/tasks.conf"})
+  void requestApi(VertxTestContext testContext, Vertx vertx,
+      @RandomPort Integer scenarioServicePort, @RandomPort Integer globalServerPort) {
+    scenarioMockService = new WireMockServer(scenarioServicePort);
+    scenarioMockService.stubFor(get(urlEqualTo("/service/mock/scenario")).inScenario(SCENARIO_NAME)
         .whenScenarioStateIs(STARTED)
-        .willReturn(aResponse()
-            .withStatus(500)
-            .withHeader("Content-Type", "application/json")
-            .withFixedDelay(300))
-        .willSetStateTo(RETRY));
-
-    scenarioMockService.stubFor(get(urlEqualTo("/service/mock/scenario")).inScenario(SCENARIO)
-        .whenScenarioStateIs(RETRY)
         .willReturn(aResponse()
             .withStatus(200)
             .withHeader("Content-Type", "application/json")
-            .withBody(FileReader.readTextSafe(OFFERS_FILE_PATH))));
-
+            .withFixedDelay(100)
+            .withBody(FileReader.readTextSafe("service/mock/emptyOffers.json")))
+        .willSetStateTo(RETRY_SCENARIO_STATE));
+    scenarioMockService.stubFor(get(urlEqualTo("/service/mock/scenario")).inScenario(SCENARIO_NAME)
+        .whenScenarioStateIs(RETRY_SCENARIO_STATE)
+        .willReturn(aResponse()
+            .withStatus(200)
+            .withHeader("Content-Type", "application/json")
+            .withBody(FileReader.readTextSafe("service/mock/specialOffers.json"))));
     scenarioMockService.start();
 
-    serverTester.testGet(testContext, vertx, "/api/http-with-retry", resp -> {
-      assertEquals(HttpResponseStatus.OK.code(), resp.statusCode());
-      JsonObject response = resp.body().toJsonObject();
-      assertNotNull(response);
-      assertEquals(5,
-          response.getJsonObject("get-available-offers-http").getJsonArray("_result").size());
-    });
+    KnotxServerTester.defaultInstance(globalServerPort)
+        .testGet(testContext, vertx, "/api/user", resp -> {
+          assertEquals(HttpResponseStatus.OK.code(), resp.statusCode());
+          JsonObject response = resp.body().toJsonObject();
+          assertNotNull(response);
+          assertEquals(5, response.getJsonObject("fetch-offers").getJsonArray("_result").size());
+        });
+  }
+
+  @AfterEach
+  void tearDown() {
+    scenarioMockService.stop();
   }
 }
