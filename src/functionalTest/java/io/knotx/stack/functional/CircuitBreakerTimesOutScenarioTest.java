@@ -42,8 +42,8 @@ class CircuitBreakerTimesOutScenarioTest {
   @Test
   @DisplayName("Expect offers fallback while circuit breaker times out offers service.")
   @KnotxApplyConfiguration({"conf/application.conf",
-      "scenarios/circuit-breaker-times-out/mocks.conf",
-      "scenarios/circuit-breaker-times-out/tasks.conf"})
+      "scenarios/cb-times-out/mocks.conf",
+      "scenarios/cb-times-out/tasks.conf"})
   void requestApi(VertxTestContext testContext, Vertx vertx,
       @RandomPort Integer delayedServicePort, @RandomPort Integer globalServerPort) {
     delayedServiceServer = new WireMockServer(delayedServicePort);

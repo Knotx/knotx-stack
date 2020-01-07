@@ -15,8 +15,8 @@
  */
 package io.knotx.stack.functional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import io.knotx.junit5.KnotxApplyConfiguration;
@@ -28,31 +28,34 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.Vertx;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(KnotxExtension.class)
-class CircuitBreakerTimesOutAndRetriesScenarioTest {
+class HttpServiceTimesOutAndRetriesScenarioTest {
 
   private WireMockServer scenarioMockService;
 
   @Test
   @DisplayName("Expect offers from second service invocation (retry) following the first attempt timeout.")
   @KnotxApplyConfiguration({"conf/application.conf",
-      "scenarios/cb-times-out-and-retries/mocks.conf",
-      "scenarios/cb-times-out-and-retries/tasks.conf"})
-  void requestApi(VertxTestContext testContext, Vertx vertx,
+      "scenarios/http-service-times-out-and-cb-retries/mocks.conf",
+      "scenarios/http-service-times-out-and-cb-retries/tasks.conf"})
+  void requestApi(VertxTestContext ctx, Vertx vertx,
       @RandomPort Integer scenarioServicePort, @RandomPort Integer globalServerPort) {
-    scenarioMockService = WireMockScenarios.firstOffersServiceInvocationWithDelay(scenarioServicePort);
+    scenarioMockService = WireMockScenarios
+        .firstOffersServiceInvocationWithDelay(scenarioServicePort);
     scenarioMockService.start();
 
-    KnotxServerTester.defaultInstance(globalServerPort)
-        .testGet(testContext, vertx, "/api/user", resp -> {
+    KnotxServerTester.defaultInstance(globalServerPort).testGet(ctx, vertx, "/api/user",
+        resp -> {
           assertEquals(HttpResponseStatus.OK.code(), resp.statusCode());
-          JsonObject response = resp.body().toJsonObject();
+          JsonObject response = resp.bodyAsJsonObject();
           assertNotNull(response);
-          assertEquals(5, response.getJsonObject("fetch-offers").getJsonArray("_result").size());
+          Assertions.assertEquals(5,
+              response.getJsonObject("fetch-offers").getJsonArray("_result").size());
         });
   }
 
