@@ -97,6 +97,8 @@ tasks {
         shouldRunAfter("test")
     }
 
+    getByName("build").dependsOn(gradle.includedBuild("knotx-dependencies").task(":build"))
+
     named("check") { dependsOn("functionalTest") }
 }
 
