@@ -97,6 +97,10 @@ tasks {
         shouldRunAfter("test")
     }
 
+    getByName("build") {
+        dependsOn(gradle.includedBuild("knotx-dependencies").task(":publishToMavenLocal"))
+    }
+
     named("check") { dependsOn("functionalTest") }
 }
 
