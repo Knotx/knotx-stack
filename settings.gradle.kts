@@ -17,7 +17,7 @@
 rootProject.name = "knotx-stack"
 
 if (file(".composite-enabled").exists()) {
-//    includeBuild("../knotx-gradle-plugins")
+    includeBuild("../knotx-dependencies")
     includeBuild("../knotx-commons")
     includeBuild("../knotx-launcher")
     includeBuild("../knotx-junit5")
