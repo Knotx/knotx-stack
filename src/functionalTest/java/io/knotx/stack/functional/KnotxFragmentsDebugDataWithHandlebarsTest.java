@@ -30,9 +30,12 @@ import io.knotx.junit5.RandomPort;
 import io.knotx.junit5.wiremock.ClasspathResourcesMockServer;
 import io.knotx.stack.KnotxServerTester;
 import io.netty.handler.codec.http.HttpResponseStatus;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.Vertx;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.junit.jupiter.api.AfterEach;
@@ -86,6 +89,9 @@ public class KnotxFragmentsDebugDataWithHandlebarsTest {
             JsonObject nodeLog = new JsonObject(result);
             assertNotNull(nodeLog);
             assertEquals(2, nodeLog.getJsonObject("log").getJsonArray("operations").size());
+            JsonArray nodes = nodeLog.getJsonObject("log").getJsonArray("operations");
+            assertEquals("fetch-user-info", nodes.getJsonObject(0).getString("node"));
+            assertEquals("te-hbs", nodes.getJsonObject(1).getString("node"));
           }
 
           if (matcher.find()) { //second fragment
@@ -94,10 +100,25 @@ public class KnotxFragmentsDebugDataWithHandlebarsTest {
             JsonObject nodeLog = new JsonObject(result);
             assertNotNull(nodeLog);
             assertEquals(8, nodeLog.getJsonObject("log").getJsonArray("operations").size());
+            JsonArray nodes = nodeLog.getJsonObject("log").getJsonArray("operations");
+            assertEquals("fetch-user-info", nodes.getJsonObject(0).getString("node"));
+            assertEqualsWithinRange("fetch-payment-providers", nodes, 1, 6);
+            assertEqualsWithinRange("fetch-offers", nodes, 1, 6);
+            assertEqualsWithinRange("fetch-offers-fallback", nodes, 1, 6);
+            assertEqualsWithinRange("fetch-delivery-options-cb", nodes, 1, 6);
+            assertEqualsWithinRange("fetch-delivery-timeout", nodes, 1, 6);
+            assertEquals("composite", nodes.getJsonObject(6).getString("node"));
+            assertEquals("te-pebble", nodes.getJsonObject(7).getString("node"));
           }
 
           //only 2 fragments, matcher should fail looking for next entries
           assertFalse(matcher.find());
         });
+  }
+
+  private void assertEqualsWithinRange(String object, JsonArray collection, int lowerBound,
+      int upperBound) {
+    List<LinkedHashMap> entries = collection.getList().subList(lowerBound, upperBound);
+    assertTrue(entries.stream().map(e -> e.get("node")).anyMatch(e -> e.equals(object)));
   }
 }
