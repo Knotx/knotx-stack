@@ -24,6 +24,5 @@ if (file(".composite-enabled").exists()) {
     includeBuild("../knotx-server-http")
     includeBuild("../knotx-repository-connector")
     includeBuild("../knotx-fragments")
-    includeBuild("../knotx-data-bridge")
     includeBuild("../knotx-template-engine")
 }
