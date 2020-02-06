@@ -20,7 +20,7 @@ plugins {
     id("io.knotx.unit-test") version "0.1.1"
     id("maven-publish")
     id("signing")
-    id("org.nosphere.apache.rat") version "0.4.0"
+    id("org.nosphere.apache.rat") version "0.6.0"
     id("idea")
 }
 
@@ -110,7 +110,7 @@ tasks {
 // -----------------------------------------------------------------------------
 tasks {
     named<RatTask>("rat") {
-        excludes.addAll("*.md", "**/*.md", "**/bin/*", "azure-pipelines.yml", "**/build/*", "**/out/*", "**/*.json", "**/*.conf", "**/*.xml", "**/*.html", "**/*.properties", ".idea", ".composite-enabled", "/logs/**")
+        excludes.addAll(listOf("*.md", "**/*.md", "**/bin/*", "azure-pipelines.yml", "**/build/*", "**/out/*", "**/*.json", "**/*.conf", "**/*.xml", "**/*.html", "**/*.properties", ".idea", ".composite-enabled", "/logs/**"))
     }
     getByName("build").dependsOn("rat")
 }
@@ -181,14 +181,7 @@ publishing {
         }
     }
 }
-val subProjectPath = this.path
-signing {
-    setRequired({
-        gradle.taskGraph.hasTask("$subProjectPath:publish") ||
-                gradle.taskGraph.hasTask("$subProjectPath:publishMavenJavaPublicationToMavenRepository")
-    })
-
-    sign(publishing.publications["knotxDistribution"])
+extra["isReleaseVersion"] = !version.toString().endsWith("SNAPSHOT")
+tasks.withType<Sign>().configureEach {
+    onlyIf { project.extra["isReleaseVersion"] as Boolean }
 }
-
-
