@@ -1,5 +1,5 @@
 [![Build Status](https://dev.azure.com/knotx/Knotx/_apis/build/status/Knotx.knotx-stack?branchName=master)](https://dev.azure.com/knotx/Knotx/_build/latest?definitionId=1&branchName=master)
-[![Gradle Status](https://gradleupdate.appspot.com/Knotx/knotx-commons/status.svg)](https://gradleupdate.appspot.com/Knotx/knotx-commons/status)
+[![Gradle Status](https://gradleupdate.appspot.com/Knotx/knotx-stack/status.svg)](https://gradleupdate.appspot.com/Knotx/knotx-stack/status)
 
 # Knot.x Stack
 Knot.x Stack is a Knot.x distribution containing all dependencies, configuration files and running scripts. 
