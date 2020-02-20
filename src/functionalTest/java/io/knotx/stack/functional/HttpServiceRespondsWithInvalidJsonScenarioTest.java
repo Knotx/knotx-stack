@@ -41,13 +41,15 @@ class HttpServiceRespondsWithInvalidJsonScenarioTest {
       "scenarios/http-service-responds-with-invalid-json/tasks.conf"})
   void requestApi(VertxTestContext ctx, Vertx vertx, @RandomPort Integer globalServerPort) {
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
-    serverTester.testGet(ctx, vertx, "/api/user",
+    serverTester.testGet(ctx, vertx, "/api/user?group=premium",
         resp -> {
           assertEquals(HttpResponseStatus.OK.code(), resp.statusCode());
           JsonObject response = resp.bodyAsJsonObject();
           assertNotNull(response);
           assertTrue(response.containsKey("fetch-user-info"));
           assertTrue(response.containsKey("fetch-payment-providers"));
+          assertEquals(1,
+              response.getJsonObject("fetch-payment-providers").getJsonArray("_result").size());
           assertEquals("json-syntax-error", response.getJsonObject("fetch-offers")
               .getJsonObject("_result").getString("fallback"));
         });

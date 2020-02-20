@@ -41,7 +41,6 @@ class PebbleTemplateEngineIntegrationTest {
     // when
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
     serverTester.testGetRequest(context, vertx,
-        "/content/fullPebblePage.html?parameter%20with%20space=value&q=knotx",
-        "results/fullPage.html");
+        "/content/fullPebblePage.html", "results/fullPage.html");
   }
 }
