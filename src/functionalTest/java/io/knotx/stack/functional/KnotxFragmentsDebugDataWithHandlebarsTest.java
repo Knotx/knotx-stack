@@ -15,15 +15,14 @@
  */
 package io.knotx.stack.functional;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
+import io.knotx.fragments.handler.LoggedNodeStatus;
 import io.knotx.junit5.KnotxApplyConfiguration;
 import io.knotx.junit5.KnotxExtension;
 import io.knotx.junit5.RandomPort;
@@ -131,6 +130,7 @@ class KnotxFragmentsDebugDataWithHandlebarsTest {
     JsonObject log = getLog(matcher);
 
     shouldHaveTopLevelMetadata(log);
+    shouldHaveFragmentLevelMetadata(log.getJsonObject("fragment"));
     shouldDescribeUserTask(log.getJsonObject("graph"));
   }
 
@@ -140,6 +140,7 @@ class KnotxFragmentsDebugDataWithHandlebarsTest {
     JsonObject log = getLog(matcher);
 
     shouldHaveTopLevelMetadata(log);
+    shouldHaveFragmentLevelMetadata(log.getJsonObject("fragment"));
     shouldDescribePaymentsTask(log.getJsonObject("graph"));
   }
 
@@ -154,11 +155,15 @@ class KnotxFragmentsDebugDataWithHandlebarsTest {
 
   private void shouldHaveTopLevelMetadata(JsonObject fragmentExecutionLog) {
     assertNotNull(fragmentExecutionLog);
-    assertFalse(StringUtils.isBlank(fragmentExecutionLog.getString("fragmentId")));
-    assertEquals(SNIPPET, fragmentExecutionLog.getString(TYPE));
     assertEquals(SUCCESS, fragmentExecutionLog.getString(STATUS));
     assertNotNull(fragmentExecutionLog.getLong("startTime"));
     assertNotNull(fragmentExecutionLog.getLong("finishTime"));
+  }
+
+  private void shouldHaveFragmentLevelMetadata(JsonObject fragment) {
+    assertNotNull(fragment);
+    assertFalse(StringUtils.isBlank(fragment.getString("id")));
+    assertEquals(SNIPPET, fragment.getString(TYPE));
   }
 
   private void shouldDescribeUserTask(JsonObject graph) {
@@ -187,16 +192,16 @@ class KnotxFragmentsDebugDataWithHandlebarsTest {
   private void shouldDescribeSuccessTransitionAfterFirstLevelNode(JsonObject node) {
     shouldDescribeCompositeNode(node);
     shouldContainSuccessResponse(node.getJsonObject(RESPONSE), 0);
-    shouldContainThreeNestedNodes(node.getJsonArray("subtasks"));
+    shouldContainNestedNodes(node.getJsonArray("subtasks"));
 
     shouldDescribeTemplateEngineNode(node.getJsonObject("on").getJsonObject(_SUCCESS), "te-pebble");
   }
 
-  private void shouldContainThreeNestedNodes(JsonArray subtasks) {
+  private void shouldContainNestedNodes(JsonArray subtasks) {
     assertEquals(3, subtasks.size());
     for (int i = 0; i < 3; i++) {
       JsonObject subtask = subtasks.getJsonObject(i);
-      shouldDescribeSingleNode(subtask, subtask.getString(LABEL));
+      shouldDescribeSingleNode(subtask, subtask.getString(LABEL), subtask.getString(STATUS));
       // execution verification for subtasks skipped
     }
   }
