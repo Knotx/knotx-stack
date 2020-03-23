@@ -49,13 +49,13 @@ steps:
     inputs:
       gradleWrapperFile: '$(workspaceDir)/knotx-stack/gradlew'
       workingDirectory: '$(workspaceDir)/knotx-stack'
-      tasks: 'publish-local-all'
+      tasks: 'publish-local-all --info'
     displayName: "Build Stack dependencies"
   - task: Gradle@2
     inputs:
       gradleWrapperFile: '$(workspaceDir)/knotx-stack/gradlew'
       workingDirectory: '$(workspaceDir)/knotx-stack'
-      tasks: 'build'
+      tasks: 'build --info'
     displayName: "Build Stack"
   - task: Gradle@2
     inputs:

@@ -37,6 +37,8 @@ import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.Vertx;
 import io.vertx.reactivex.core.buffer.Buffer;
 import io.vertx.reactivex.ext.web.client.HttpResponse;
+
+import java.util.Comparator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
@@ -66,6 +68,7 @@ class FragmentsDebugDataTest {
   private static final String _SUCCESS = "_success";
   private static final String LABEL = "label";
   private static final String UNPROCESSED = "UNPROCESSED";
+  private static final String MISSING = "MISSING";
 
   @ClasspathResourcesMockServer
   private WireMockServer delayedServiceServer;
@@ -160,7 +163,7 @@ class FragmentsDebugDataTest {
     assertNotEquals(0, knotxFragment.getLong("finishTime"));
     assertNotEquals(0, knotxFragment.getLong("startTime"));
     assertEquals(5, knotxFragment.getJsonObject("fragment").size());
-    assertEquals(8, knotxFragment.getJsonObject("graph").size());
+    assertEquals(10, knotxFragment.getJsonObject("graph").size());
   }
 
   private void responseShouldBeValid(HttpResponse<Buffer> response) {
@@ -292,6 +295,17 @@ class FragmentsDebugDataTest {
     assertEquals("SINGLE", node.getString(TYPE));
     assertEquals(alias, node.getString(LABEL));
     assertEquals(status, node.getString(STATUS));
+
+    Long started = node.getLong("started");
+    Long finished = node.getLong("finished");
+
+    if (MISSING.equals(status) || UNPROCESSED.equals(status)) {
+      assertEquals(0, started);
+      assertEquals(0, finished);
+    } else {
+      assertTrue(started > 0);
+      assertTrue(finished > started);
+    }
   }
 
   private void shouldDescribeCompositeNode(JsonObject node) {
@@ -299,6 +313,12 @@ class FragmentsDebugDataTest {
     assertEquals("COMPOSITE", node.getString(TYPE));
     assertEquals("composite", node.getString(LABEL));
     assertEquals(SUCCESS, node.getString(STATUS));
+
+    Long started = node.getLong("started");
+    Long finished = node.getLong("finished");
+
+    assertTrue(started > 0);
+    assertTrue(finished > started);
   }
 
   private void shouldDescribeAction(JsonObject operation, String actionFactory) {
