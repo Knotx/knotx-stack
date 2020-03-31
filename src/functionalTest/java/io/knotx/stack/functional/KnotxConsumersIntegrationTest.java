@@ -15,12 +15,18 @@
  */
 package io.knotx.stack.functional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.tomakehurst.wiremock.WireMockServer;
 import io.knotx.junit5.KnotxApplyConfiguration;
 import io.knotx.junit5.KnotxExtension;
 import io.knotx.junit5.RandomPort;
 import io.knotx.junit5.wiremock.ClasspathResourcesMockServer;
 import io.knotx.stack.KnotxServerTester;
+import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.Vertx;
 import org.junit.jupiter.api.DisplayName;
@@ -44,8 +50,20 @@ public class KnotxConsumersIntegrationTest {
   void processFragment(VertxTestContext testContext, Vertx vertx,
       @RandomPort Integer globalServerPort) {
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
-    serverTester.testGet(testContext, vertx, "/api/consumer", response -> {
-      response.hashCode();
+    serverTester.testGet(testContext, vertx, "/api/consumer?debug=true", response -> {
+      assertNotNull(response);
+      JsonObject responseData = new JsonObject(response.bodyAsString());
+      assertEquals(4, responseData.size());
+      assertTrue(responseData.containsKey("_knotx_fragment"));
+      assertTrue(responseData.containsKey("fetch-user-info"));
+      assertTrue(responseData.containsKey("fetch-payment-providers"));
+      assertTrue(responseData.containsKey("fetch-offers"));
+      JsonObject knotxFragment = responseData.getJsonObject("_knotx_fragment");
+      assertEquals("SUCCESS", knotxFragment.getString("status"));
+      assertNotEquals(0, knotxFragment.getLong("finishTime"));
+      assertNotEquals(0, knotxFragment.getLong("startTime"));
+      assertEquals(5, knotxFragment.getJsonObject("fragment").size());
+      assertEquals(8, knotxFragment.getJsonObject("graph").size());
     });
   }
 }
