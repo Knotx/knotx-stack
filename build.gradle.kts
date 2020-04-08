@@ -66,6 +66,7 @@ dependencies {
     implementation("io.knotx:knotx-fragments-action-core:${project.version}")
     implementation("io.knotx:knotx-fragments-handler-core:${project.version}")
     implementation("io.knotx:knotx-fragments-handler-consumer-html:${project.version}")
+    implementation("io.knotx:knotx-fragments-handler-consumer-json:${project.version}")
     implementation("io.knotx:knotx-template-engine-core:${project.version}")
     implementation("io.knotx:knotx-template-engine-handlebars:${project.version}")
     implementation("io.knotx:knotx-template-engine-pebble:${project.version}")
