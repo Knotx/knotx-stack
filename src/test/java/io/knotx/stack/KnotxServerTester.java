@@ -29,6 +29,7 @@ import io.vertx.reactivex.core.Vertx;
 import io.vertx.reactivex.core.buffer.Buffer;
 import io.vertx.reactivex.ext.web.client.HttpResponse;
 import io.vertx.reactivex.ext.web.client.WebClient;
+import java.util.Collections;
 import java.util.Map;
 
 public final class KnotxServerTester {
@@ -85,9 +86,18 @@ public final class KnotxServerTester {
 
   public void testGet(VertxTestContext context, Vertx vertx, String url,
       Consumer<HttpResponse<Buffer>> assertions) {
+    testGet(context, vertx, url, Collections.emptyMap(), assertions);
+  }
+
+  public void testGet(VertxTestContext context, Vertx vertx, String url, Map<String, String> headers,
+        Consumer<HttpResponse<Buffer>> assertions) {
+    MultiMap headersMultiMap = MultiMap.caseInsensitiveMultiMap();
+    headersMultiMap.addAll(headers);
+
     WebClient client = WebClient.create(vertx);
     Single<HttpResponse<Buffer>> httpResponseSingle = client
         .get(serverPort, serverHost, url)
+        .putHeaders(headersMultiMap)
         .rxSend();
 
     subscribeToResult_shouldSucceed(context, httpResponseSingle,
