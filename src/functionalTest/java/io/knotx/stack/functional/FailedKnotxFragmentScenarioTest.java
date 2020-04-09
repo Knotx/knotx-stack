@@ -23,11 +23,11 @@ import io.knotx.junit5.wiremock.ClasspathResourcesMockServer;
 import io.knotx.stack.KnotxServerTester;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.Vertx;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+
+import java.util.Collections;
+import java.util.Map;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -53,13 +53,9 @@ public class FailedKnotxFragmentScenarioTest {
       "scenarios/failed-knotx-fragment/tasks.conf",
       "scenarios/failed-knotx-fragment/pebble.conf" })
   void requestFailedData(VertxTestContext testContext, Vertx vertx, @RandomPort Integer delayedServicePort, @RandomPort Integer globalServerPort) {
-    server = new WireMockServer(delayedServicePort);
-    server.stubFor(get(urlEqualTo("/mock/broken/500.json")).willReturn(aResponse().withStatus(500)));
-    server.start();
+    prepareServer(delayedServicePort, globalServerPort);
 
-    serverTester = KnotxServerTester.defaultInstance(globalServerPort);
-
-    serverTester.testGet(testContext, vertx, "/content/failedFragment.html?debug=true", response -> {
+    serverTester.testGet(testContext, vertx, "/content/failedFragment.html", response -> {
       assertEquals(500, response.statusCode());
     });
   }
@@ -70,16 +66,35 @@ public class FailedKnotxFragmentScenarioTest {
       "scenarios/failed-knotx-fragment/mocks.conf",
       "scenarios/failed-knotx-fragment/tasks.conf",
       "scenarios/failed-knotx-fragment/pebble.conf" })
+  void requestFailedDataWithParam(VertxTestContext testContext, Vertx vertx, @RandomPort Integer delayedServicePort, @RandomPort Integer globalServerPort) {
+    prepareServer(delayedServicePort, globalServerPort);
+
+    serverTester.testGet(testContext, vertx, "/content/failedFragment.html?allowInvalidFragments=true", response -> {
+      assertEquals(200, response.statusCode());
+    });
+  }
+
+  @Test
+  @DisplayName("Fragments handler succeeds for a failed fragment when a header is provided")
+  @KnotxApplyConfiguration({"conf/application.conf",
+      "scenarios/failed-knotx-fragment/mocks.conf",
+      "scenarios/failed-knotx-fragment/tasks.conf",
+      "scenarios/failed-knotx-fragment/pebble.conf" })
   void requestFailedDataWithHeader(VertxTestContext testContext, Vertx vertx, @RandomPort Integer delayedServicePort, @RandomPort Integer globalServerPort) {
+    prepareServer(delayedServicePort, globalServerPort);
+
+    Map<String, String> headers = Collections.singletonMap("Allow-Invalid-Fragments", "true");
+
+    serverTester.testGet(testContext, vertx, "/content/failedFragment.html", headers, response -> {
+      assertEquals(200, response.statusCode());
+    });
+  }
+
+  private void prepareServer(Integer delayedServicePort, Integer globalServerPort) {
     server = new WireMockServer(delayedServicePort);
     server.stubFor(get(urlEqualTo("/mock/broken/500.json")).willReturn(aResponse().withStatus(500)));
     server.start();
 
     serverTester = KnotxServerTester.defaultInstance(globalServerPort);
-
-    serverTester.testGet(testContext, vertx, "/content/failedFragment.html?debug=true&allowInvalidFragments=true", response -> {
-      assertEquals(200, response.statusCode());
-    });
   }
-
 }

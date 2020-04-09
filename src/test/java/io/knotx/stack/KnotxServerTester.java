@@ -23,12 +23,15 @@ import io.knotx.junit5.util.FileReader;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.reactivex.Single;
 import io.reactivex.functions.Consumer;
-import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.MultiMap;
+import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.Vertx;
 import io.vertx.reactivex.core.buffer.Buffer;
 import io.vertx.reactivex.ext.web.client.HttpResponse;
 import io.vertx.reactivex.ext.web.client.WebClient;
+import org.graalvm.compiler.nodes.memory.MemoryCheckpoint;
+
+import java.util.Collections;
 import java.util.Map;
 
 public final class KnotxServerTester {
@@ -85,9 +88,18 @@ public final class KnotxServerTester {
 
   public void testGet(VertxTestContext context, Vertx vertx, String url,
       Consumer<HttpResponse<Buffer>> assertions) {
+    testGet(context, vertx, url, Collections.emptyMap(), assertions);
+  }
+
+  public void testGet(VertxTestContext context, Vertx vertx, String url, Map<String, String> headers,
+        Consumer<HttpResponse<Buffer>> assertions) {
+    MultiMap headersMultiMap = MultiMap.caseInsensitiveMultiMap();
+    headersMultiMap.addAll(headers);
+
     WebClient client = WebClient.create(vertx);
     Single<HttpResponse<Buffer>> httpResponseSingle = client
         .get(serverPort, serverHost, url)
+        .putHeaders(headersMultiMap)
         .rxSend();
 
     subscribeToResult_shouldSucceed(context, httpResponseSingle,
