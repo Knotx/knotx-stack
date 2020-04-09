@@ -23,14 +23,12 @@ import io.knotx.junit5.util.FileReader;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.reactivex.Single;
 import io.reactivex.functions.Consumer;
-import io.vertx.reactivex.core.MultiMap;
 import io.vertx.junit5.VertxTestContext;
+import io.vertx.reactivex.core.MultiMap;
 import io.vertx.reactivex.core.Vertx;
 import io.vertx.reactivex.core.buffer.Buffer;
 import io.vertx.reactivex.ext.web.client.HttpResponse;
 import io.vertx.reactivex.ext.web.client.WebClient;
-import org.graalvm.compiler.nodes.memory.MemoryCheckpoint;
-
 import java.util.Collections;
 import java.util.Map;
 
