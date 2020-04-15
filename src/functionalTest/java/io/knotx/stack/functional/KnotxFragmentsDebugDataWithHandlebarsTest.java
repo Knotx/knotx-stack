@@ -15,9 +15,12 @@
  */
 package io.knotx.stack.functional;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -50,7 +53,8 @@ class KnotxFragmentsDebugDataWithHandlebarsTest {
 
   private static final String SCRIPT_REGEXP = "<script data-knotx-debug=\"log\" data-knotx-id=\"?.*?\" type=\"application/json\">(?<logJson>.*?)</script>";
   private static final Pattern SCRIPT_PATTERN = Pattern.compile(SCRIPT_REGEXP, Pattern.DOTALL);
-  private static final String REQUESTED_PATH = "/content/payments.html?debug=true";
+  private static final String REQUESTED_PATH_DEBUG_DATA = "/content/payments.html?debug=true";
+  private static final String REQUESTED_PATH_JSON_CONSUMER = "/api/consumer?debug=true";
 
   private static final String SUCCESS = "SUCCESS";
   private static final String SNIPPET = "snippet";
@@ -88,6 +92,18 @@ class KnotxFragmentsDebugDataWithHandlebarsTest {
     knotxShouldProvideDebugData(testContext, vertx);
   }
 
+  @Test
+  @DisplayName("Should return fragment with correctly appended body from json consumer")
+  @KnotxApplyConfiguration({"conf/application.conf",
+      "scenarios/knotx-fragments-debug-data/mocks.conf",
+      "scenarios/knotx-fragments-debug-data/tasks.conf",
+      "scenarios/knotx-fragments-debug-data/consumerFactoriesConfig.conf"})
+  void processFragmentWithJsonConsumer(VertxTestContext testContext, Vertx vertx,
+      @RandomPort Integer globalServerPort) {
+    givenServerTester(globalServerPort);
+    knotxShouldAppendConsumerDataToFragmentBody(testContext, vertx);
+  }
+
   private void givenServerTester(Integer globalServerPort) {
     serverTester = KnotxServerTester.defaultInstance(globalServerPort);
   }
@@ -103,10 +119,43 @@ class KnotxFragmentsDebugDataWithHandlebarsTest {
 
   private void knotxShouldProvideDebugData(VertxTestContext testContext, Vertx vertx) {
     serverTester.testGet(testContext, vertx,
-        REQUESTED_PATH, response -> {
+        REQUESTED_PATH_DEBUG_DATA, response -> {
           responseShouldBeValid(response);
           debugDataForTwoSnippetsShouldBeValid(response.bodyAsString());
         });
+  }
+
+  private void knotxShouldAppendConsumerDataToFragmentBody(VertxTestContext testContext,
+      Vertx vertx) {
+    serverTester.testGet(testContext, vertx, REQUESTED_PATH_JSON_CONSUMER,
+        response -> {
+          responseShouldBeValid(response);
+
+          JsonObject responseData = new JsonObject(response.bodyAsString());
+
+          knotxFragmentResponseDataShouldContainBodyAndKnotxFragmentEntries(
+              new JsonObject(response.bodyAsString()));
+          knotxFragmentShouldContainExecutionLogEntries(
+              responseData.getJsonObject("_knotx_fragment"));
+
+        });
+  }
+
+  private void knotxFragmentResponseDataShouldContainBodyAndKnotxFragmentEntries(
+      JsonObject responseData) {
+    assertEquals(4, responseData.size());
+    assertTrue(responseData.containsKey("_knotx_fragment"));
+    assertTrue(responseData.containsKey("fetch-user-info"));
+    assertTrue(responseData.containsKey("fetch-payment-providers"));
+    assertTrue(responseData.containsKey("fetch-offers-json"));
+  }
+
+  private void knotxFragmentShouldContainExecutionLogEntries(JsonObject knotxFragment) {
+    assertEquals("SUCCESS", knotxFragment.getString("status"));
+    assertNotEquals(0, knotxFragment.getLong("finishTime"));
+    assertNotEquals(0, knotxFragment.getLong("startTime"));
+    assertEquals(5, knotxFragment.getJsonObject("fragment").size());
+    assertEquals(8, knotxFragment.getJsonObject("graph").size());
   }
 
   private void responseShouldBeValid(HttpResponse<Buffer> response) {
