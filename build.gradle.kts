@@ -16,11 +16,11 @@
 import org.nosphere.apache.rat.RatTask
 
 plugins {
-    id("io.knotx.java-library") version "0.1.1"
-    id("io.knotx.unit-test") version "0.1.1"
-    id("maven-publish")
-    id("signing")
-    id("org.nosphere.apache.rat") version "0.6.0"
+    id("io.knotx.java-library")
+    id("io.knotx.unit-test")
+    id("io.knotx.maven-publish")
+    id("io.knotx.release-base")
+    id("org.nosphere.apache.rat")
     id("idea")
 }
 
@@ -103,11 +103,29 @@ tasks {
         shouldRunAfter("test")
     }
 
-    getByName("build") {
-        dependsOn(gradle.includedBuild("knotx-dependencies").task(":publishToMavenLocal"))
+    named("check") { dependsOn("functionalTest") }
+
+    named("build") {
+        if (file(".composite-enabled").exists()) {
+            dependsOn(gradle.includedBuild("knotx-dependencies").task(":publishToMavenLocal"))
+        }
+        mustRunAfter("setVersion")
     }
 
-    named("check") { dependsOn("functionalTest") }
+    named("updateChangelog") {
+        dependsOn("signMavenJavaPublication", "signAssembleDistribution", "setVersion")
+    }
+
+    register("prepare") {
+        group = "release"
+        dependsOn("updateChangelog", "publishToMavenLocal")
+    }
+
+    register("publishArtifacts") {
+        group = "release"
+        dependsOn("publish")
+        logger.lifecycle("Publishing java artifacts")
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -141,7 +159,7 @@ publishing {
             pom {
                 name.set("Knot.x Stack")
                 description.set("Distribution of Knot.x containing all dependencies, configurations and running scripts.")
-                url.set("http://knotx.io")
+                url.set("https://knotx.io")
                 licenses {
                     license {
                         name.set("The Apache Software License, Version 2.0")
@@ -168,7 +186,7 @@ publishing {
                 scm {
                     connection.set("scm:git:git://github.com/Knotx/knotx-stack.git")
                     developerConnection.set("scm:git:ssh://github.com:Knotx/knotx-stack.git")
-                    url.set("http://knotx.io")
+                    url.set("https://knotx.io")
                 }
             }
         }
@@ -186,7 +204,12 @@ publishing {
         }
     }
 }
-extra["isReleaseVersion"] = !version.toString().endsWith("SNAPSHOT")
+
+signing {
+    sign(tasks["assembleDistribution"])
+}
+
+extra["isReleaseVersion"] = true // !version.toString().endsWith("SNAPSHOT")
 tasks.withType<Sign>().configureEach {
     onlyIf { project.extra["isReleaseVersion"] as Boolean }
 }
