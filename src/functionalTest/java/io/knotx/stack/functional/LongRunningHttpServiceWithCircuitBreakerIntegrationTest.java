@@ -55,6 +55,8 @@ class LongRunningHttpServiceWithCircuitBreakerIntegrationTest {
   @Test
   @DisplayName("Expect page containing data from services and fallback data for broken service.")
   @KnotxApplyConfiguration({"conf/application.conf",
+      "common/templating/routing.conf",
+      "common/templating/fragments.conf",
       "scenarios/long-running-http-service-with-circuit-breaker/mocks.conf",
       "scenarios/long-running-http-service-with-circuit-breaker/tasks.conf"})
   void taskWithCircuitBreaker(VertxTestContext context, Vertx vertx,

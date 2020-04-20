@@ -49,12 +49,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(KnotxExtension.class)
 @TestInstance(Lifecycle.PER_CLASS)
-class KnotxFragmentsDebugDataWithHandlebarsTest {
+class FragmentsDebugDataTest {
 
   private static final String SCRIPT_REGEXP = "<script data-knotx-debug=\"log\" data-knotx-id=\"?.*?\" type=\"application/json\">(?<logJson>.*?)</script>";
   private static final Pattern SCRIPT_PATTERN = Pattern.compile(SCRIPT_REGEXP, Pattern.DOTALL);
-  private static final String REQUESTED_PATH_DEBUG_DATA = "/content/payments.html?debug=true";
-  private static final String REQUESTED_PATH_JSON_CONSUMER = "/api/consumer?debug=true";
+  private static final String REQUESTED_PATH_TEMPLATING = "/content/payments.html?debug=true";
+  private static final String REQUESTED_PATH_WEB_API = "/api/consumer?debug=true";
 
   private static final String SUCCESS = "SUCCESS";
   private static final String SNIPPET = "snippet";
@@ -78,11 +78,14 @@ class KnotxFragmentsDebugDataWithHandlebarsTest {
   }
 
   @Test
-  @DisplayName("Should return page with valid debug data")
+  @DisplayName("Expect HTML markup with many fragments containing debug data.")
   @KnotxApplyConfiguration({"conf/application.conf",
-      "scenarios/knotx-fragments-debug-data/mocks.conf",
-      "scenarios/knotx-fragments-debug-data/tasks.conf",
-      "scenarios/knotx-fragments-debug-data/pebble.conf"})
+      "common/templating/routing.conf",
+      "common/templating/fragments.conf",
+      "scenarios/fragments-debug-data/debugHtml.conf",
+      "scenarios/fragments-debug-data/mocks.conf",
+      "scenarios/fragments-debug-data/tasks.conf",
+      "scenarios/fragments-debug-data/pebble.conf"})
   void requestPage(VertxTestContext testContext, Vertx vertx,
       @RandomPort Integer delayedServicePort, @RandomPort Integer globalServerPort) {
 
@@ -93,12 +96,14 @@ class KnotxFragmentsDebugDataWithHandlebarsTest {
   }
 
   @Test
-  @DisplayName("Should return fragment with correctly appended body from json consumer")
+  @DisplayName("Expect JSON with single fragment debug data")
   @KnotxApplyConfiguration({"conf/application.conf",
-      "scenarios/knotx-fragments-debug-data/mocks.conf",
-      "scenarios/knotx-fragments-debug-data/tasks.conf",
-      "scenarios/knotx-fragments-debug-data/consumerFactoriesConfig.conf"})
-  void processFragmentWithJsonConsumer(VertxTestContext testContext, Vertx vertx,
+      "common/api/routing.conf",
+      "common/api/fragments.conf",
+      "scenarios/fragments-debug-data/debugJson.conf",
+      "scenarios/fragments-debug-data/mocks.conf",
+      "scenarios/fragments-debug-data/tasks.conf"})
+  void requestWebApi(VertxTestContext testContext, Vertx vertx,
       @RandomPort Integer globalServerPort) {
     givenServerTester(globalServerPort);
     knotxShouldAppendConsumerDataToFragmentBody(testContext, vertx);
@@ -119,7 +124,7 @@ class KnotxFragmentsDebugDataWithHandlebarsTest {
 
   private void knotxShouldProvideDebugData(VertxTestContext testContext, Vertx vertx) {
     serverTester.testGet(testContext, vertx,
-        REQUESTED_PATH_DEBUG_DATA, response -> {
+        REQUESTED_PATH_TEMPLATING, response -> {
           responseShouldBeValid(response);
           debugDataForTwoSnippetsShouldBeValid(response.bodyAsString());
         });
@@ -127,7 +132,7 @@ class KnotxFragmentsDebugDataWithHandlebarsTest {
 
   private void knotxShouldAppendConsumerDataToFragmentBody(VertxTestContext testContext,
       Vertx vertx) {
-    serverTester.testGet(testContext, vertx, REQUESTED_PATH_JSON_CONSUMER,
+    serverTester.testGet(testContext, vertx, REQUESTED_PATH_WEB_API,
         response -> {
           responseShouldBeValid(response);
 

@@ -49,6 +49,8 @@ class FailingHttpServicesWithFallbacksIntegrationTest {
   @Test
   @DisplayName("Expect page containing data from services and fallback data for broken service.")
   @KnotxApplyConfiguration({"conf/application.conf",
+      "common/templating/routing.conf",
+      "common/templating/fragments.conf",
       "scenarios/failing-http-services-with-fallbacks/mocks.conf",
       "scenarios/failing-http-services-with-fallbacks/tasks.conf"})
   void requestPage(VertxTestContext context, Vertx vertx, @RandomPort Integer mockBrokenServicePort,

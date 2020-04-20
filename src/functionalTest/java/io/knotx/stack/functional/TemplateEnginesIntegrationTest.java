@@ -15,11 +15,9 @@
  */
 package io.knotx.stack.functional;
 
-import com.github.tomakehurst.wiremock.WireMockServer;
 import io.knotx.junit5.KnotxApplyConfiguration;
 import io.knotx.junit5.KnotxExtension;
 import io.knotx.junit5.RandomPort;
-import io.knotx.junit5.wiremock.ClasspathResourcesMockServer;
 import io.knotx.stack.KnotxServerTester;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.Vertx;
@@ -33,6 +31,8 @@ class TemplateEnginesIntegrationTest {
   @Test
   @DisplayName("Should return page properly processed by handlebars")
   @KnotxApplyConfiguration({"conf/application.conf",
+      "common/templating/routing.conf",
+      "common/templating/fragments.conf",
       "scenarios/template-engines-integration/mocks.conf",
       "scenarios/template-engines-integration/tasks.conf",
       "scenarios/template-engines-integration/pebble.conf"})

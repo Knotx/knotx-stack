@@ -37,6 +37,8 @@ class HttpServiceRespondsWithInvalidJsonScenarioTest {
   @Test
   @DisplayName("Expect offers fallback while offers service responds with invalid JSON.")
   @KnotxApplyConfiguration({"conf/application.conf",
+      "common/api/routing.conf",
+      "common/api/fragments.conf",
       "scenarios/http-service-responds-with-invalid-json/mocks.conf",
       "scenarios/http-service-responds-with-invalid-json/tasks.conf"})
   void requestApi(VertxTestContext ctx, Vertx vertx, @RandomPort Integer globalServerPort) {

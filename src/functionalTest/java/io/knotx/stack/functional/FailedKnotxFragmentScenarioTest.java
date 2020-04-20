@@ -49,6 +49,8 @@ public class FailedKnotxFragmentScenarioTest {
   @Test
   @DisplayName("Fragments handler fails for a failed fragment")
   @KnotxApplyConfiguration({"conf/application.conf",
+      "common/templating/routing.conf",
+      "common/templating/fragments.conf",
       "scenarios/failed-knotx-fragment/mocks.conf",
       "scenarios/failed-knotx-fragment/tasks.conf",
       "scenarios/failed-knotx-fragment/pebble.conf" })
@@ -63,6 +65,8 @@ public class FailedKnotxFragmentScenarioTest {
   @Test
   @DisplayName("Fragments handler succeeds for a failed fragment when a param is provided")
   @KnotxApplyConfiguration({"conf/application.conf",
+      "common/templating/routing.conf",
+      "common/templating/fragments.conf",
       "scenarios/failed-knotx-fragment/mocks.conf",
       "scenarios/failed-knotx-fragment/tasks.conf",
       "scenarios/failed-knotx-fragment/pebble.conf" })
@@ -77,6 +81,8 @@ public class FailedKnotxFragmentScenarioTest {
   @Test
   @DisplayName("Fragments handler succeeds for a failed fragment when a header is provided")
   @KnotxApplyConfiguration({"conf/application.conf",
+      "common/templating/routing.conf",
+      "common/templating/fragments.conf",
       "scenarios/failed-knotx-fragment/mocks.conf",
       "scenarios/failed-knotx-fragment/tasks.conf",
       "scenarios/failed-knotx-fragment/pebble.conf" })

@@ -48,6 +48,8 @@ class CircuitBreakerTimesOutAndRetriesScenarioTest {
   @Test
   @DisplayName("Expect offers from second service invocation (retry) following the first attempt timeout.")
   @KnotxApplyConfiguration({"conf/application.conf",
+      "common/api/routing.conf",
+      "common/api/fragments.conf",
       "scenarios/circuit-breaker-times-out-and-retries/mocks.conf",
       "scenarios/circuit-breaker-times-out-and-retries/tasks.conf"})
   void requestApi(VertxTestContext testContext, Vertx vertx,

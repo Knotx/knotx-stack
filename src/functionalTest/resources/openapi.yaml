@@ -35,17 +35,9 @@ servers:
       default: '8092'
 
 paths:
-  /content/*:
+  /*:
     get:
-      operationId: te-get
+      operationId: scenario-operation
       responses:
         default:
-          description: HTTP repository response continaing fragments with
-            Data Bridge (https://github.com/Knotx/knotx-data-bridge) and
-            Template Engine (https://github.com/Knotx/knotx-template-engine) processing
-  /api/*:
-    get:
-      operationId: web-api-get
-      responses:
-        default:
-          description: HTTP repository response continaing fragments processed using Fragments Handler
+          description: scenario specific operation
