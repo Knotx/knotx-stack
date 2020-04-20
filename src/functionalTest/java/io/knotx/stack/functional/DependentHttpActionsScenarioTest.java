@@ -65,6 +65,8 @@ class DependentHttpActionsScenarioTest {
   @Test
   @DisplayName("Expect successful response from database service when called with a token from auth service")
   @KnotxApplyConfiguration({"conf/application.conf",
+      "common/api/routing.conf",
+      "common/api/fragments.conf",
       "scenarios/dependent-http-actions-scenario-test/mocks.conf",
       "scenarios/dependent-http-actions-scenario-test/tasks.conf"})
   void taskWithManyHttpMethods(VertxTestContext context, Vertx vertx,

@@ -15,6 +15,13 @@
  */
 package io.knotx.stack.functional;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import com.github.tomakehurst.wiremock.WireMockServer;
 import io.knotx.junit5.KnotxApplyConfiguration;
 import io.knotx.junit5.KnotxExtension;
@@ -29,11 +36,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 @ExtendWith(KnotxExtension.class)
 class CircuitBreakerTimesOutScenarioTest {
 
@@ -42,6 +44,8 @@ class CircuitBreakerTimesOutScenarioTest {
   @Test
   @DisplayName("Expect offers fallback while circuit breaker times out offers service.")
   @KnotxApplyConfiguration({"conf/application.conf",
+      "common/api/routing.conf",
+      "common/api/fragments.conf",
       "scenarios/circuit-breaker-times-out/mocks.conf",
       "scenarios/circuit-breaker-times-out/tasks.conf"})
   void requestApi(VertxTestContext testContext, Vertx vertx,

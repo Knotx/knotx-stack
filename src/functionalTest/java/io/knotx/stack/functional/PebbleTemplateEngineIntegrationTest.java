@@ -34,6 +34,8 @@ class PebbleTemplateEngineIntegrationTest {
   @Test
   @DisplayName("Expect page with markup processed by Pebble Template Engine")
   @KnotxApplyConfiguration({"conf/application.conf",
+      "common/templating/routing.conf",
+      "common/templating/fragments.conf",
       "scenarios/pebble-template-engine/mocks.conf",
       "scenarios/pebble-template-engine/tasks.conf"})
   void requestPage(VertxTestContext context, Vertx vertx,
