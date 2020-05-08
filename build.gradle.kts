@@ -66,7 +66,7 @@ dependencies {
     implementation("io.knotx:knotx-fragments-action-library:${project.version}")
     // tasks
     implementation("io.knotx:knotx-fragments-task-handler:${project.version}")
-    implementation("io.knotx:knotx-fragments-task-factory-config:${project.version}")
+    implementation("io.knotx:knotx-fragments-task-factory-default:${project.version}")
     implementation("io.knotx:knotx-fragments-task-handler-log-html:${project.version}")
     implementation("io.knotx:knotx-fragments-task-handler-log-json:${project.version}")
     // te
