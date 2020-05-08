@@ -63,10 +63,13 @@ dependencies {
     implementation("io.knotx:knotx-fragments-supplier-html-splitter:${project.version}")
     implementation("io.knotx:knotx-fragments-supplier-single-fragment:${project.version}")
     implementation("io.knotx:knotx-fragments-assembler:${project.version}")
-    implementation("io.knotx:knotx-fragments-action-core:${project.version}")
-    implementation("io.knotx:knotx-fragments-handler-core:${project.version}")
-    implementation("io.knotx:knotx-fragments-handler-consumer-html:${project.version}")
-    implementation("io.knotx:knotx-fragments-handler-consumer-json:${project.version}")
+    implementation("io.knotx:knotx-fragments-action-library:${project.version}")
+    // tasks
+    implementation("io.knotx:knotx-fragments-task-handler:${project.version}")
+    implementation("io.knotx:knotx-fragments-task-factory-config:${project.version}")
+    implementation("io.knotx:knotx-fragments-task-handler-log-html:${project.version}")
+    implementation("io.knotx:knotx-fragments-task-handler-log-json:${project.version}")
+    // te
     implementation("io.knotx:knotx-template-engine-core:${project.version}")
     implementation("io.knotx:knotx-template-engine-handlebars:${project.version}")
     implementation("io.knotx:knotx-template-engine-pebble:${project.version}")
