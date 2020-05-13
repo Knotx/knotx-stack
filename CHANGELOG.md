@@ -3,6 +3,7 @@ All notable changes to `knotx-stack` will be documented in this file.
 
 ## Unreleased
 List of changes that are finished but not yet released in any final version.
+- [PR-110](https://github.com/Knotx/knotx-stack/pull/110) - Knotx/knotx-fragments#154 Fragments modules refactor.
 - [PR-100](https://github.com/Knotx/knotx-stack/pull/100) - Knotx/knotx-fragments#135 Extract actions Core & API.
 - [PR-97](https://github.com/Knotx/knotx-stack/pull/97) - Knotx/knotx-fragments#92 Extract HTML Fragment Event Consumer.
 - [PR-96](https://github.com/Knotx/knotx-stack/pull/96) - Knotx/knotx-fragements#73 Functional test for various HTTP methods.
