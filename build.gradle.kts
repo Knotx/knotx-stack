@@ -50,7 +50,7 @@ sourceSets {
 apply(from = "gradle/distribution.gradle.kts")
 
 val functionalTestImplementation: Configuration by configurations.getting { extendsFrom(configurations.named("implementation").get()) }
-val functionalTestRuntimeOnly: Configuration by configurations.getting
+val functionalTestRuntimeOnly: Configuration by configurations.getting { }
 
 dependencies {
     implementation(platform("io.knotx:knotx-dependencies:${project.version}"))
@@ -113,7 +113,7 @@ tasks {
     }
 
     named("updateChangelog") {
-        dependsOn("signMavenJavaPublication", "signAssembleDistribution", "setVersion")
+        dependsOn("signMavenJavaPublication", "signKnotxDistributionPublication", "setVersion")
     }
 
     register("prepare") {
@@ -133,7 +133,7 @@ tasks {
 // -----------------------------------------------------------------------------
 tasks {
     named<RatTask>("rat") {
-        excludes.addAll(listOf("*.md", "**/*.md", "**/bin/*", "azure-pipelines.yml", "**/build/*", "**/out/*", "**/*.json", "**/*.conf", "**/*.xml", "**/*.html", "**/*.properties", ".idea", ".composite-enabled", "/logs/**"))
+        excludes.addAll(listOf("*.md", "**/*.md", "**/bin/*", "azure-pipelines.yml", "**/build/*", "**/out/*", "**/*.json", "**/*.conf", "**/*.xml", "**/*.html", "**/*.properties", ".idea", ".composite-enabled", "/logs/**", "**/*.iml"))
     }
     getByName("build").dependsOn("rat")
 }
@@ -206,10 +206,5 @@ publishing {
 }
 
 signing {
-    sign(tasks["assembleDistribution"])
-}
-
-extra["isReleaseVersion"] = true // !version.toString().endsWith("SNAPSHOT")
-tasks.withType<Sign>().configureEach {
-    onlyIf { project.extra["isReleaseVersion"] as Boolean }
+    sign(publishing.publications["knotxDistribution"])
 }

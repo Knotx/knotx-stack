@@ -16,7 +16,25 @@
 
 rootProject.name = "knotx-stack"
 
+pluginManagement {
+    val version: String by settings
+    plugins {
+        id("io.knotx.java-library") version version
+        id("io.knotx.unit-test") version version
+        id("io.knotx.jacoco") version version
+        id("io.knotx.maven-publish") version version
+        id("io.knotx.release-base") version version
+        id("org.nosphere.apache.rat") version "0.6.0"
+    }
+    repositories {
+        mavenLocal()
+        jcenter()
+        gradlePluginPortal()
+    }
+}
+
 if (file(".composite-enabled").exists()) {
+    includeBuild("../knotx-gradle-plugins")
     includeBuild("../knotx-dependencies")
     includeBuild("../knotx-commons")
     includeBuild("../knotx-launcher")
