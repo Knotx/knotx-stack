@@ -90,6 +90,7 @@ dependencies {
     functionalTestImplementation("org.junit.jupiter:junit-jupiter-api")
     functionalTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     functionalTestImplementation(group = "com.github.tomakehurst", name = "wiremock")
+    functionalTestImplementation("io.knotx:knotx-fragments-task-functional-test:${project.version}")
 }
 
 tasks {
@@ -101,6 +102,9 @@ tasks {
         testClassesDirs = sourceSets["functionalTest"].output.classesDirs
 
         shouldRunAfter("test")
+        if (file(".composite-enabled").exists()) {
+            dependsOn(gradle.includedBuild("knotx-fragments").task(":knotx-fragments-task-functional-test:test"))
+        }
     }
 
     named("check") { dependsOn("functionalTest") }
