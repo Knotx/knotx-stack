@@ -67,7 +67,7 @@ class FailingHttpServicesWithFallbacksIntegrationTest {
 
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
     serverTester
-        .testGetRequest(context, vertx, "/content/fullPage.html",
+        .testGetWithExpectedResponse(context, vertx, "/content/fullPage.html",
             "scenarios/failing-http-services-with-fallbacks/result/fullPage.html");
   }
 }

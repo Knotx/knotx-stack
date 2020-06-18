@@ -39,7 +39,7 @@ class TemplateEnginesIntegrationTest {
   void requestPage(VertxTestContext testContext, Vertx vertx,
       @RandomPort Integer globalServerPort) {
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
-    serverTester.testGetRequest(testContext, vertx, "/content/payments.html",
+    serverTester.testGetWithExpectedResponse(testContext, vertx, "/content/payments.html",
         "scenarios/template-engines-integration/resultPage.html");
   }
 }

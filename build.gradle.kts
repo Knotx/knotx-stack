@@ -80,6 +80,7 @@ dependencies {
     testImplementation(group = "io.vertx", name = "vertx-unit")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.junit.jupiter:junit-jupiter-engine")
+    testImplementation(group = "io.vertx", name = "vertx-web-client")
     testImplementation(group = "com.github.tomakehurst", name = "wiremock")
     testImplementation(group = "io.rest-assured", name = "rest-assured", version = "3.3.0")
 
@@ -90,6 +91,7 @@ dependencies {
     functionalTestImplementation("org.junit.jupiter:junit-jupiter-api")
     functionalTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     functionalTestImplementation(group = "com.github.tomakehurst", name = "wiremock")
+    functionalTestImplementation(group = "io.vertx", name = "vertx-web-client")
 }
 
 tasks {

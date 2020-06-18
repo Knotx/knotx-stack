@@ -23,6 +23,7 @@ import io.knotx.junit5.util.FileReader;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.reactivex.Single;
 import io.reactivex.functions.Consumer;
+import io.vertx.ext.web.client.WebClientOptions;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.MultiMap;
 import io.vertx.reactivex.core.Vertx;
@@ -40,6 +41,9 @@ public final class KnotxServerTester {
   private final String serverHost;
   private final int serverPort;
 
+  private WebClientOptions clientOptions = new WebClientOptions();
+  private Map<String, String> headers = Collections.emptyMap();
+
   private KnotxServerTester(String serverHost, int serverPort) {
     this.serverHost = serverHost;
     this.serverPort = serverPort;
@@ -53,22 +57,17 @@ public final class KnotxServerTester {
     return new KnotxServerTester(KNOTX_TESTS_SERVER_ADDRESS_DEFAULT, port);
   }
 
-  public void testPostRequest(VertxTestContext context, Vertx vertx, String url,
-      Map<String, Object> formData, String expectedResponseFile) {
-
-    WebClient client = WebClient.create(vertx);
-    Single<HttpResponse<Buffer>> httpResponseSingle = client
-        .post(serverPort, serverHost, url)
-        .rxSendForm(getMultiMap(formData));
-
-    subscribeToResult_shouldSucceed(context, httpResponseSingle, resp -> {
-      HtmlMarkupAssertions.assertHtmlBodyMarkupsEqual(FileReader.readTextSafe(expectedResponseFile),
-          resp.body().toString());
-      assertEquals(HttpResponseStatus.OK.code(), resp.statusCode());
-    });
+  public KnotxServerTester withClientOptions(WebClientOptions clientOptions) {
+    this.clientOptions = clientOptions;
+    return this;
   }
 
-  public void testGetRequest(VertxTestContext context, Vertx vertx, String url,
+  public KnotxServerTester withRequestHeaders(Map<String, String> headers) {
+    this.headers = headers;
+    return this;
+  }
+
+  public void testGetWithExpectedResponse(VertxTestContext context, Vertx vertx, String url,
       String expectedResponseFile) {
     testGet(context, vertx, url, resp -> {
       assertEquals(HttpResponseStatus.OK.code(), resp.statusCode());
@@ -77,24 +76,12 @@ public final class KnotxServerTester {
     });
   }
 
-  public void testGetServerError(VertxTestContext context, Vertx vertx, String url,
-      int expectedError) {
-    testGet(context, vertx, url, resp -> {
-      assertEquals(expectedError, resp.statusCode());
-    });
-  }
-
   public void testGet(VertxTestContext context, Vertx vertx, String url,
       Consumer<HttpResponse<Buffer>> assertions) {
-    testGet(context, vertx, url, Collections.emptyMap(), assertions);
-  }
-
-  public void testGet(VertxTestContext context, Vertx vertx, String url, Map<String, String> headers,
-        Consumer<HttpResponse<Buffer>> assertions) {
     MultiMap headersMultiMap = MultiMap.caseInsensitiveMultiMap();
     headersMultiMap.addAll(headers);
 
-    WebClient client = WebClient.create(vertx);
+    WebClient client = WebClient.create(vertx, clientOptions);
     Single<HttpResponse<Buffer>> httpResponseSingle = client
         .get(serverPort, serverHost, url)
         .putHeaders(headersMultiMap)
@@ -107,9 +94,4 @@ public final class KnotxServerTester {
         });
   }
 
-  private MultiMap getMultiMap(Map<String, Object> formData) {
-    MultiMap formMap = MultiMap.caseInsensitiveMultiMap();
-    formData.forEach((key, value) -> formMap.add(key, (String) value));
-    return formMap;
-  }
 }

@@ -42,7 +42,7 @@ class PebbleTemplateEngineIntegrationTest {
       @RandomPort Integer globalServerPort) {
     // when
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
-    serverTester.testGetRequest(context, vertx,
+    serverTester.testGetWithExpectedResponse(context, vertx,
         "/content/fullPebblePage.html", "results/fullPage.html");
   }
 }
