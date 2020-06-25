@@ -73,7 +73,7 @@ class LongRunningHttpServiceWithCircuitBreakerIntegrationTest {
     // when
     KnotxServerTester serverTester = KnotxServerTester.defaultInstance(globalServerPort);
     serverTester
-        .testGetRequest(context, vertx, "/content/fullPage.html",
+        .testGetWithExpectedResponse(context, vertx, "/content/fullPage.html",
             "scenarios/long-running-http-service-with-circuit-breaker/result/fullPage.html");
   }
 

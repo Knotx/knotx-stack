@@ -72,7 +72,7 @@ class VariousMethodsForHttpActionIntegrationTest {
 
     // when, then
     serverTester
-        .testGetRequest(context, vertx, "/content/variousHttpMethods.html",
+        .testGetWithExpectedResponse(context, vertx, "/content/variousHttpMethods.html",
             "scenarios/various-methods-for-http-action/result/fullPage.html");
   }
 
