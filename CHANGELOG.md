@@ -4,6 +4,7 @@ All notable changes to `knotx-stack` will be documented in this file.
 ## Unreleased
 List of changes that are finished but not yet released in any final version.
 - [PR-115](https://github.com/Knotx/knotx-stack/pull/115) - knotx-fragments-task-functional-test are executed during stack functional tests 
+- [PR-114](https://github.com/Knotx/knotx-stack/pull/114) - Knotx/knotx-fragments#161 enable passing status code from handlers to end user
                 
 ## 2.2.0
 - [PR-110](https://github.com/Knotx/knotx-stack/pull/110) - Knotx/knotx-fragments#154 Fragments modules refactor.

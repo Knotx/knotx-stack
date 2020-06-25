@@ -27,7 +27,6 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Collections;
-import java.util.Map;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -89,9 +88,9 @@ public class FailedKnotxFragmentScenarioTest {
   void requestFailedDataWithHeader(VertxTestContext testContext, Vertx vertx, @RandomPort Integer delayedServicePort, @RandomPort Integer globalServerPort) {
     prepareServer(delayedServicePort, globalServerPort);
 
-    Map<String, String> headers = Collections.singletonMap("Allow-Invalid-Fragments", "true");
-
-    serverTester.testGet(testContext, vertx, "/content/failedFragment.html", headers, response -> {
+    serverTester
+        .withRequestHeaders(Collections.singletonMap("Allow-Invalid-Fragments", "true"))
+        .testGet(testContext, vertx, "/content/failedFragment.html", response -> {
       assertEquals(200, response.statusCode());
     });
   }
