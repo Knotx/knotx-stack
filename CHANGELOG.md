@@ -3,6 +3,8 @@ All notable changes to `knotx-stack` will be documented in this file.
 
 ## Unreleased
 List of changes that are finished but not yet released in any final version.
+                
+## 2.2.1
 - [PR-114](https://github.com/Knotx/knotx-stack/pull/114) - Knotx/knotx-fragments#161 enable passing status code from handlers to end user
                 
 ## 2.2.0
