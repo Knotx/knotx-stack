@@ -105,7 +105,10 @@ tasks {
         shouldRunAfter("test")
     }
 
-    named("check") { dependsOn("functionalTest") }
+    named("check") {
+        dependsOn("functionalTest")
+        dependsOn(gradle.includedBuilds.stream().map { ib -> ib.task(":check") }.toArray())
+    }
 
     named("build") {
         if (file(".composite-enabled").exists()) {
