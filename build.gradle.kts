@@ -73,7 +73,6 @@ dependencies {
     implementation("io.knotx:knotx-template-engine-core:${project.version}")
     implementation("io.knotx:knotx-template-engine-handlebars:${project.version}")
     implementation("io.knotx:knotx-template-engine-pebble:${project.version}")
-    implementation("io.netty:netty-tcnative-boringssl-static")
 
     testImplementation("io.knotx:knotx-junit5:${project.version}")
     testImplementation(group = "io.vertx", name = "vertx-junit5")
