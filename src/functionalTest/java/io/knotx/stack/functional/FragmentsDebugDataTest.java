@@ -247,7 +247,7 @@ class FragmentsDebugDataTest {
 
   private void shouldDescribeSuccessTransitionAfterFirstLevelNode(JsonObject node) {
     shouldDescribeCompositeNode(node);
-    shouldContainSuccessResponse(node.getJsonObject(RESPONSE), 0);
+    shouldContainSuccessResponse(node.getJsonObject(RESPONSE), 1);
     shouldContainNestedNodes(node.getJsonArray("subtasks"));
 
     shouldDescribeTemplateEngineNode(node.getJsonObject("on").getJsonObject(_SUCCESS), "te-pebble");
