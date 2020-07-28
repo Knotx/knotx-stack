@@ -226,7 +226,7 @@ class FragmentsDebugDataTest {
     assertFalse(graph.isEmpty());
     shouldDescribeSingleNode(graph, "fetch-user-info");
     shouldDescribeAction(graph.getJsonObject(OPERATION), HTTP);
-    shouldContainSuccessResponse(graph.getJsonObject(RESPONSE), 1);
+    shouldContainSuccessResponse(graph.getJsonObject(RESPONSE));
 
     shouldDescribeTemplateEngineNode(graph.getJsonObject("on").getJsonObject(_SUCCESS), "te-hbs");
   }
@@ -235,7 +235,7 @@ class FragmentsDebugDataTest {
     assertFalse(graph.isEmpty());
     shouldDescribeSingleNode(graph, "fetch-user-info");
     shouldDescribeAction(graph.getJsonObject(OPERATION), HTTP);
-    shouldContainSuccessResponse(graph.getJsonObject(RESPONSE), 1);
+    shouldContainSuccessResponse(graph.getJsonObject(RESPONSE));
 
     shouldDescribeSuccessTransitionAfterFirstLevelNode(graph.getJsonObject("on").getJsonObject(
         _SUCCESS));
@@ -247,7 +247,7 @@ class FragmentsDebugDataTest {
 
   private void shouldDescribeSuccessTransitionAfterFirstLevelNode(JsonObject node) {
     shouldDescribeCompositeNode(node);
-    shouldContainSuccessResponse(node.getJsonObject(RESPONSE), 1);
+    shouldContainSuccessResponse(node.getJsonObject(RESPONSE));
     shouldContainNestedNodes(node.getJsonArray("subtasks"));
 
     shouldDescribeTemplateEngineNode(node.getJsonObject("on").getJsonObject(_SUCCESS), "te-pebble");
@@ -280,10 +280,10 @@ class FragmentsDebugDataTest {
     shouldDescribeAction(node.getJsonObject(OPERATION), HTTP);
   }
 
-  private void shouldContainSuccessResponse(JsonObject response, int invocations) {
+  private void shouldContainSuccessResponse(JsonObject response) {
     assertFalse(response.isEmpty());
     assertEquals(_SUCCESS, response.getString("transition"));
-    assertEquals(invocations, response.getJsonArray("invocations").size());
+    assertNotNull(response.getJsonObject("log"));
   }
 
   private void shouldDescribeSingleNode(JsonObject node, String alias) {
