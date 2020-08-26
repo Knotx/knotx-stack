@@ -37,8 +37,8 @@ repositories {
 
 sourceSets {
     register("functionalTest") {
-        compileClasspath += sourceSets.test.get().output.classesDirs
-        runtimeClasspath += sourceSets.test.get().output.classesDirs
+        compileClasspath += sourceSets.test.get().output
+        runtimeClasspath += sourceSets.test.get().output
     }
     test {
         resources {
