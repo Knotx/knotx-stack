@@ -16,7 +16,9 @@
 package io.knotx.stack.functional;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.equalToJson;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -37,8 +39,6 @@ import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.Vertx;
 import io.vertx.reactivex.core.buffer.Buffer;
 import io.vertx.reactivex.ext.web.client.HttpResponse;
-
-import java.util.Comparator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
@@ -71,13 +71,17 @@ class FragmentsDebugDataTest {
   private static final String MISSING = "MISSING";
 
   @ClasspathResourcesMockServer
-  private WireMockServer delayedServiceServer;
+  private WireMockServer brokenServiceMock;
+
+  @ClasspathResourcesMockServer
+  private WireMockServer delayedServiceMock;
 
   private KnotxServerTester serverTester;
 
   @AfterEach
   void tearDown() {
-    delayedServiceServer.stop();
+    brokenServiceMock.stop();
+    delayedServiceMock.stop();
   }
 
   @Test
@@ -90,11 +94,14 @@ class FragmentsDebugDataTest {
       "scenarios/fragments-debug-data/tasks.conf",
       "scenarios/fragments-debug-data/pebble.conf"})
   void requestPage(VertxTestContext testContext, Vertx vertx,
-      @RandomPort Integer delayedServicePort, @RandomPort Integer globalServerPort) {
-
+      @RandomPort Integer brokenServicePort, @RandomPort Integer delayedServicePort,
+      @RandomPort Integer globalServerPort) {
+    // given
+    givenBrokenServiceServer(brokenServicePort);
     givenDelayedServiceServer(delayedServicePort);
     givenServerTester(globalServerPort);
 
+    // when & then
     knotxShouldProvideDebugData(testContext, vertx);
   }
 
@@ -107,8 +114,14 @@ class FragmentsDebugDataTest {
       "scenarios/fragments-debug-data/mocks.conf",
       "scenarios/fragments-debug-data/tasks.conf"})
   void requestWebApi(VertxTestContext testContext, Vertx vertx,
+      @RandomPort Integer brokenServicePort, @RandomPort Integer delayedServicePort,
       @RandomPort Integer globalServerPort) {
+    // given
+    givenBrokenServiceServer(brokenServicePort);
+    givenDelayedServiceServer(delayedServicePort);
     givenServerTester(globalServerPort);
+
+    // when & then
     knotxShouldAppendConsumerDataToFragmentBody(testContext, vertx);
   }
 
@@ -116,13 +129,24 @@ class FragmentsDebugDataTest {
     serverTester = KnotxServerTester.defaultInstance(globalServerPort);
   }
 
-  private void givenDelayedServiceServer(Integer delayedServicePort) {
-    delayedServiceServer = new WireMockServer(delayedServicePort);
-    delayedServiceServer.stubFor(get(urlEqualTo("/mock/scenario/delayed")).willReturn(
-        aResponse()
-            .withStatus(200)
-            .withFixedDelay(200)));
-    delayedServiceServer.start();
+  private void givenBrokenServiceServer(Integer port) {
+    brokenServiceMock = new WireMockServer(port);
+    brokenServiceMock.stubFor(
+        get(urlEqualTo("/mock/scenario/broken"))
+            .willReturn(aResponse().withStatus(500)));
+    brokenServiceMock.stubFor(
+        post(urlEqualTo("/mock/scenario/analytics"))
+            .withRequestBody(equalToJson("{\"user-data-id\":\"3214232\"}"))
+            .willReturn(aResponse().withStatus(500)));
+    brokenServiceMock.start();
+  }
+
+  private void givenDelayedServiceServer(Integer port) {
+    delayedServiceMock = new WireMockServer(port);
+    delayedServiceMock.stubFor(
+        get(urlEqualTo("/mock/scenario/delayed"))
+            .willReturn(aResponse().withStatus(200).withFixedDelay(200)));
+    delayedServiceMock.start();
   }
 
   private void knotxShouldProvideDebugData(VertxTestContext testContext, Vertx vertx) {
@@ -151,11 +175,15 @@ class FragmentsDebugDataTest {
 
   private void knotxFragmentResponseDataShouldContainBodyAndKnotxFragmentEntries(
       JsonObject responseData) {
-    assertEquals(4, responseData.size());
+    assertEquals(8, responseData.size());
     assertTrue(responseData.containsKey("_knotx_fragment"));
     assertTrue(responseData.containsKey("fetch-user-info"));
     assertTrue(responseData.containsKey("fetch-payment-providers"));
-    assertTrue(responseData.containsKey("fetch-offers-json"));
+    assertTrue(responseData.containsKey("fetch-offers"));
+    assertTrue(responseData.containsKey("fetch-offers-fallback"));
+    assertTrue(responseData.containsKey("notify-analytics"));
+    assertTrue(responseData.containsKey("notify-analytics-fallback"));
+    assertTrue(responseData.containsKey("fetch-delivery"));
   }
 
   private void knotxFragmentShouldContainExecutionLogEntries(JsonObject knotxFragment) {
@@ -239,10 +267,6 @@ class FragmentsDebugDataTest {
 
     shouldDescribeSuccessTransitionAfterFirstLevelNode(graph.getJsonObject("on").getJsonObject(
         _SUCCESS));
-    shouldDescribeErrorTransitionAfterFirstLevelNode(
-        graph.getJsonObject("on").getJsonObject("_error"));
-    shouldDescribeCustomTransitionAfterFirstLevelNode(
-        graph.getJsonObject("on").getJsonObject("_custom"));
   }
 
   private void shouldDescribeSuccessTransitionAfterFirstLevelNode(JsonObject node) {
@@ -254,30 +278,12 @@ class FragmentsDebugDataTest {
   }
 
   private void shouldContainNestedNodes(JsonArray subtasks) {
-    assertEquals(3, subtasks.size());
-    for (int i = 0; i < 3; i++) {
+    assertEquals(4, subtasks.size());
+    for (int i = 0; i < 4; i++) {
       JsonObject subtask = subtasks.getJsonObject(i);
       shouldDescribeSingleNode(subtask, subtask.getString(LABEL), subtask.getString(STATUS));
       // execution verification for subtasks skipped
     }
-  }
-
-  private void shouldDescribeErrorTransitionAfterFirstLevelNode(JsonObject node) {
-    shouldDescribeSingleNode(node, "fetch-user-info-fallback", UNPROCESSED);
-    shouldDescribeAction(node.getJsonObject(OPERATION), HTTP);
-
-    JsonObject successTransition = node.getJsonObject("on").getJsonObject(_SUCCESS);
-    shouldDescribeSingleNode(successTransition, "fetch-user-info-fallback-success", UNPROCESSED);
-    shouldDescribeAction(successTransition.getJsonObject(OPERATION), HTTP);
-
-    JsonObject errorTransition = node.getJsonObject("on").getJsonObject("_error");
-    shouldDescribeSingleNode(errorTransition, "fetch-user-info-fallback-error", UNPROCESSED);
-    shouldDescribeAction(errorTransition.getJsonObject(OPERATION), HTTP);
-  }
-
-  private void shouldDescribeCustomTransitionAfterFirstLevelNode(JsonObject node) {
-    shouldDescribeSingleNode(node, "fetch-user-info-custom-fallback", UNPROCESSED);
-    shouldDescribeAction(node.getJsonObject(OPERATION), HTTP);
   }
 
   private void shouldContainSuccessResponse(JsonObject response) {
@@ -291,6 +297,7 @@ class FragmentsDebugDataTest {
   }
 
   private void shouldDescribeSingleNode(JsonObject node, String alias, String status) {
+    assertNotNull(node, "Node not found for [" + alias + "]");
     assertFalse(StringUtils.isBlank(node.getString("id")));
     assertEquals("SINGLE", node.getString(TYPE));
     assertEquals(alias, node.getString(LABEL));
