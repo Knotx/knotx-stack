@@ -37,8 +37,6 @@ import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.Vertx;
 import io.vertx.reactivex.core.buffer.Buffer;
 import io.vertx.reactivex.ext.web.client.HttpResponse;
-
-import java.util.Comparator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
@@ -71,13 +69,13 @@ class FragmentsDebugDataTest {
   private static final String MISSING = "MISSING";
 
   @ClasspathResourcesMockServer
-  private WireMockServer delayedServiceServer;
+  private WireMockServer mockBrokenServiceServer;
 
   private KnotxServerTester serverTester;
 
   @AfterEach
   void tearDown() {
-    delayedServiceServer.stop();
+    mockBrokenServiceServer.stop();
   }
 
   @Test
@@ -90,9 +88,9 @@ class FragmentsDebugDataTest {
       "scenarios/fragments-debug-data/tasks.conf",
       "scenarios/fragments-debug-data/pebble.conf"})
   void requestPage(VertxTestContext testContext, Vertx vertx,
-      @RandomPort Integer delayedServicePort, @RandomPort Integer globalServerPort) {
+      @RandomPort Integer mockBrokenServicePort, @RandomPort Integer globalServerPort) {
 
-    givenDelayedServiceServer(delayedServicePort);
+    givenDelayedServiceServer(mockBrokenServicePort);
     givenServerTester(globalServerPort);
 
     knotxShouldProvideDebugData(testContext, vertx);
@@ -107,8 +105,11 @@ class FragmentsDebugDataTest {
       "scenarios/fragments-debug-data/mocks.conf",
       "scenarios/fragments-debug-data/tasks.conf"})
   void requestWebApi(VertxTestContext testContext, Vertx vertx,
-      @RandomPort Integer globalServerPort) {
+      @RandomPort Integer mockBrokenServicePort, @RandomPort Integer globalServerPort) {
+
+    givenDelayedServiceServer(mockBrokenServicePort);
     givenServerTester(globalServerPort);
+
     knotxShouldAppendConsumerDataToFragmentBody(testContext, vertx);
   }
 
@@ -117,12 +118,11 @@ class FragmentsDebugDataTest {
   }
 
   private void givenDelayedServiceServer(Integer delayedServicePort) {
-    delayedServiceServer = new WireMockServer(delayedServicePort);
-    delayedServiceServer.stubFor(get(urlEqualTo("/mock/scenario/delayed")).willReturn(
+    mockBrokenServiceServer = new WireMockServer(delayedServicePort);
+    mockBrokenServiceServer.stubFor(get(urlEqualTo("/mock/scenario/broken")).willReturn(
         aResponse()
-            .withStatus(200)
-            .withFixedDelay(200)));
-    delayedServiceServer.start();
+            .withStatus(500)));
+    mockBrokenServiceServer.start();
   }
 
   private void knotxShouldProvideDebugData(VertxTestContext testContext, Vertx vertx) {
@@ -151,11 +151,12 @@ class FragmentsDebugDataTest {
 
   private void knotxFragmentResponseDataShouldContainBodyAndKnotxFragmentEntries(
       JsonObject responseData) {
-    assertEquals(4, responseData.size());
+    assertEquals(5, responseData.size());
     assertTrue(responseData.containsKey("_knotx_fragment"));
     assertTrue(responseData.containsKey("fetch-user-info"));
     assertTrue(responseData.containsKey("fetch-payment-providers"));
-    assertTrue(responseData.containsKey("fetch-offers-json"));
+    assertTrue(responseData.containsKey("fetch-offers"));
+    assertTrue(responseData.containsKey("fetch-delivery"));
   }
 
   private void knotxFragmentShouldContainExecutionLogEntries(JsonObject knotxFragment) {
