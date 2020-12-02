@@ -1,8 +1,11 @@
 # Changelog
 All notable changes to `knotx-stack` will be documented in this file.
 
-## Unreleased
-List of changes that are finished but not yet released in any final version.
+# 1.6.0
+This version is dependency updates only, no new features or bugfixes. If you are upgrading from older than 1.5.0 version, follow the [Upgrade Notes for 1.5](https://knotx.io/blog/release-1_5_0/) first.
+- Upgraded Vert.x to 3.7.1.
+
+## 1.5.0
 - [PR-36](https://github.com/Knotx/knotx-stack/pull/36) - Cleanup integration tests
 - [PR-32](https://github.com/Knotx/knotx-stack/pull/32) - Extract assembler and splitter EB addresses to globals.
 - [PR-33](https://github.com/Knotx/knotx-stack/pull/33) - Knot.x Template Engine introduced instead of HBS Knot

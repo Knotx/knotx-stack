@@ -37,7 +37,7 @@ public class ResolverOptions {
   private static final String DEFAULT_MAVEN_LOCAL =
       USER_HOME + FILE_SEP + ".m2" + FILE_SEP + "repository";
   private static final String DEFAULT_MAVEN_REMOTES =
-      "http://central.maven.org/maven2/ https://oss.sonatype.org/content/repositories/snapshots/";
+      "https://repo1.maven.org/maven2/ https://oss.sonatype.org/content/repositories/snapshots/";
 
   private String localRepository = System.getProperty(LOCAL_REPO_SYS_PROP, DEFAULT_MAVEN_LOCAL);
 
