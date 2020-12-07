@@ -139,4 +139,9 @@ public class Dependency extends org.apache.maven.model.Dependency {
         "You cannot add an optional dependency to a stack - optional does not " +
             "make sense in this case");
   }
+
+  @Override
+  public String toString() {
+    return this.getGroupId() + " : " + this.getArtifactId() + " : " + this.getVersion();
+  }
 }

@@ -131,6 +131,7 @@ public class StackResolution {
     List<Actions.Action> chain = new ArrayList<>();
 
     selectedArtifacts.forEach((key, artifact) -> {
+      LOGGER.trace("Selected ARTIFACT: " + key);
       String fileName = artifact.getArtifact().getFile().getName();
 
       if (marks.containsKey(fileName)) {
@@ -153,6 +154,7 @@ public class StackResolution {
   }
 
   private void resolve(Dependency dependency) {
+    LOGGER.trace("Resolving ARTIFACT" + dependency);
     List<Artifact> list;
     if (dependency.isIncluded()) {
       list = cache.get(dependency.getGACV(), dependency.getResolutionOptions());
@@ -177,6 +179,9 @@ public class StackResolution {
     list.forEach(artifact -> {
       String gaec = getManagementKey(artifact);
       String version = selectedVersions.get(gaec);
+
+      LOGGER.trace("ARTIFACT --- " + gaec + " : " + version);
+
       if (version == null || version.equalsIgnoreCase(artifact.getBaseVersion())) {
         selectedVersions.put(gaec, artifact.getBaseVersion());
         keepATrace(dependency, artifact);
