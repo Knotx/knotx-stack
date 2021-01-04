@@ -26,6 +26,12 @@ plugins {
 
 project.group = "io.knotx"
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+    }
+}
+
 // we do not use mavenLocal - instead please setup composite build environment (https://github.com/Knotx/knotx-aggregator)
 repositories {
     jcenter()
