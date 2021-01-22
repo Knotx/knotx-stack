@@ -20,6 +20,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.equalToJson;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static io.knotx.stack.functional.utils.TestUtils.OK200;
+import static io.knotx.stack.functional.utils.TestUtils.bodyNotEmpty;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -32,14 +34,16 @@ import io.knotx.junit5.KnotxExtension;
 import io.knotx.junit5.RandomPort;
 import io.knotx.junit5.wiremock.ClasspathResourcesMockServer;
 import io.knotx.stack.KnotxServerTester;
-import io.netty.handler.codec.http.HttpResponseStatus;
+import io.knotx.stack.functional.debug.DebugUtils;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.reactivex.core.Vertx;
 import io.vertx.reactivex.core.buffer.Buffer;
 import io.vertx.reactivex.ext.web.client.HttpResponse;
-import java.util.regex.Matcher;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.AfterEach;
@@ -53,8 +57,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @TestInstance(Lifecycle.PER_CLASS)
 class FragmentsDebugDataTest {
 
-  private static final String SCRIPT_REGEXP = "<script data-knotx-debug=\"log\" data-knotx-id=\"?.*?\" type=\"application/json\">(?<logJson>.*?)</script>";
-  private static final Pattern SCRIPT_PATTERN = Pattern.compile(SCRIPT_REGEXP, Pattern.DOTALL);
   private static final String REQUESTED_PATH_TEMPLATING = "/content/payments.html?debug=true";
   private static final String REQUESTED_PATH_WEB_API = "/api/consumer?debug=true";
 
@@ -195,46 +197,36 @@ class FragmentsDebugDataTest {
   }
 
   private void responseShouldBeValid(HttpResponse<Buffer> response) {
-    assertEquals(HttpResponseStatus.OK.code(), response.statusCode());
-    assertNotNull(response.bodyAsString());
+    OK200(response);
+    bodyNotEmpty(response);
   }
 
   private void debugDataForTwoSnippetsShouldBeValid(String responseBody) {
-    Matcher matcher = SCRIPT_PATTERN.matcher(responseBody);
+    LinkedHashMap<String, String> logs = DebugUtils.findLogsInHtml(responseBody);
 
-    firstFragmentShouldHaveExpectedLog(matcher);
-    secondFragmentShouldHaveExpectedLog(matcher);
-    thereShouldBeNoMoreLogScripts(
-        matcher); // only 2 fragments, matcher should fail looking for next entries
+    assertEquals(2, logs.size());
+
+    // Traversing in insertion (=match) ordering
+    Iterator<Entry<String, String>> elements = logs.entrySet().iterator();
+
+    userTaskLog(elements.next().getValue());
+    paymentsTaskLog(elements.next().getValue());
   }
 
-  private void firstFragmentShouldHaveExpectedLog(Matcher matcher) {
-    assertTrue(matcher.find()); // first fragment with user-task
-
-    JsonObject log = getLog(matcher);
+  private void userTaskLog(String logAsString) {
+    JsonObject log = new JsonObject(logAsString);
 
     shouldHaveTopLevelMetadata(log);
     shouldHaveFragmentLevelMetadata(log.getJsonObject("fragment"));
     shouldDescribeUserTask(log.getJsonObject("graph"));
   }
 
-  private void secondFragmentShouldHaveExpectedLog(Matcher matcher) {
-    assertTrue(matcher.find()); // second fragment with payments-task
-
-    JsonObject log = getLog(matcher);
+  private void paymentsTaskLog(String logAsString) {
+    JsonObject log = new JsonObject(logAsString);
 
     shouldHaveTopLevelMetadata(log);
     shouldHaveFragmentLevelMetadata(log.getJsonObject("fragment"));
     shouldDescribePaymentsTask(log.getJsonObject("graph"));
-  }
-
-  private void thereShouldBeNoMoreLogScripts(Matcher matcher) {
-    assertFalse(matcher.find());
-  }
-
-  private JsonObject getLog(Matcher matcher) {
-    String logAsString = matcher.group("logJson");
-    return new JsonObject(logAsString);
   }
 
   private void shouldHaveTopLevelMetadata(JsonObject fragmentExecutionLog) {

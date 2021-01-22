@@ -62,6 +62,7 @@ class VariousMethodsForHttpActionIntegrationTest {
   @KnotxApplyConfiguration({"conf/application.conf",
       "common/templating/routing.conf",
       "common/templating/fragments.conf",
+      "scenarios/various-methods-for-http-action/debugHtml.conf",
       "scenarios/various-methods-for-http-action/mocks.conf",
       "scenarios/various-methods-for-http-action/tasks.conf"})
   void taskWithManyHttpMethods(VertxTestContext context, Vertx vertx,
