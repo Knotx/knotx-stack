@@ -93,6 +93,8 @@ dependencies {
     functionalTestImplementation("io.knotx:knotx-junit5:${project.version}")
     functionalTestImplementation(group = "io.vertx", name = "vertx-junit5")
     functionalTestImplementation(group = "io.vertx", name = "vertx-unit")
+    functionalTestImplementation(group = "io.vertx", name = "vertx-rx-java")
+    functionalTestImplementation(group = "io.vertx", name = "vertx-rx-java2")
     functionalTestImplementation("org.junit.jupiter:junit-jupiter-api")
     functionalTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     functionalTestImplementation(group = "com.github.tomakehurst", name = "wiremock")
