@@ -21,7 +21,6 @@ plugins {
     id("io.knotx.maven-publish")
     id("io.knotx.release-base")
     id("org.nosphere.apache.rat")
-    id("idea")
 }
 
 project.group = "io.knotx"
@@ -29,16 +28,14 @@ project.group = "io.knotx"
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(8))
-    }
+        vendor.set(JvmVendorSpec.ADOPTOPENJDK)
 }
 
-// we do not use mavenLocal - instead please setup composite build environment (https://github.com/Knotx/knotx-aggregator)
+
 repositories {
-    jcenter()
     mavenLocal()
+    mavenCentral()
     maven { url = uri("https://plugins.gradle.org/m2/") }
-    maven { url = uri("https://oss.sonatype.org/content/groups/staging/") }
-    maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
 }
 
 sourceSets {
@@ -60,7 +57,6 @@ val functionalTestRuntimeOnly: Configuration by configurations.getting { }
 
 dependencies {
     implementation(platform("io.knotx:knotx-dependencies:${project.version}"))
-    testImplementation(platform("io.knotx:knotx-dependencies:${project.version}"))
 
     implementation("io.knotx:knotx-launcher:${project.version}")
     implementation("io.knotx:knotx-server-http-core:${project.version}")
@@ -81,12 +77,7 @@ dependencies {
     implementation("io.knotx:knotx-template-engine-pebble:${project.version}")
 
     testImplementation("io.knotx:knotx-junit5:${project.version}")
-    testImplementation(group = "io.vertx", name = "vertx-junit5")
-    testImplementation(group = "io.vertx", name = "vertx-unit")
-    testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testImplementation("org.junit.jupiter:junit-jupiter-engine")
     testImplementation(group = "io.vertx", name = "vertx-web-client")
-    testImplementation(group = "com.github.tomakehurst", name = "wiremock")
     testImplementation(group = "io.rest-assured", name = "rest-assured", version = "3.3.0")
 
     functionalTestImplementation(platform("io.knotx:knotx-dependencies:${project.version}"))
@@ -145,9 +136,16 @@ tasks {
 // -----------------------------------------------------------------------------
 tasks {
     named<RatTask>("rat") {
-        excludes.addAll(listOf("*.md", "**/*.md", "**/bin/*", "azure-pipelines.yml", "**/build/*", "**/out/*", "**/*.json", "**/*.conf", "**/*.xml", "**/*.html", "**/*.properties", ".idea", ".composite-enabled", "/logs/**", "**/*.iml"))
+        excludes.addAll(listOf(
+            "**/*.md", // docs
+            "gradle/wrapper/**", "gradle*", "**/build/**", // Gradle
+            "*.iml", "*.ipr", "*.iws", "*.idea/**", // IDEs
+            "**/generated/*", "**/*.adoc", "**/resources/**", // assets
+            ".github/*", "**/packaging/**", "**/logs/**", ".composite-enabled"
+        ))
     }
-    getByName("build").dependsOn("rat")
+    getByName("check").dependsOn("rat")
+    getByName("rat").dependsOn("compileJava")
 }
 
 // -----------------------------------------------------------------------------
