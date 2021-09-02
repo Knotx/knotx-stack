@@ -25,18 +25,10 @@ plugins {
 
 project.group = "io.knotx"
 
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(8))
-        vendor.set(JvmVendorSpec.ADOPTOPENJDK)
-    }
-}
-
-
 repositories {
     mavenLocal()
     mavenCentral()
-    maven { url = uri("https://plugins.gradle.org/m2/") }
+    gradlePluginPortal()
 }
 
 sourceSets {
