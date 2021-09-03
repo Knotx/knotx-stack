@@ -81,7 +81,7 @@ dependencies {
     functionalTestImplementation(group = "io.vertx", name = "vertx-rx-java2")
     functionalTestImplementation("org.junit.jupiter:junit-jupiter-api")
     functionalTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
-    functionalTestImplementation(group = "com.github.tomakehurst", name = "wiremock")
+    functionalTestImplementation(group = "com.github.tomakehurst", name = "wiremock-jre8")
     functionalTestImplementation(group = "io.vertx", name = "vertx-web-client")
 }
 
