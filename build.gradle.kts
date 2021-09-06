@@ -21,6 +21,7 @@ plugins {
     id("io.knotx.maven-publish")
     id("io.knotx.release-base")
     id("org.nosphere.apache.rat")
+    id("net.ossindex.audit")
 }
 
 project.group = "io.knotx"
@@ -71,7 +72,7 @@ dependencies {
 
     testImplementation("io.knotx:knotx-junit5:${project.version}")
     testImplementation(group = "io.vertx", name = "vertx-web-client")
-    testImplementation(group = "io.rest-assured", name = "rest-assured", version = "3.3.0")
+    testImplementation(group = "io.rest-assured", name = "rest-assured", version = "4.4.0")
 
     functionalTestImplementation(platform("io.knotx:knotx-dependencies:${project.version}"))
     functionalTestImplementation("io.knotx:knotx-junit5:${project.version}")
@@ -140,6 +141,20 @@ tasks {
     getByName("check").dependsOn("rat")
     getByName("rat").dependsOn("compileJava")
 }
+
+// AUDIT
+tasks {
+    val audit = named("audit") {
+        group = "verification"
+    }
+    named("check") {
+        dependsOn(audit)
+    }
+    named("test") {
+        mustRunAfter(audit)
+    }
+}
+
 
 // -----------------------------------------------------------------------------
 // Publication
