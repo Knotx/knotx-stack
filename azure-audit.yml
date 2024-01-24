@@ -14,7 +14,7 @@
 
 schedules:
   - cron: "0 0 * * *"
-    displayName: Daily Knot.x audit
+    displayName: Daily Knot.x audit from main
     branches:
       include:
         - master
@@ -38,9 +38,9 @@ steps:
         cd knotx-aggregator/development
         ./pull-all.sh -r ../../$(workspaceDir) -b master -a
     displayName: "Clone all repositories"
-  - task: Gradle@2
+  - task: Gradle@3
     inputs:
       gradleWrapperFile: '$(workspaceDir)/knotx-stack/gradlew'
       workingDirectory: '$(workspaceDir)/knotx-stack'
-      tasks: 'check --info'
+      tasks: 'check -Paudit.enabled --info'
     displayName: "Check new vulnerabilities"
