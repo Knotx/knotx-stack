@@ -72,7 +72,7 @@ dependencies {
 
     testImplementation("io.knotx:knotx-junit5:${project.version}")
     testImplementation(group = "io.vertx", name = "vertx-web-client")
-    testImplementation(group = "io.rest-assured", name = "rest-assured", version = "4.4.0")
+    testImplementation(group = "io.rest-assured", name = "rest-assured", version = "5.4.0")
 
     functionalTestImplementation(platform("io.knotx:knotx-dependencies:${project.version}"))
     functionalTestImplementation("io.knotx:knotx-junit5:${project.version}")
@@ -82,7 +82,7 @@ dependencies {
     functionalTestImplementation(group = "io.vertx", name = "vertx-rx-java2")
     functionalTestImplementation("org.junit.jupiter:junit-jupiter-api")
     functionalTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
-    functionalTestImplementation(group = "com.github.tomakehurst", name = "wiremock-jre8")
+    functionalTestImplementation(group = "org.wiremock", name = "wiremock")
     functionalTestImplementation(group = "io.vertx", name = "vertx-web-client")
 }
 
@@ -132,7 +132,7 @@ tasks {
     named<RatTask>("rat") {
         excludes.addAll(listOf(
             "**/*.md", // docs
-            "gradle/wrapper/**", "gradle*", "**/build/**", // Gradle
+            "gradle/wrapper/**", "gradle*", "**/build/**", "**/bin/**", // Gradle
             "*.iml", "*.ipr", "*.iws", "*.idea/**", // IDEs
             "**/generated/*", "**/*.adoc", "**/resources/**", // assets
             ".github/*", "**/packaging/**", "**/logs/**", ".composite-enabled"
@@ -146,6 +146,7 @@ tasks {
 tasks {
     val audit = named("audit") {
         group = "verification"
+        onlyIf { project.hasProperty("audit.enabled") }
     }
     named("check") {
         dependsOn(audit)
