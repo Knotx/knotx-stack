@@ -67,18 +67,13 @@ that will do (1) and (2) steps for you.
 ## Running Stack
 To start playing with Knot.x stack unzip the archive.
 From the `knotx-stack` folder, execute:
-```cmd
+```bash
 bin/knotx run-knotx
 ```
 or
-```cmd
+```powershell
 bin/knotx.bat run-knotx
 ```
 to run the instance.
 
-
-[travis]:https://travis-ci.org/Knotx/knotx-stack
-[travis img]:https://travis-ci.org/Knotx/knotx-stack.svg?branch=master
-
-[license]:https://github.com/Knotx/knotx-stack/blob/master/LICENSE
-[license img]:https://img.shields.io/badge/License-Apache%202.0-blue.svg
+By default, Knot.x stack's server will start on `localhost:8092`.
