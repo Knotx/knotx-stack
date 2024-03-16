@@ -4,6 +4,8 @@ All notable changes to `knotx-stack` will be documented in this file.
 ## Unreleased
 List of changes that are finished but not yet released in any final version.
                 
+## 2.4.0
+                
 ## 2.3.1
 - [PR-142](https://github.com/Knotx/knotx-stack/pull/142) Upgrade Gradle to 7.6.3
 
